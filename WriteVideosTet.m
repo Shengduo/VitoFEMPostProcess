@@ -6,7 +6,7 @@ VitoColorFlag = true;
 
 % frontsurfFile = 'FineFHLoad15DRS1-frontsurf.h5';
 videoprefix = 'VWFirst_DRS1_8ModA0.02Load4.75_Vww0.1_1.5_4_fw0.35_0.1_theta0.09';
-faultFileName = strcat(videoprefix, '-fault.h5');
+faultFileName = strcat('../h5Outputs/', videoprefix, '-fault.h5');
 h5disp(faultFileName);
 fontsize = 25;
 
@@ -129,7 +129,7 @@ if videoflag == true
     videoname = strcat(videoprefix, '_surface.mp4');
     
     % Initialize video
-    myVideo = VideoWriter(strcat('Videos/', videoname), 'MPEG-4');
+    myVideo = VideoWriter(strcat('/../Videos/', videoname), 'MPEG-4');
     myVideo.FrameRate = framerate;
     myVideo.Quality = 100;
     open(myVideo);
@@ -162,7 +162,7 @@ if plotflag == true
     fig.Position(3:4) = 1.5 * fig.Position(3:4);
     
     % Initialize names
-    plotname = strcat(pwd, '/plots/', videoprefix, '_X-TofSlipRate_normalRange.png');
+    plotname = strcat(pwd, '/../plots/', videoprefix, '_X-TofSlipRate_normalRange.png');
     
     % Plot sliprate on X-T
     [Tsteps, Xsteps] = meshgrid(1e6 * time, 1e3 * FaultX);
@@ -170,7 +170,7 @@ if plotflag == true
     h = pcolor(Xsteps', Tsteps', surfaceSlipRateMag');
     shading interp;
     if VitoColorFlag == 1
-        plotname = strcat(pwd, '/Vitoplots/', videoprefix, '_X-TofSlipRate_normalRange.png');
+        plotname = strcat(pwd, '/../Vitoplots/', videoprefix, '_X-TofSlipRate_normalRange.png');
         colormap(flipud(black_rainbow_shear_long));
     end
     hold on;
@@ -211,7 +211,7 @@ if plotflag == true
     fig.Position(3:4) = 1.5 * fig.Position(3:4);
     
     % Initialize names
-    plotname = strcat(pwd, '/plots/', videoprefix, '_X-TofSlipRate_VitoRange.png');
+    plotname = strcat(pwd, '/../plots/', videoprefix, '_X-TofSlipRate_VitoRange.png');
     
     % Plot sliprate on X-T
     [Tsteps, Xsteps] = meshgrid(1e6 * time, 1e3 * FaultX);
@@ -219,7 +219,7 @@ if plotflag == true
     h = pcolor(Xsteps', Tsteps', surfaceSlipRateMag');
     shading interp;
     if VitoColorFlag == 1
-        plotname = strcat(pwd, '/Vitoplots/', videoprefix, '_X-TofSlipRate_VitoRange.png');
+        plotname = strcat(pwd, '/../Vitoplots/', videoprefix, '_X-TofSlipRate_VitoRange.png');
         colormap(flipud(black_rainbow_shear_long));
     end
     hold on;
@@ -260,7 +260,7 @@ if plotflag == true
     fig.Position(3:4) = 1.5 * fig.Position(3:4);
     
     % Initialize names
-    plotname = strcat(pwd, '/plots/', videoprefix, '_X-TofSlipRate_normalRangeLog.png');
+    plotname = strcat(pwd, '/../plots/', videoprefix, '_X-TofSlipRate_normalRangeLog.png');
     
     % Plot sliprate on X-T
     [Tsteps, Xsteps] = meshgrid(1e6 * time, 1e3 * FaultX);
@@ -268,7 +268,7 @@ if plotflag == true
     h = pcolor(Xsteps', Tsteps', log10(surfaceSlipRateMag)');
     shading interp;
     if VitoColorFlag == 1
-        plotname = strcat(pwd, '/Vitoplots/', videoprefix, '_X-TofSlipRate_normalRangeLog.png');
+        plotname = strcat(pwd, '/../Vitoplots/', videoprefix, '_X-TofSlipRate_normalRangeLog.png');
         colormap(flipud(black_rainbow_shear_long));
     end
     hold on;
@@ -309,7 +309,7 @@ if plotflag == true
     fig.Position(3:4) = 1.5 * fig.Position(3:4);
     
     % Initialize names
-    plotname = strcat(pwd, '/plots/', videoprefix, '_X-TofSlipRate_window.png');
+    plotname = strcat(pwd, '/../plots/', videoprefix, '_X-TofSlipRate_window.png');
     
     % Plot sliprate on X-T
     [Tsteps, Xsteps] = meshgrid(1e6 * time, 1e3 * FaultX);
@@ -317,7 +317,7 @@ if plotflag == true
     h = pcolor(Xsteps', Tsteps', surfaceSlipRateMag');
     shading interp;
     if VitoColorFlag == 1
-        plotname = strcat(pwd, '/Vitoplots/', videoprefix, '_X-TofSlipRate_window.png');
+        plotname = strcat(pwd, '/../Vitoplots/', videoprefix, '_X-TofSlipRate_window.png');
         colormap(flipud(black_rainbow_shear_long));
     end
     hold on;
@@ -364,7 +364,7 @@ if plotflag == true
     fig.Position(3:4) = 1.5 * fig.Position(3:4);
     
     % Initialize names
-    plotname = strcat(pwd, '/plots/', videoprefix, '_X-TofSlipRate_window_small.png');
+    plotname = strcat(pwd, '/../plots/', videoprefix, '_X-TofSlipRate_window_small.png');
     
     % Plot sliprate on X-T
     [Tsteps, Xsteps] = meshgrid(1e6 * time, 1e3 * FaultX);
@@ -372,7 +372,7 @@ if plotflag == true
     h = pcolor(Xsteps', Tsteps', surfaceSlipRateMag');
     shading interp;
     if VitoColorFlag == 1
-        plotname = strcat(pwd, '/Vitoplots/', videoprefix, '_X-TofSlipRate_window_small.png');
+        plotname = strcat(pwd, '/../Vitoplots/', videoprefix, '_X-TofSlipRate_window_small.png');
         colormap(flipud(black_rainbow_shear_long));
     end
     hold on;
@@ -418,7 +418,7 @@ if plotflag == true
     fig.Position(3:4) = 1.5 * fig.Position(3:4);
     
     % Initialize names
-    plotname = strcat(pwd, '/plots/', videoprefix, '_X-TofShearStress_normalRange.png');
+    plotname = strcat(pwd, '/../plots/', videoprefix, '_X-TofShearStress_normalRange.png');
     
     % Plot sliprate on X-T
     [Tsteps, Xsteps] = meshgrid(1e6 * time, 1e3 * FaultX);
@@ -426,7 +426,7 @@ if plotflag == true
     h = pcolor(Xsteps', Tsteps', (surfaceTraction / 1.0e6)');
     shading interp;
     if VitoColorFlag == 1
-        plotname = strcat(pwd, '/Vitoplots/', videoprefix, '_X-TofShearStress_normalRange.png');
+        plotname = strcat(pwd, '/../Vitoplots/', videoprefix, '_X-TofShearStress_normalRange.png');
         colormap(black_rainbow_plus_long);
     end
     hold on;
@@ -472,7 +472,7 @@ if plotflag == true
     fig.Position(3:4) = 1.5 * fig.Position(3:4);
     
     % Initialize names
-    plotname = strcat(pwd, '/plots/', videoprefix, '_X-TofShearstress_window.png');
+    plotname = strcat(pwd, '/../plots/', videoprefix, '_X-TofShearstress_window.png');
     
     % Plot sliprate on X-T
     [Tsteps, Xsteps] = meshgrid(1e6 * time, 1e3 * FaultX);
@@ -480,7 +480,7 @@ if plotflag == true
     h = pcolor(Xsteps', Tsteps', (surfaceTraction ./ 1e6)');
     shading interp;
     if VitoColorFlag == 1
-        plotname = strcat(pwd, '/Vitoplots/', videoprefix, '_X-TofShearStress_window.png');
+        plotname = strcat(pwd, '/../Vitoplots/', videoprefix, '_X-TofShearStress_window.png');
         colormap(black_rainbow_plus_long);
     end
     hold on;
@@ -530,7 +530,7 @@ if videoflag == true
     videoname = strcat(videoprefix, '_sliprateMag.mp4');
     
     % Initialize video
-    myVideo = VideoWriter(strcat('Videos/', videoname), 'MPEG-4');
+    myVideo = VideoWriter(strcat('../Videos/', videoname), 'MPEG-4');
     myVideo.FrameRate = framerate;
     myVideo.Quality = 100;
     open(myVideo);
@@ -584,7 +584,7 @@ if videoflag == true
     videoname = strcat(videoprefix, '_shearTrac.mp4');
     
     % Initialize video
-    myVideo = VideoWriter(strcat('Videos/', videoname), 'MPEG-4');
+    myVideo = VideoWriter(strcat('../Videos/', videoname), 'MPEG-4');
     myVideo.FrameRate = framerate;
     myVideo.Quality = 100;
     open(myVideo);
@@ -638,7 +638,7 @@ if videoflag == true
     videoname = strcat(videoprefix, '_normalTrac.mp4');
     
     % Initialize video
-    myVideo = VideoWriter(strcat('Videos/', videoname), 'MPEG-4');
+    myVideo = VideoWriter(strcat('../Videos/', videoname), 'MPEG-4');
     myVideo.FrameRate = framerate;
     myVideo.Quality = 100;
     open(myVideo);
@@ -685,7 +685,7 @@ if videoflag == true
     videoname = strcat(videoprefix, '_open.mp4');
     
     % Initialize video
-    myVideo = VideoWriter(strcat('Videos/', videoname), 'MPEG-4');
+    myVideo = VideoWriter(strcat('../Videos/', videoname), 'MPEG-4');
     myVideo.FrameRate = framerate;
     myVideo.Quality = 100;
     open(myVideo);
@@ -732,7 +732,7 @@ if videoflag == true
     videoname = strcat(videoprefix, '_slip.mp4');
     
     % Initialize video
-    myVideo = VideoWriter(strcat('Videos/', videoname), 'MPEG-4');
+    myVideo = VideoWriter(strcat('../Videos/', videoname), 'MPEG-4');
     myVideo.FrameRate = framerate;
     myVideo.Quality = 100;
     open(myVideo);
@@ -800,7 +800,7 @@ if videoflag == true
     videoname = strcat(videoprefix, '_prlV.mp4');
     
     % Initialize video
-    myVideo = VideoWriter(strcat('Videos/', videoname), 'MPEG-4');
+    myVideo = VideoWriter(strcat('../Videos/', videoname), 'MPEG-4');
     myVideo.FrameRate = framerate;
     myVideo.Quality = 100;
     open(myVideo);
@@ -847,7 +847,7 @@ if videoflag == true
     videoname = strcat(videoprefix, '_nmlV.mp4');
     
     % Initialize video
-    myVideo = VideoWriter(strcat('Videos/', videoname), 'MPEG-4');
+    myVideo = VideoWriter(strcat('../Videos/', videoname), 'MPEG-4');
     myVideo.FrameRate = framerate;
     myVideo.Quality = 100;
     open(myVideo);

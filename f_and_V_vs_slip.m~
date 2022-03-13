@@ -2,8 +2,8 @@
 clc,clear;
 close all;
 videoprefix = 'DRS1_2.0LongLoad4.75_Vw1.5_fw0.16_theta0.08';
-faultFileName = strcat('../h5Outputs/', videoprefix, '-fault.h5');
-frontsurfFile = strcat('../h5Outputs/', videoprefix, '-frontsurf.h5');
+faultFileName = strcat('../', videoprefix, '-fault.h5');
+frontsurfFile = strcat('../', videoprefix, '-frontsurf.h5');
 
 h5disp(faultFileName);
 h5disp(frontsurfFile);
@@ -184,7 +184,7 @@ if videoflag == true
     videoname = strcat(videoprefix,'X_', num2str(target_x), '_f_and_V_vs_slip.mp4');
     
     % Initialize video
-    myVideo = VideoWriter(strcat('../Videos/', videoname), 'MPEG-4');
+    myVideo = VideoWriter(strcat('Videos/', videoname), 'MPEG-4');
     myVideo.FrameRate = framerate;
     myVideo.Quality = 100;
     open(myVideo);
@@ -304,7 +304,7 @@ if videoflag == true
     videoname = strcat(videoprefix,'X_', num2str(target_x), '_f_and_V_vs_time.mp4');
     
     % Initialize video
-    myVideo = VideoWriter(strcat('../Videos/', videoname), 'MPEG-4');
+    myVideo = VideoWriter(strcat('Videos/', videoname), 'MPEG-4');
     myVideo.FrameRate = framerate;
     myVideo.Quality = 100;
     open(myVideo);

@@ -1,8 +1,8 @@
 clc,clear;
 close all;
 videoprefix = 'DRS1_2.0LongLoad4.75_Vw1.5_fw0.16_theta0.08';
-upperFile = strcat(videoprefix, '-upper_crust.h5');
-lowerFile = strcat(videoprefix, '-lower_crust.h5');
+upperFile = strcat('../h5Outputs/', videoprefix, '-upper_crust.h5');
+lowerFile = strcat('../h5Outputs/', videoprefix, '-lower_crust.h5');
 
 % Calculate normal direction
 faultST = [-0.100000000000000, -0.0554300000000000];
@@ -145,7 +145,7 @@ if videoflag == true
     videoname = strcat(videoprefix, '_shearStress.mp4');
     
     % Initialize video
-    myVideo = VideoWriter(strcat('Videos/', videoname), 'MPEG-4');
+    myVideo = VideoWriter(strcat('../Videos/', videoname), 'MPEG-4');
     myVideo.FrameRate = framerate;
     myVideo.Quality = 100;
     open(myVideo);
