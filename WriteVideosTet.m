@@ -5,8 +5,8 @@ load('BRColorScale.mat');
 VitoColorFlag = true;
 
 % frontsurfFile = 'FineFHLoad15DRS1-frontsurf.h5';
-videoprefix = 'VWFirst_DRS1_8ModA0.02Load4.75_Vww0.1_1.5_4_fw0.35_0.1_theta0.09';
-faultFileName = strcat('../h5Outputs/', videoprefix, '-fault.h5');
+videoprefix = 'PureWeakening';
+faultFileName = strcat('../faultFiles/', videoprefix, '-fault.h5');
 h5disp(faultFileName);
 fontsize = 25;
 
@@ -16,7 +16,7 @@ time = reshape(time, [1, size(time, 3)]);
 time = time - 10e-6;
 nOfTimeSteps = size(time, 2);
 
-% Several wave speed to show on the plot
+% Several wave speed to show on the aplot
 cp = 2662.4;
 cs = 1279;
 nu = 0.35;
@@ -179,11 +179,11 @@ if plotflag == true
     text(VSregion(1)+ 5, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize);
     % Add the wave speeds
     plot(cX, crY, 'w', 'linewidth', 2.0);
-    text(cX(2) + 4, crY(2)+5, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 5, 'interpreter', 'latex');
+    text(cX(2) + 4, crY(2)+5, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
     plot(cX, csY, 'w', 'linewidth', 2.0);
-    text(cX(2) + 4, csY(2) - 1, strcat('$c_s$ = 1.28 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 5, 'interpreter', 'latex');
+    text(cX(2) + 4, csY(2) - 1, strcat('$c_s$ = 1.28 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
     plot(cX, cpY, 'w', 'linewidth', 2.0);
-    text(cX(2) + 4, cpY(2), strcat('$c_p$ = 2.66 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 5, 'interpreter', 'latex');
+    text(cX(2) + 4, cpY(2), strcat('$c_p$ = 2.66 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
     hold off;
     set(h, 'EdgeColor', 'None');
     c = colorbar;
@@ -228,11 +228,11 @@ if plotflag == true
     text(VSregion(1)+ 5, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize);
     % Add the wave speeds
     plot(cX, crY, 'w', 'linewidth', 2.0);
-    text(cX(2) + 4, crY(2)+5, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 5, 'interpreter', 'latex');
+    text(cX(2) + 4, crY(2)+5, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
     plot(cX, csY, 'w', 'linewidth', 2.0);
-    text(cX(2) + 4, csY(2) - 1, strcat('$c_s$ = 1.28 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 5, 'interpreter', 'latex');
+    text(cX(2) + 4, csY(2) - 1, strcat('$c_s$ = 1.28 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
     plot(cX, cpY, 'w', 'linewidth', 2.0);
-    text(cX(2) + 4, cpY(2), strcat('$c_p$ = 2.66 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 5, 'interpreter', 'latex');
+    text(cX(2) + 4, cpY(2), strcat('$c_p$ = 2.66 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
     hold off;
     set(h, 'EdgeColor', 'None');
     c = colorbar;
@@ -277,11 +277,11 @@ if plotflag == true
     text(VSregion(1)+ 5, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize);
     % Add the wave speeds
     plot(cX, crY, 'w', 'linewidth', 2.0);
-    text(cX(2) + 4, crY(2)+5, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 5, 'interpreter', 'latex');
+    text(cX(2) + 4, crY(2)+5, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
     plot(cX, csY, 'w', 'linewidth', 2.0);
-    text(cX(2) + 4, csY(2) - 1, strcat('$c_s$ = 1.28 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 5, 'interpreter', 'latex');
+    text(cX(2) + 4, csY(2) - 1, strcat('$c_s$ = 1.28 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
     plot(cX, cpY, 'w', 'linewidth', 2.0);
-    text(cX(2) + 4, cpY(2), strcat('$c_p$ = 2.66 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 5, 'interpreter', 'latex');
+    text(cX(2) + 4, cpY(2), strcat('$c_p$ = 2.66 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
     hold off;
     set(h, 'EdgeColor', 'None');
     c = colorbar;
@@ -332,11 +332,11 @@ if plotflag == true
     cpY = [60, (cX(2) - cX(1)) * 1e3 / cp + 60];
 
     plot(cX, crY, 'w', 'linewidth', 2.0);
-    text(cX(2) + 4, crY(2)+2, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 5, 'interpreter', 'latex');
+    text(cX(2) + 4, crY(2)+2, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
     plot(cX, csY, 'w', 'linewidth', 2.0);
-    text(cX(2) + 4, csY(2) - 1, strcat('$c_s$ = 1.28 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 5, 'interpreter', 'latex');
+    text(cX(2) + 4, csY(2) - 1, strcat('$c_s$ = 1.28 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
     plot(cX, cpY, 'w', 'linewidth', 2.0);
-    text(cX(2) + 4, cpY(2), strcat('$c_p$ = 2.66 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 5, 'interpreter', 'latex');
+    text(cX(2) + 4, cpY(2), strcat('$c_p$ = 2.66 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
     hold off;
     set(h, 'EdgeColor', 'None');
     c = colorbar;
@@ -387,11 +387,11 @@ if plotflag == true
     cpY = [60, (cX(2) - cX(1)) * 1e3 / cp + 60];
 
     plot(cX, crY, 'w', 'linewidth', 2.0);
-    text(cX(2) + 4, crY(2)+2, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 5, 'interpreter', 'latex');
+    text(cX(2) + 4, crY(2)+2, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
     plot(cX, csY, 'w', 'linewidth', 2.0);
-    text(cX(2) + 4, csY(2) - 1, strcat('$c_s$ = 1.28 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 5, 'interpreter', 'latex');
+    text(cX(2) + 4, csY(2) - 1, strcat('$c_s$ = 1.28 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
     plot(cX, cpY, 'w', 'linewidth', 2.0);
-    text(cX(2) + 4, cpY(2), strcat('$c_p$ = 2.66 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 5, 'interpreter', 'latex');
+    text(cX(2) + 4, cpY(2), strcat('$c_p$ = 2.66 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
     hold off;
     set(h, 'EdgeColor', 'None');
     c = colorbar;
@@ -440,11 +440,11 @@ if plotflag == true
     cpY = [10, (cX(2) - cX(1)) * 1e3 / cp + 10];
     % Add the wave speeds
     plot(cX, crY, 'w', 'linewidth', 2.0);
-    text(cX(2) + 4, crY(2)+5, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 5, 'interpreter', 'latex');
+    text(cX(2) + 4, crY(2)+5, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
     plot(cX, csY, 'w', 'linewidth', 2.0);
-    text(cX(2) + 4, csY(2) - 1, strcat('$c_s$ = 1.28 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 5, 'interpreter', 'latex');
+    text(cX(2) + 4, csY(2) - 1, strcat('$c_s$ = 1.28 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
     plot(cX, cpY, 'w', 'linewidth', 2.0);
-    text(cX(2) + 4, cpY(2), strcat('$c_p$ = 2.66 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 5, 'interpreter', 'latex');
+    text(cX(2) + 4, cpY(2), strcat('$c_p$ = 2.66 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
     hold off;
     set(h, 'EdgeColor', 'None');
     c = colorbar;
@@ -495,11 +495,11 @@ if plotflag == true
     cpY = [40, (cX(2) - cX(1)) * 1e3 / cp + 40];
 
     plot(cX, crY, 'w', 'linewidth', 2.0);
-    text(cX(2) + 4, crY(2)+2, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 5, 'interpreter', 'latex');
+    text(cX(2) + 4, crY(2)+2, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
     plot(cX, csY, 'w', 'linewidth', 2.0);
-    text(cX(2) + 4, csY(2) - 1, strcat('$c_s$ = 1.28 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 5, 'interpreter', 'latex');
+    text(cX(2) + 4, csY(2) - 1, strcat('$c_s$ = 1.28 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
     plot(cX, cpY, 'w', 'linewidth', 2.0);
-    text(cX(2) + 4, cpY(2), strcat('$c_p$ = 2.66 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 5, 'interpreter', 'latex');
+    text(cX(2) + 4, cpY(2), strcat('$c_p$ = 2.66 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
     hold off;
     set(h, 'EdgeColor', 'None');
     c = colorbar;
