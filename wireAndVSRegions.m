@@ -1,3 +1,4 @@
+%% Compute the position of wire and outer part of the gouge
 clc,clear;
 W1 = 0.085;
 VS_start = W1 + 36.6e-3;
@@ -15,6 +16,7 @@ VS_startPos = leftBd + VS_start * dir;
 VS_afterEndPos = leftBd + VS_afterEnd * dir;
 VS_endPos = leftBd + VS_end * dir;
 
+%% Figure out the position of the wire
 W1LL = [-0.031034, -0.017202];
 W1L = [-0.027586, -0.015291];
 W1R = [-0.020690, -0.011468];
@@ -28,3 +30,4 @@ W1LL = W1LL + W1Correct;
 W1L = W1L + W1Correct;
 W1R = W1R + W1Correct;
 W1RR = W1RR + W1Correct;
+
