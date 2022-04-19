@@ -165,7 +165,7 @@ DICdisp_low = zeros(2, size(X_low, 1), size(X_low, 2), size(time, 2));
 for i = 1:1:nOfTimeSteps
     % Symmetrize the displacements
     % Print timestep
-    disp(strcat("Time step: ", num2str(i)));
+    disp(strcat("Calculating displacement, time step: ", num2str(i)));
     F_displacement_up_x = scatteredInterpolant(XYZ(:, UpperID)', squeeze(displacement(1, UpperID, i))', 'natural');
     F_displacement_up_y = scatteredInterpolant(XYZ(:, UpperID)', squeeze(displacement(2, UpperID, i))', 'natural');
     F_displacement_low_x = scatteredInterpolant(XYZ(:, LowerID)', squeeze(displacement(1, LowerID, i))', 'natural');
@@ -199,6 +199,8 @@ vi = 0.35;
 
 % Calculate strain
 for t = 1:1:nOfTimeSteps
+    % Print timestep
+    disp(strcat("Calculating strain and stress, time step: ", num2str(t)));
     % eps_xx and temp eps_yx
     for ii = 2:1:size(X_up, 2) - 1
         DICstrain_up(1, :, ii, t) = (DICdisp_up(1, :, ii + 1, t) - DICdisp_up(1, :, ii - 1, t)) ./ (2.0 * stepsize * pxsize);
@@ -224,14 +226,14 @@ for t = 1:1:nOfTimeSteps
         tempstrain_low(2, jj, :) = (DICdisp_low(1, jj + 1, :, t) - DICdisp_low(1, jj - 1, :, t)) ./ (2.0 * stepsize * pxsize);
     end
     DICstrain_up(2, 1, :, t) = -(3 * DICdisp_up(2, 1, :, t) - 4 * DICdisp_up(2, 2, :, t) + DICdisp_up(2, 3, :, t)) ./ (2.0 * stepsize * pxsize);
-    DICstrain_up(2, size(X_up, 1), :, t) = (3 * DICdisp_up(2, size(X_up, 1), :, t) - 4 * DICdisp_up(2, size(X_up, 1) - 1, :, t) + DICdisp_up(2, size(X_up, 2) - 2, :, t)) ./ (2.0 * stepsize * pxsize);
+    DICstrain_up(2, size(X_up, 1), :, t) = (3 * DICdisp_up(2, size(X_up, 1), :, t) - 4 * DICdisp_up(2, size(X_up, 1) - 1, :, t) + DICdisp_up(2, size(X_up, 1) - 2, :, t)) ./ (2.0 * stepsize * pxsize);
     DICstrain_low(2, 1, :, t) = -(3 * DICdisp_low(2, 1, :, t) - 4 * DICdisp_low(2, 2, :, t) + DICdisp_low(2, 3, :, t)) ./ (2.0 * stepsize * pxsize);
-    DICstrain_low(2, size(X_up, 1), :, t) = (3 * DICdisp_low(2, size(X_up, 1), :, t) - 4 * DICdisp_low(2, size(X_up, 1) - 1, :, t) + DICdisp_low(2, size(X_up, 2) - 2, :, t)) ./ (2.0 * stepsize * pxsize);
+    DICstrain_low(2, size(X_up, 1), :, t) = (3 * DICdisp_low(2, size(X_up, 1), :, t) - 4 * DICdisp_low(2, size(X_up, 1) - 1, :, t) + DICdisp_low(2, size(X_up, 1) - 2, :, t)) ./ (2.0 * stepsize * pxsize);
     
     tempstrain_up(2, 1, :) = -(3 * DICdisp_up(1, 1, :, t) - 4 * DICdisp_up(1, 2, :, t) + DICdisp_up(1, 3, :, t)) ./ (2.0 * stepsize * pxsize);
-    tempstrain_up(2, size(X_up, 1), :) = (3 * DICdisp_up(1, size(X_up, 1), :, t) - 4 * DICdisp_up(1, size(X_up, 1) - 1, :, t) + DICdisp_up(1, size(X_up, 2) - 2, :, t)) ./ (2.0 * stepsize * pxsize);
+    tempstrain_up(2, size(X_up, 1), :) = (3 * DICdisp_up(1, size(X_up, 1), :, t) - 4 * DICdisp_up(1, size(X_up, 1) - 1, :, t) + DICdisp_up(1, size(X_up, 1) - 2, :, t)) ./ (2.0 * stepsize * pxsize);
     tempstrain_low(2, 1, :) = -(3 * DICdisp_low(1, 1, :, t) - 4 * DICdisp_low(1, 2, :, t) + DICdisp_low(1, 3, :, t)) ./ (2.0 * stepsize * pxsize);
-    tempstrain_low(2, size(X_up, 1), :) = (3 * DICdisp_low(1, size(X_up, 1), :, t) - 4 * DICdisp_low(1, size(X_up, 1) - 1, :, t) + DICdisp_low(1, size(X_up, 2) - 2, :, t)) ./ (2.0 * stepsize * pxsize);
+    tempstrain_low(2, size(X_up, 1), :) = (3 * DICdisp_low(1, size(X_up, 1), :, t) - 4 * DICdisp_low(1, size(X_up, 1) - 1, :, t) + DICdisp_low(1, size(X_up, 1) - 2, :, t)) ./ (2.0 * stepsize * pxsize);
     
     % Recover eps_xy = eps_yx
     DICstrain_up(3, :, :, t) = (tempstrain_up(1, :, :) + tempstrain_up(2, :, :)) ./ 2.0; 
@@ -241,7 +243,7 @@ for t = 1:1:nOfTimeSteps
     DICstress_up(1, :, :, t) = Ed / (1 - vi^2) * (DICstrain_up(1, :, :, t) + vi * DICstrain_up(2, :, :, t));
     DICstress_up(2, :, :, t) = Ed / (1 - vi^2) * (DICstrain_up(2, :, :, t) + vi * DICstrain_up(1, :, :, t));
     DICstress_up(3, :, :, t) = Ed / (1 + vi) * (DICstrain_up(3, :, :, t));
-    
+    git push
     DICstress_low(1, :, :, t) = Ed / (1 - vi^2) * (DICstrain_low(1, :, :, t) + vi * DICstrain_low(2, :, :, t));
     DICstress_low(2, :, :, t) = Ed / (1 - vi^2) * (DICstrain_low(2, :, :, t) + vi * DICstrain_low(1, :, :, t));
     DICstress_low(3, :, :, t) = Ed / (1 + vi) * (DICstrain_low(3, :, :, t));
