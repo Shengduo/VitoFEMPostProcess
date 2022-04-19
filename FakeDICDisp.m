@@ -93,4 +93,4 @@ y_up = pxsize : stepsize * pxsize : 20e-3;     % Assume the window height is 20 
 y_low = - y_up;
 
 % Get the values of displacements at [x, y]s
-
+F_displacement_up = scatteredInterpolant(NXYZs, displacement, 'linear');
