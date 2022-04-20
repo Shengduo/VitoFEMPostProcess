@@ -65,7 +65,7 @@ WirePos1 = [-0.025657; -0.014222; 0];
 % VSend = [0.079942, 0.044312, 0]';
 
 VSstart = [0.006354, 0.003522, 0]';
-VSend = [0.058832, 0.032610, 0]';
+VSend = [0.063204, 0.035034, 0]';
 VSregion = 1e3 * [norm(VSstart - WirePos1, 2), norm(VSend - WirePos1, 2)];
 % VSregion = [50, 120];
 
