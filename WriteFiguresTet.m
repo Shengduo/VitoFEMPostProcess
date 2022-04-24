@@ -7,7 +7,7 @@ tractionOffsetFlag = false;
 
 % frontsurfFile = 'FineFHLoad15DRS1-frontsurf.h5';
 % videoprefix = 'DRS1.5_8ModA0.016Load5_Vw2_fw0.1_theta0.036_NULoad2dir1';
-videoprefix = '1WithWallDRS1.5_1.5ModA0.008Load5_Vw2_fw0.1_theta0.032_8000000000000000.0_NULoad2dir0';
+videoprefix = '1WithWallDRS1.5_1.5ModA0.008B0.003Load5_Vw2e+16_fw0.58_theta0.036_8000000000000000.0_NULoad2dir0';
 % videoprefix = 'ViscoElastic_theta0.043';
 % videoprefix = 'DiffNULoadWithWallDRS1.5_8ModA0.016Load5_Vw2_fw0.1_theta0.036_8_NULoad2dir-1';
 faultFileName = strcat('../faultFiles/', videoprefix, '-fault.h5');
