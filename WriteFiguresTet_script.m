@@ -3,7 +3,7 @@ clc,clear;
 close all;
 
 % Parameters
-drs = [1.5]; 
+drs = [3]; 
 load = [5];
 Vw = [2];
 fw = [0.1];
@@ -44,8 +44,8 @@ end
 Distance_To_Surface = 0.005;
 for i = 1:1:size(filenames, 1)
     disp(filenames(i));
-    % WriteFiguresTet_function(filenames(i), Distance_To_Surface);
-    % close all;
+    WriteFiguresTet_function(filenames(i), Distance_To_Surface);
+    close all;
     FakeDICDisp_function(filenames(i));
     close all;
 end

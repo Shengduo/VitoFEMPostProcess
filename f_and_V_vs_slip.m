@@ -1,9 +1,9 @@
 % Read results from hdf5 files.
 clc,clear;
 close all;
-videoprefix = 'DRS1_2.0LongLoad4.75_Vw1.5_fw0.16_theta0.08';
-faultFileName = strcat('../h5Outputs/', videoprefix, '-fault.h5');
-frontsurfFile = strcat('../h5Outputs/', videoprefix, '-frontsurf.h5');
+videoprefix = '1WithWallDRS1.5_1.5ModA0.008AmB0.005Load5_Vw2e+16_fw0.58_theta0.036_-11_NULoad2dir0';
+faultFileName = strcat('../faultFiles/', videoprefix, '-fault.h5');
+frontsurfFile = strcat('../frontsurfFiles/', videoprefix, '-frontsurf.h5');
 
 h5disp(faultFileName);
 h5disp(frontsurfFile);
@@ -41,7 +41,7 @@ WirePos1 = [-0.025657; -0.014222; 0];
 % VSend = [0.079942, 0.044312, 0]';
 
 VSstart = [0.006354, 0.003522, 0]';
-VSend = [0.058832, 0.032610, 0]';
+VSend = [0.063204, 0.035034, 0]';
 VSregion = 1e3 * [norm(VSstart - WirePos1, 2), norm(VSend - WirePos1, 2)];
 
 nOf2DNodes = sum(I1);
@@ -172,19 +172,19 @@ Q = [cos(alpha), sin(alpha); -sin(alpha), cos(alpha)];
 %% -------------------------------------------------------------------------
 % Save a video for fV vs slip
 % Other constants
-timeWindow = [0, 120];
+timeWindow = [10, 120];
 videoflag = true;
 videoXrange = [-110, 110];
 videoYrange = [-110, 110];
-crange = [0, 10];
+crange = [0, 2];
 
 if videoflag == true
     
     % Initialize names
-    videoname = strcat(videoprefix,'X_', num2str(target_x), '_f_and_V_vs_slip.mp4');
+    videoname = strcat(videoprefix,'X_', num2str(target_x), '_f_and_V_vs_slip.avi');
     
     % Initialize video
-    myVideo = VideoWriter(strcat('../Videos/', videoname), 'MPEG-4');
+    myVideo = VideoWriter(strcat('../Videos/', videoname), 'Motion JPEG AVI');
     myVideo.FrameRate = framerate;
     myVideo.Quality = 100;
     open(myVideo);
@@ -193,6 +193,9 @@ if videoflag == true
     for i = 1:1:size(time, 2)
         if time(i) * 1e6 < timeWindow(1)
             continue;
+        end
+        if time(i) * 1e6 > timeWindow(2)
+            break;
         end
         if exist('lastLine1', 'var')
             delete(lastLine1);
@@ -247,9 +250,6 @@ if videoflag == true
         % Write the video
         frame = getframe(gcf);
         writeVideo(myVideo, frame);
-        if time(i) * 1e6 > timeWindow(2)
-            break;
-        end
     end
     close(myVideo);
 end
@@ -266,7 +266,7 @@ pos = fig2.Position;
 pos(3) = pos(3) * 3;
 pos(4) = pos(4) * 2;
 fig2.Position = pos;
-
+xrange = [0, 110];
 % Generate sliprate-slip plot
 subplot(2, 3, 1);
 plot(time * 1e6 - 10, - surfaceShearStress(Ind, 1:end) ./ surfaceNormalStress(Ind, 2), 'linewidth', 2.0);
@@ -292,19 +292,19 @@ set(gca, 'FontSize', fontsize);
 
 
 % Other constants
-timeWindow = [0, 150];
+timeWindow = [10, 150];
 % videoflag = true;
 videoXrange = [-110, 110];
 videoYrange = [-110, 110];
-crange = [0, 10];
+crange = [0, 2];
 
 if videoflag == true
     
     % Initialize names
-    videoname = strcat(videoprefix,'X_', num2str(target_x), '_f_and_V_vs_time.mp4');
+    videoname = strcat(videoprefix,'X_', num2str(target_x), '_f_and_V_vs_time.avi');
     
     % Initialize video
-    myVideo = VideoWriter(strcat('../Videos/', videoname), 'MPEG-4');
+    myVideo = VideoWriter(strcat('../Videos/', videoname), 'Motion JPEG AVI');
     myVideo.FrameRate = framerate;
     myVideo.Quality = 100;
     open(myVideo);
@@ -313,6 +313,9 @@ if videoflag == true
     for i = 1:1:size(time, 2)
         if time(i) * 1e6 < timeWindow(1)
             continue;
+        end
+        if time(i) * 1e6 > timeWindow(2)
+            break;
         end
         if exist('lastLine1', 'var')
             delete(lastLine1);
@@ -367,9 +370,6 @@ if videoflag == true
         % Write the video
         frame = getframe(gcf);
         writeVideo(myVideo, frame);
-        if time(i) * 1e6 > timeWindow(2)
-            break;
-        end
     end
     close(myVideo);
 end

@@ -3,12 +3,12 @@ clc,clear;
 close all;
 
 %% Some pre-calculated geometry info
-videoprefix = '1WithWallDRS1.5_1.5ModA0.008Load5_Vw2_fw0.1_theta0.036_8000000000000000.0_NULoad2dir0';
+videoprefix = '1WithWallDRS1.5_1.5ModA0.003B0.008Load5_Vw0.2_fw0.33_theta0.036_0.036_NULoad2dir0';
 dataFile = strcat('../dumpFiles/', videoprefix, '-domain.h5');
 lowerFile = strcat('../dumpFiles/', videoprefix, '-lower_crust.h5');
 
 % Whether or not apply average symmetry
-symmetryFlag = true;
+symmetryFlag = false;
 
 % Calculate normal direction
 faultST = [-0.100000000000000, -0.0554300000000000];
