@@ -6,7 +6,7 @@ function FakeDICDisp_function(videoprefix)
     lowerFile = strcat('../dumpFiles/', videoprefix, '-lower_crust.h5');
 
     % Whether or not apply average symmetry
-    symmetryFlag = true;
+    symmetryFlag = false;
 
     % Calculate normal direction
     faultST = [-0.100000000000000, -0.0554300000000000];
@@ -238,19 +238,19 @@ function FakeDICDisp_function(videoprefix)
         % eps_yy and temp eps_xy
         for jj = 2:1:size(X_up, 1) - 1
             DICstrain_up(2, jj, :, t) = (DICdisp_up(2, jj + 1, :, t) - DICdisp_up(2, jj - 1, :, t)) ./ (2.0 * stepsize * pxsize);
-            DICstrain_low(2, jj, :, t) = (DICdisp_low(2, jj + 1, :, t) - DICdisp_low(2, jj - 1, :, t)) ./ (2.0 * stepsize * pxsize);
+            DICstrain_low(2, jj, :, t) = (DICdisp_low(2, jj + 1, :, t) - DICdisp_low(2, jj - 1, :, t)) ./ (-2.0 * stepsize * pxsize);
             tempstrain_up(2, jj, :) = (DICdisp_up(1, jj + 1, :, t) - DICdisp_up(1, jj - 1, :, t)) ./ (2.0 * stepsize * pxsize);
-            tempstrain_low(2, jj, :) = (DICdisp_low(1, jj + 1, :, t) - DICdisp_low(1, jj - 1, :, t)) ./ (2.0 * stepsize * pxsize);
+            tempstrain_low(2, jj, :) = (DICdisp_low(1, jj + 1, :, t) - DICdisp_low(1, jj - 1, :, t)) ./ (-2.0 * stepsize * pxsize);
         end
         DICstrain_up(2, 1, :, t) = -(3 * DICdisp_up(2, 1, :, t) - 4 * DICdisp_up(2, 2, :, t) + DICdisp_up(2, 3, :, t)) ./ (2.0 * stepsize * pxsize);
         DICstrain_up(2, size(X_up, 1), :, t) = (3 * DICdisp_up(2, size(X_up, 1), :, t) - 4 * DICdisp_up(2, size(X_up, 1) - 1, :, t) + DICdisp_up(2, size(X_up, 1) - 2, :, t)) ./ (2.0 * stepsize * pxsize);
-        DICstrain_low(2, 1, :, t) = -(3 * DICdisp_low(2, 1, :, t) - 4 * DICdisp_low(2, 2, :, t) + DICdisp_low(2, 3, :, t)) ./ (2.0 * stepsize * pxsize);
-        DICstrain_low(2, size(X_up, 1), :, t) = (3 * DICdisp_low(2, size(X_up, 1), :, t) - 4 * DICdisp_low(2, size(X_up, 1) - 1, :, t) + DICdisp_low(2, size(X_up, 1) - 2, :, t)) ./ (2.0 * stepsize * pxsize);
+        DICstrain_low(2, 1, :, t) = -(3 * DICdisp_low(2, 1, :, t) - 4 * DICdisp_low(2, 2, :, t) + DICdisp_low(2, 3, :, t)) ./ (-2.0 * stepsize * pxsize);
+        DICstrain_low(2, size(X_up, 1), :, t) = (3 * DICdisp_low(2, size(X_up, 1), :, t) - 4 * DICdisp_low(2, size(X_up, 1) - 1, :, t) + DICdisp_low(2, size(X_up, 1) - 2, :, t)) ./ (-2.0 * stepsize * pxsize);
 
         tempstrain_up(2, 1, :) = -(3 * DICdisp_up(1, 1, :, t) - 4 * DICdisp_up(1, 2, :, t) + DICdisp_up(1, 3, :, t)) ./ (2.0 * stepsize * pxsize);
         tempstrain_up(2, size(X_up, 1), :) = (3 * DICdisp_up(1, size(X_up, 1), :, t) - 4 * DICdisp_up(1, size(X_up, 1) - 1, :, t) + DICdisp_up(1, size(X_up, 1) - 2, :, t)) ./ (2.0 * stepsize * pxsize);
-        tempstrain_low(2, 1, :) = -(3 * DICdisp_low(1, 1, :, t) - 4 * DICdisp_low(1, 2, :, t) + DICdisp_low(1, 3, :, t)) ./ (2.0 * stepsize * pxsize);
-        tempstrain_low(2, size(X_up, 1), :) = (3 * DICdisp_low(1, size(X_up, 1), :, t) - 4 * DICdisp_low(1, size(X_up, 1) - 1, :, t) + DICdisp_low(1, size(X_up, 1) - 2, :, t)) ./ (2.0 * stepsize * pxsize);
+        tempstrain_low(2, 1, :) = -(3 * DICdisp_low(1, 1, :, t) - 4 * DICdisp_low(1, 2, :, t) + DICdisp_low(1, 3, :, t)) ./ (-2.0 * stepsize * pxsize);
+        tempstrain_low(2, size(X_up, 1), :) = (3 * DICdisp_low(1, size(X_up, 1), :, t) - 4 * DICdisp_low(1, size(X_up, 1) - 1, :, t) + DICdisp_low(1, size(X_up, 1) - 2, :, t)) ./ (-2.0 * stepsize * pxsize);
 
         % Recover eps_xy = eps_yx
         DICstrain_up(3, :, :, t) = (tempstrain_up(1, :, :) + tempstrain_up(2, :, :)) ./ 2.0; 

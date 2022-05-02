@@ -3,7 +3,7 @@ clc,clear;
 close all;
 
 %% Some pre-calculated geometry info
-videoprefix = '1WithWallDRS1.5_1.5ModA0.003B0.008Load5_Vw0.2_fw0.33_theta0.036_0.036_NULoad2dir0';
+videoprefix = '1WithWallDRS1.5_1.5ModA0.008AmB0.005Load5_Vw2_fw0.1_theta0.036_-11_NULoad2dir0';
 dataFile = strcat('../dumpFiles/', videoprefix, '-domain.h5');
 lowerFile = strcat('../dumpFiles/', videoprefix, '-lower_crust.h5');
 
@@ -240,19 +240,19 @@ for t = 1:1:nOfTimeSteps
     % eps_yy and temp eps_xy
     for jj = 2:1:size(X_up, 1) - 1
         DICstrain_up(2, jj, :, t) = (DICdisp_up(2, jj + 1, :, t) - DICdisp_up(2, jj - 1, :, t)) ./ (2.0 * stepsize * pxsize);
-        DICstrain_low(2, jj, :, t) = (DICdisp_low(2, jj + 1, :, t) - DICdisp_low(2, jj - 1, :, t)) ./ (2.0 * stepsize * pxsize);
+        DICstrain_low(2, jj, :, t) = (DICdisp_low(2, jj + 1, :, t) - DICdisp_low(2, jj - 1, :, t)) ./ (-2.0 * stepsize * pxsize);
         tempstrain_up(2, jj, :) = (DICdisp_up(1, jj + 1, :, t) - DICdisp_up(1, jj - 1, :, t)) ./ (2.0 * stepsize * pxsize);
-        tempstrain_low(2, jj, :) = (DICdisp_low(1, jj + 1, :, t) - DICdisp_low(1, jj - 1, :, t)) ./ (2.0 * stepsize * pxsize);
+        tempstrain_low(2, jj, :) = (DICdisp_low(1, jj + 1, :, t) - DICdisp_low(1, jj - 1, :, t)) ./ (-2.0 * stepsize * pxsize);
     end
     DICstrain_up(2, 1, :, t) = -(3 * DICdisp_up(2, 1, :, t) - 4 * DICdisp_up(2, 2, :, t) + DICdisp_up(2, 3, :, t)) ./ (2.0 * stepsize * pxsize);
     DICstrain_up(2, size(X_up, 1), :, t) = (3 * DICdisp_up(2, size(X_up, 1), :, t) - 4 * DICdisp_up(2, size(X_up, 1) - 1, :, t) + DICdisp_up(2, size(X_up, 1) - 2, :, t)) ./ (2.0 * stepsize * pxsize);
-    DICstrain_low(2, 1, :, t) = -(3 * DICdisp_low(2, 1, :, t) - 4 * DICdisp_low(2, 2, :, t) + DICdisp_low(2, 3, :, t)) ./ (2.0 * stepsize * pxsize);
-    DICstrain_low(2, size(X_up, 1), :, t) = (3 * DICdisp_low(2, size(X_up, 1), :, t) - 4 * DICdisp_low(2, size(X_up, 1) - 1, :, t) + DICdisp_low(2, size(X_up, 1) - 2, :, t)) ./ (2.0 * stepsize * pxsize);
+    DICstrain_low(2, 1, :, t) = -(3 * DICdisp_low(2, 1, :, t) - 4 * DICdisp_low(2, 2, :, t) + DICdisp_low(2, 3, :, t)) ./ (-2.0 * stepsize * pxsize);
+    DICstrain_low(2, size(X_up, 1), :, t) = (3 * DICdisp_low(2, size(X_up, 1), :, t) - 4 * DICdisp_low(2, size(X_up, 1) - 1, :, t) + DICdisp_low(2, size(X_up, 1) - 2, :, t)) ./ (-2.0 * stepsize * pxsize);
     
     tempstrain_up(2, 1, :) = -(3 * DICdisp_up(1, 1, :, t) - 4 * DICdisp_up(1, 2, :, t) + DICdisp_up(1, 3, :, t)) ./ (2.0 * stepsize * pxsize);
     tempstrain_up(2, size(X_up, 1), :) = (3 * DICdisp_up(1, size(X_up, 1), :, t) - 4 * DICdisp_up(1, size(X_up, 1) - 1, :, t) + DICdisp_up(1, size(X_up, 1) - 2, :, t)) ./ (2.0 * stepsize * pxsize);
-    tempstrain_low(2, 1, :) = -(3 * DICdisp_low(1, 1, :, t) - 4 * DICdisp_low(1, 2, :, t) + DICdisp_low(1, 3, :, t)) ./ (2.0 * stepsize * pxsize);
-    tempstrain_low(2, size(X_up, 1), :) = (3 * DICdisp_low(1, size(X_up, 1), :, t) - 4 * DICdisp_low(1, size(X_up, 1) - 1, :, t) + DICdisp_low(1, size(X_up, 1) - 2, :, t)) ./ (2.0 * stepsize * pxsize);
+    tempstrain_low(2, 1, :) = -(3 * DICdisp_low(1, 1, :, t) - 4 * DICdisp_low(1, 2, :, t) + DICdisp_low(1, 3, :, t)) ./ (-2.0 * stepsize * pxsize);
+    tempstrain_low(2, size(X_up, 1), :) = (3 * DICdisp_low(1, size(X_up, 1), :, t) - 4 * DICdisp_low(1, size(X_up, 1) - 1, :, t) + DICdisp_low(1, size(X_up, 1) - 2, :, t)) ./ (-2.0 * stepsize * pxsize);
     
     % Recover eps_xy = eps_yx
     DICstrain_up(3, :, :, t) = (tempstrain_up(1, :, :) + tempstrain_up(2, :, :)) ./ 2.0; 
@@ -297,6 +297,7 @@ P = 14.3e6;
 alpha = 29 * pi / 180;
 sigma_Pre = -P * [sin(alpha)^2; cos(alpha)^2; sin(alpha) * cos(alpha)];
 totalFaultStress = faultStress + sigma_Pre;
+
 %% Save a X-T diagram plot of shear stress (only observing window)
 plotflag = true;
 if plotflag == true
@@ -351,6 +352,62 @@ if plotflag == true
     print(figure(figNo) ,plotname, '-dpng', '-r500');
 end
 figNo = figNo + 1;
+
+%% Save a X-T diagram plot of normal stress (only observing window)
+plotflag = true;
+if plotflag == true
+    fig = figure(figNo);
+    % Trange = [0, 150];
+    Trange = [30, 110];
+    Xrange = [VSregion(1), VSregion(1) + 45];
+    fig.Position(3:4) = 1.5 * fig.Position(3:4);
+    
+    % Initialize names
+    plotname = strcat(pwd, '/../plots/', videoprefix, '_X-TofNormalStress_window_DIC.png');
+    
+    % Plot sliprate on X-T
+    [Tsteps, Xsteps] = meshgrid(1e6 * plotTime, 1e3 * plot_x_up);
+    %subplot(2,2,iii)
+    h = pcolor(Xsteps', Tsteps', (squeeze(- totalFaultStress(2, :, :)) ./ 1e6)');
+    shading interp;
+    if VitoColorFlag == 1
+        plotname = strcat(pwd, '/../Vitoplots/', videoprefix, '_X-TofNormalStress_window_DIC.png');
+        colormap(black_rainbow_plus_long);
+    end
+    hold on;
+    xline(VSregion(1), 'r' ,'linewidth', 2.0);
+    xline(VSregion(2), 'r' ,'linewidth', 2.0);
+    text(VSregion(1)+ 5, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize);
+    % Add the wave speeds
+    
+    cX = [55, 65];
+    crY = [40, (cX(2) - cX(1)) * 1e3 / cr + 40];
+    csY = [40, (cX(2) - cX(1)) * 1e3 / cs + 40];
+    cpY = [40, (cX(2) - cX(1)) * 1e3 / cp + 40];
+
+    plot(cX, crY, 'w', 'linewidth', 2.0);
+    text(cX(2) + 4, crY(2)+2, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
+    plot(cX, csY, 'w', 'linewidth', 2.0);
+    text(cX(2) + 4, csY(2) - 1, strcat('$c_s$ = 1.28 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
+    plot(cX, cpY, 'w', 'linewidth', 2.0);
+    text(cX(2) + 4, cpY(2), strcat('$c_p$ = 2.66 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
+    hold off;
+    set(h, 'EdgeColor', 'None');
+    c = colorbar;
+    caxis([5, 15]);
+    ylabel(c,'Normal stress [MPa]','FontName','Avenir','FontSize',fontsize);
+    xlim(Xrange);
+    ylim(Trange);
+    xlabel('Distance along the fault [mm]');
+    ylabel('Time [\mus]');
+    title('X-T diagram of Normal stress');
+    set(gca, 'FontSize', fontsize);
+    
+    % Save the figure
+    print(figure(figNo) ,plotname, '-dpng', '-r500');
+end
+figNo = figNo + 1;
+
 
 %% Save a X-T diagram plot of surface slip rate (only observing window)
 plotflag = true;

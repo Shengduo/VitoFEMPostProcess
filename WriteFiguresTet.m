@@ -7,7 +7,7 @@ tractionOffsetFlag = false;
 
 % frontsurfFile = 'FineFHLoad15DRS1-frontsurf.h5';
 % videoprefix = 'DRS1.5_8ModA0.016Load5_Vw2_fw0.1_theta0.036_NULoad2dir1';
-videoprefix = '1WithWallDRS1.5_1.5ModA0.008B0.003Load5_Vw2e+16_fw0.58_theta0.036_8000000000000000.0_NULoad2dir0';
+videoprefix = '1WithWallDRS1.5_1.5ModA0.003B0.008Load5_Vw0.2_fw0.33_theta0.036_0.036_NULoad2dir0';
 % videoprefix = 'ViscoElastic_theta0.043';
 % videoprefix = 'DiffNULoadWithWallDRS1.5_8ModA0.016Load5_Vw2_fw0.1_theta0.036_8_NULoad2dir-1';
 faultFileName = strcat('../faultFiles/', videoprefix, '-fault.h5');
@@ -74,9 +74,14 @@ nOf2DNodes = sum(I1);
 FaultX = zeros(1, nOf2DNodes);
 surfaceNodesXYZ = nodalXYZ(:, I1);
 surfaceTraction = Traction(1, I1, :);
+surfaceNormal = Traction(3, I1, :);
 surfaceTraction = reshape(surfaceTraction, size(surfaceTraction, 2), size(surfaceTraction, 3));
+surfaceNormal = reshape(surfaceNormal, size(surfaceNormal, 2), size(surfaceNormal, 3));
+
 [~, I] = sort(surfaceNodesXYZ(1,:));
 surfaceTraction = surfaceTraction(I, :);
+surfaceNormal = surfaceNormal(I, :);
+
 
 % Fault Range
 xrange = [-100, 150];
@@ -495,6 +500,61 @@ if plotflag == true
     xlabel('Distance along the fault [mm]');
     ylabel('Time [\mus]');
     title('X-T diagram of Shear stress');
+    set(gca, 'FontSize', fontsize);
+    
+    % Save the figure
+    print(figure(figNo) ,plotname, '-dpng', '-r500');
+end
+figNo = figNo + 1;
+
+%% Save a X-T diagram plot of normal stress (only observing window)
+plotflag = true;
+if plotflag == true
+    fig = figure(figNo);
+    % Trange = [0, 150];
+    Trange = [30, 110];
+    Xrange = [VSregion(1), VSregion(1) + 45];
+    fig.Position(3:4) = 1.5 * fig.Position(3:4);
+    
+    % Initialize names
+    plotname = strcat(pwd, '/../plots/', videoprefix, '_X-TofNormalstress_window.png');
+    
+    % Plot sliprate on X-T
+    [Tsteps, Xsteps] = meshgrid(1e6 * time, 1e3 * FaultX);
+    %subplot(2,2,iii)
+    h = pcolor(Xsteps', Tsteps', -(surfaceNormal ./ 1e6)');
+    shading interp;
+    if VitoColorFlag == 1
+        plotname = strcat(pwd, '/../Vitoplots/', videoprefix, '_X-TofNormalStress_window.png');
+        colormap(black_rainbow_plus_long);
+    end
+    hold on;
+    xline(VSregion(1), 'r' ,'linewidth', 2.0);
+    xline(VSregion(2), 'r' ,'linewidth', 2.0);
+    text(VSregion(1)+ 5, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize);
+    % Add the wave speeds
+    
+    cX = [55, 65];
+    crY = [40, (cX(2) - cX(1)) * 1e3 / cr + 40];
+    csY = [40, (cX(2) - cX(1)) * 1e3 / cs + 40];
+    cpY = [40, (cX(2) - cX(1)) * 1e3 / cp + 40];
+
+    plot(cX, crY, 'w', 'linewidth', 2.0);
+    text(cX(2) + 4, crY(2)+2, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
+    plot(cX, csY, 'w', 'linewidth', 2.0);
+    text(cX(2) + 4, csY(2) - 1, strcat('$c_s$ = 1.28 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
+    plot(cX, cpY, 'w', 'linewidth', 2.0);
+    text(cX(2) + 4, cpY(2), strcat('$c_p$ = 2.66 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
+    hold off;
+    set(h, 'EdgeColor', 'None');
+    c = colorbar;
+    caxis([5, 15]);
+    ylabel(c,'Shear stress [MPa]','FontName','Avenir','FontSize',fontsize);
+    xlim(Xrange);
+    ylim(Trange);
+    xlabel('Distance along the fault [mm]');
+    ylabel('Time [\mus]');
+    title('X-T diagram of Normal stress');
     set(gca, 'FontSize', fontsize);
     
     % Save the figure
