@@ -203,7 +203,7 @@ faultStress = zeros(3, size(x_up, 2), size(time, 2));
 faultSlipRate = zeros(size(x_up, 2), size(time, 2));
 
 % Young's modulus and Poisson's ratio
-Ed = 5300e6;
+Ed = 5.300095616629909e+09;
 vi = 0.35;
 
 % Calculate strain

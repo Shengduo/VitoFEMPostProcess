@@ -9,7 +9,7 @@ la = density * (cp ^ 2 - 2 * cs ^ 2);
 G = density * cs ^ 2;
 E = G * (3 * la + 2 * G) / (la + G);
 nu = la / (2 * (la + G));
-s_yy = - 13.6e6;
+s_yy = - 14.3e6;
 
 alpha = 29 / 180 * pi;
 tau0 = - s_yy * sin(alpha) * cos(alpha);
