@@ -38,7 +38,7 @@ for idrs = 1:1:size(drs, 2)
                                     continue;
                                 end
                                 for iNULoad = 1:1:size(NULoad, 2)
-                                    fileNamePrefix = "2WithWallDRS1.5_" + string(drs(idrs)) + "ModA" + string(A(iA)) + "AmB" + string(AmB(iAmB)) + "Load" + string(load(iload)) + "_Vw" + string(Vw(iVw)) + "_fw" + string(fw(ifw)) + "_theta" + string(theta1(itheta1)) + "_" + string(theta2(itheta2)) + "_NULoad2dir" + string(NULoad(iNULoad));
+                                    fileNamePrefix = "3WithWallDRS1.5_" + string(drs(idrs)) + "ModA" + string(A(iA)) + "AmB" + string(AmB(iAmB)) + "Load" + string(load(iload)) + "_Vw" + string(Vw(iVw)) + "_fw" + string(fw(ifw)) + "_theta" + string(theta1(itheta1)) + "_" + string(theta2(itheta2)) + "_NULoad2dir" + string(NULoad(iNULoad));
                                     filenames = [filenames; fileNamePrefix];
                                 end
                             end
@@ -52,7 +52,10 @@ end
 
 %% Call the function script to postprocess all the cases in on RunJobs
 
-Distance_To_Surface = 0.004135;
+% 2 Distance_To_Surface = 0.004133;
+% 1 Distance_To_Surface = 0.004135;
+% 3 Distance_To_Surface = 0.004134
+Distance_To_Surface = 0.004134;
 for i = 1:1:size(filenames, 1)
     disp(filenames(i));
     WriteFiguresTet_function(filenames(i), Distance_To_Surface);
