@@ -7,7 +7,7 @@ tractionOffsetFlag = false;
 
 % frontsurfFile = 'FineFHLoad15DRS1-frontsurf.h5';
 % videoprefix = 'DRS1.5_8ModA0.016Load5_Vw2_fw0.1_theta0.036_NULoad2dir1';
-videoprefix = '1WithWallDRS1.5_1.5ModA0.003B0.008Load5_Vw0.2_fw0.33_theta0.036_0.036_NULoad2dir0';
+videoprefix = '3WithWallDRS1.5_1.5ModA0.008AmB0.005Load5_Vw2_fw0.1_theta0.036_-11_NULoad2dir0';
 % videoprefix = 'ViscoElastic_theta0.043';
 % videoprefix = 'DiffNULoadWithWallDRS1.5_8ModA0.016Load5_Vw2_fw0.1_theta0.036_8_NULoad2dir-1';
 faultFileName = strcat('../faultFiles/', videoprefix, '-fault.h5');
@@ -105,7 +105,7 @@ for t = 1:1:nOfTimeSteps
 end
 figNo = 1;
 %% Plot slip rate at different time
-plotflag = true;
+plotflag = false;
 if plotflag == true
     dtstep = 10;
     tstep = 35;
@@ -163,7 +163,7 @@ end
 figNo = figNo + 1;
 
 %% Save a X-T diagram plot of surface slip rate (normal range)
-plotflag = true;
+plotflag = false;
 if plotflag == true
     fig = figure(figNo);
     Trange = [0, 115];
@@ -211,7 +211,7 @@ end
 figNo = figNo + 1;
 
 %% Save a X-T diagram plot of surface slip rate (Vito range)
-plotflag = true;
+plotflag = false;
 if plotflag == true
     fig = figure(figNo);
     % Trange = [0, 150];
@@ -260,7 +260,7 @@ end
 figNo = figNo + 1;
 
 %% Save a X-T diagram plot of surface slip rate (normal range, log scale)
-plotflag = true;
+plotflag = false;
 if plotflag == true
     fig = figure(figNo);
     % Trange = [0, 150];
@@ -309,7 +309,7 @@ end
 figNo = figNo + 1;
 
 %% Save a X-T diagram plot of surface slip rate (only observing window)
-plotflag = true;
+plotflag = false;
 if plotflag == true
     fig = figure(figNo);
     % Trange = [0, 150];
@@ -364,7 +364,7 @@ end
 figNo = figNo + 1;
 
 %% Save a X-T diagram plot of surface slip rate (observing window, smaller range)
-plotflag = true;
+plotflag = false;
 if plotflag == true
     fig = figure(figNo);
     % Trange = [0, 150];
@@ -419,7 +419,7 @@ end
 figNo = figNo + 1;
 
 %% Save a X-T diagram plot of shear stress (normal range)
-plotflag = true;
+plotflag = false;
 if plotflag == true
     fig = figure(figNo);
     Trange = [0, 115];
@@ -472,7 +472,7 @@ end
 figNo = figNo + 1;
 
 %% Save a X-T diagram plot of shear stress (only observing window)
-plotflag = true;
+plotflag = false;
 if plotflag == true
     fig = figure(figNo);
     % Trange = [0, 150];
@@ -563,7 +563,7 @@ if videoflag == true
         hold off;
         p.Faces = Connection' + 1;
         c = colorbar;
-        caxis([0, 12]);
+        caxis([0, 2]);
         ylabel(c,'Slip rate [m/s]','FontName','Avenir','FontSize',fontsize);
         axis equal;
         grid on;
@@ -645,10 +645,10 @@ if videoflag == true
     yrange = [-6, 6];
     
     % Initialize names
-    videoname = strcat(videoprefix, '_normalTrac.mp4');
+    videoname = strcat(videoprefix, '_normalTrac.avi');
     
     % Initialize video
-    myVideo = VideoWriter(strcat('../Videos/', videoname), 'MPEG-4');
+    myVideo = VideoWriter(strcat('../Videos/', videoname), 'Motion JPEG AVI');
     myVideo.FrameRate = framerate;
     myVideo.Quality = 100;
     open(myVideo);
@@ -739,7 +739,7 @@ if videoflag == true
     yrange = [0, 20];
     
     % Initialize names
-    videoname = strcat(videoprefix, '_slip.mp4');
+    videoname = strcat(videoprefix, '_slip.avi');
     
     % Initialize video
     myVideo = VideoWriter(strcat('../Videos/', videoname), 'MPEG-4');

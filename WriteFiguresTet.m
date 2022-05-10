@@ -120,7 +120,7 @@ for t = 1:1:nOfTimeSteps
 end
 figNo = 1;
 %% Plot slip rate at different time
-plotflag = true;
+plotflag = false;
 if plotflag == true
     dtstep = 10;
     tstep = 35;
@@ -144,7 +144,7 @@ end
 figNo = figNo + 1;
 
 %% Save a X-T diagram plot of surface slip rate (normal range)
-plotflag = true;
+plotflag = false;
 if plotflag == true
     fig = figure(figNo);
     Trange = [0, 115];
@@ -192,7 +192,7 @@ end
 figNo = figNo + 1;
 
 %% Save a X-T diagram plot of surface slip rate (Vito range)
-plotflag = true;
+plotflag = false;
 if plotflag == true
     fig = figure(figNo);
     % Trange = [0, 150];
@@ -241,7 +241,7 @@ end
 figNo = figNo + 1;
 
 %% Save a X-T diagram plot of surface slip rate (normal range, log scale)
-plotflag = true;
+plotflag = false;
 if plotflag == true
     fig = figure(figNo);
     % Trange = [0, 150];
@@ -290,7 +290,7 @@ end
 figNo = figNo + 1;
 
 %% Save a X-T diagram plot of surface slip rate (only observing window)
-plotflag = true;
+plotflag = false;
 if plotflag == true
     fig = figure(figNo);
     % Trange = [0, 150];
@@ -345,7 +345,7 @@ end
 figNo = figNo + 1;
 
 %% Save a X-T diagram plot of surface slip rate (observing window, smaller range)
-plotflag = true;
+plotflag = false;
 if plotflag == true
     fig = figure(figNo);
     % Trange = [0, 150];
@@ -400,7 +400,7 @@ end
 figNo = figNo + 1;
 
 %% Save a X-T diagram plot of shear stress (normal range)
-plotflag = true;
+plotflag = false;
 if plotflag == true
     fig = figure(figNo);
     Trange = [0, 115];
@@ -453,7 +453,7 @@ end
 figNo = figNo + 1;
 
 %% Save a X-T diagram plot of shear stress (only observing window)
-plotflag = true;
+plotflag = false;
 if plotflag == true
     fig = figure(figNo);
     % Trange = [0, 150];
@@ -508,7 +508,7 @@ end
 figNo = figNo + 1;
 
 %% Save a X-T diagram plot of normal stress (only observing window)
-plotflag = true;
+plotflag = false;
 if plotflag == true
     fig = figure(figNo);
     % Trange = [0, 150];

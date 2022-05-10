@@ -1,4 +1,4 @@
-function FakeDICDisp_function(videoprefix)
+function FakeDICDisp_function(videoprefix, stress_distance)
     % Script to generate fake measurement of stress, strain
     %% Some pre-calculated geometry info
     % videoprefix = '1WithWallDRS1.5_1.5ModA0.008Load5_Vw2_fw0.1_theta0.036_8000000000000000.0_NULoad2dir0';
@@ -349,7 +349,66 @@ function FakeDICDisp_function(videoprefix)
         print(figure(figNo) ,plotname, '-dpng', '-r500');
     end
     figNo = figNo + 1;
+    
+    %% Save a X-T diagram plot of shear stress above the surface at stress_distance (mm)
+    plotflag = true;
+    if plotflag == true
+        fig = figure(figNo);
+        % Trange = [0, 150];
+        Trange = [30, 110];
+        Xrange = [VSregion(1), VSregion(1) + 45];
+        fig.Position(3:4) = 1.5 * fig.Position(3:4);
 
+        % Initialize names
+        plotname = strcat(pwd, '/../plots/', videoprefix, '_X-TofShearstress_window_', num2str(stress_distance), '_DIC.png');
+        [Xq, Yq] = meshgrid(x_up, stress_distance / 1e3);
+        stress_at_dist = zeros(size(x_up, 2), size(time, 2));
+        for t = 1:1:size(time, 2)
+            stress_at_dist(:, t) = squeeze(interp2(X_up, Y_up, squeeze(DICstress_up(3, :, :, t)), Xq, Yq));
+        end
+        totalStressAtDist = stress_at_dist + sigma_Pre(3);
+        % Plot sliprate on X-T
+        [Tsteps, Xsteps] = meshgrid(1e6 * plotTime, 1e3 * plot_x_up);
+        %subplot(2,2,iii)
+        h = pcolor(Xsteps', Tsteps', (squeeze(- totalStressAtDist) ./ 1e6)');
+        shading interp;
+        if VitoColorFlag == 1
+            plotname = strcat(pwd, '/../Vitoplots/', videoprefix, '_X-TofShearstress_window_', num2str(stress_distance), '_DIC.png');
+            colormap(black_rainbow_plus_long);
+        end
+        hold on;
+        xline(VSregion(1), 'r' ,'linewidth', 2.0);
+        xline(VSregion(2), 'r' ,'linewidth', 2.0);
+        text(VSregion(1)+ 5, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize);
+        % Add the wave speeds
+
+        cX = [55, 65];
+        crY = [40, (cX(2) - cX(1)) * 1e3 / cr + 40];
+        csY = [40, (cX(2) - cX(1)) * 1e3 / cs + 40];
+        cpY = [40, (cX(2) - cX(1)) * 1e3 / cp + 40];
+
+        plot(cX, crY, 'w', 'linewidth', 2.0);
+        text(cX(2) + 4, crY(2)+2, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
+        plot(cX, csY, 'w', 'linewidth', 2.0);
+        text(cX(2) + 4, csY(2) - 1, strcat('$c_s$ = 1.28 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
+        plot(cX, cpY, 'w', 'linewidth', 2.0);
+        text(cX(2) + 4, cpY(2), strcat('$c_p$ = 2.66 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
+        hold off;
+        set(h, 'EdgeColor', 'None');
+        c = colorbar;
+        caxis([2, 10]);
+        ylabel(c,'Shear stress [MPa]','FontName','Avenir','FontSize',fontsize);
+        xlim(Xrange);
+        ylim(Trange);
+        xlabel('Distance along the fault [mm]');
+        ylabel('Time [\mus]');
+        title(strcat('X-T Shear stress at ', num2str(stress_distance), ' ', 'mm'));
+        set(gca, 'FontSize', fontsize);
+
+        % Save the figure
+        print(figure(figNo) ,plotname, '-dpng', '-r500');
+    end
+    figNo = figNo + 1;
     
     %% Save a X-T diagram plot of normal stress (only observing window)
     plotflag = true;
