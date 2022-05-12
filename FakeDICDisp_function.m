@@ -159,6 +159,8 @@ function FakeDICDisp_function(videoprefix, stress_distance)
     % Displacement for upper and lower halves, fault slip
     DICdisp_up = zeros(2, size(X_up, 1), size(X_up, 2), size(time, 2));
     DICdisp_low = zeros(2, size(X_low, 1), size(X_low, 2), size(time, 2));
+    Vel_up = zeros(2, size(X_up, 1), size(X_up, 2), size(time, 2));
+    Vel_low = zeros(2, size(X_low, 1), size(X_low, 2), size(time, 2));
     faultSlip = zeros(size(x_up, 2), size(time, 2));
 
     % Get the values of displacements at [x, y]s and fault slip
@@ -170,11 +172,22 @@ function FakeDICDisp_function(videoprefix, stress_distance)
         F_displacement_up_y = scatteredInterpolant(XYZ(:, UpperID)', squeeze(displacement(2, UpperID, i))', 'natural');
         F_displacement_low_x = scatteredInterpolant(XYZ(:, LowerID)', squeeze(displacement(1, LowerID, i))', 'natural');
         F_displacement_low_y = scatteredInterpolant(XYZ(:, LowerID)', squeeze(displacement(2, LowerID, i))', 'natural');
-
+        
+        % Get velocity
+        F_vel_up_x = scatteredInterpolant(XYZ(:, UpperID)', squeeze(velocity(1, UpperID, i))', 'natural');
+        F_vel_up_y = scatteredInterpolant(XYZ(:, UpperID)', squeeze(velocity(2, UpperID, i))', 'natural');
+        F_vel_low_x = scatteredInterpolant(XYZ(:, LowerID)', squeeze(velocity(1, LowerID, i))', 'natural');
+        F_vel_low_y = scatteredInterpolant(XYZ(:, LowerID)', squeeze(velocity(2, LowerID, i))', 'natural');
+        
         DICdisp_up(1, :, :, i) = F_displacement_up_x(X_up, Y_up);
         DICdisp_up(2, :, :, i) = F_displacement_up_y(X_up, Y_up);
         DICdisp_low(1, :, :, i) = F_displacement_low_x(X_low, Y_low);
         DICdisp_low(2, :, :, i) = F_displacement_low_y(X_low, Y_low);
+    
+        Vel_up(1, :, :, i) = F_vel_up_x(X_up, Y_up);
+        Vel_up(2, :, :, i) = F_vel_up_y(X_up, Y_up);
+        Vel_low(1, :, :, i) = F_vel_low_x(X_low, Y_low);
+        Vel_low(2, :, :, i) = F_vel_low_y(X_low, Y_low);
 
         % Apply averaging between upper and lower layer
         if symmetryFlag == true
@@ -402,7 +415,7 @@ function FakeDICDisp_function(videoprefix, stress_distance)
         ylim(Trange);
         xlabel('Distance along the fault [mm]');
         ylabel('Time [\mus]');
-        title(strcat('X-T Shear stress at ', num2str(stress_distance), ' ', 'mm'));
+        title(['X-T Shear stress at ', num2str(stress_distance), ' ', 'mm']);
         set(gca, 'FontSize', fontsize);
 
         % Save the figure
@@ -569,6 +582,71 @@ function FakeDICDisp_function(videoprefix, stress_distance)
         xlabel('Distance along the fault [mm]');
         ylabel('Time [\mus]');
         title('X-T diagram of Slip rate');
+        set(gca, 'FontSize', fontsize);
+
+        % Save the figure
+        print(figure(figNo) ,plotname, '-dpng', '-r500');
+    end
+    figNo = figNo + 1;
+
+    
+    %% Save a X-T diagram plot of slip rate at stress-distance above the interface 
+    % (real one, only observing window, smaller caxis range)
+    plotflag = true;
+    if plotflag == true
+        fig = figure(figNo);
+        % Trange = [0, 150];
+        Trange = [30, 110];
+        Xrange = [VSregion(1), VSregion(1) + 45];
+        fig.Position(3:4) = 1.5 * fig.Position(3:4);
+
+        % Initialize names
+        plotname = strcat(pwd, '/../plots/', videoprefix, '_X-TofSlipRate_window_small_', num2str(stress_distance), '.png');
+        
+        % Compute slip rate
+        [Xq, Yq] = meshgrid(x_up, stress_distance / 1e3);
+        sliprate_at_dist = zeros(size(x_up, 2), size(time, 2));
+        for t = 1:1:size(time, 2)
+            sliprate_at_dist(:, t) = squeeze(interp2(X_up, Y_up, squeeze(Vel_up(1, :, :, t)), Xq, Yq)) ...
+                                     - squeeze(interp2(X_low, Y_low, squeeze(Vel_low(1, :, :, t)), Xq, -Yq));
+        end        
+        
+        % Plot sliprate on X-T
+        [Tsteps, Xsteps] = meshgrid(1e6 * plotTime, 1e3 * plot_x_up);
+        %subplot(2,2,iii)
+        h = pcolor(Xsteps', Tsteps', (-sliprate_at_dist)');
+        shading interp;
+        if VitoColorFlag == 1
+            plotname = strcat(pwd, '/../Vitoplots/', videoprefix, '_X-TofSlipRate_window_small_', num2str(stress_distance), '.png');
+            colormap(flipud(black_rainbow_shear_long));
+        end
+        hold on;
+        xline(VSregion(1), 'r' ,'linewidth', 2.0);
+        xline(VSregion(2), 'r' ,'linewidth', 2.0);
+        text(VSregion(1)+ 5, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize);
+        % Add the wave speeds
+
+        cX = [55, 65];
+        crY = [60, (cX(2) - cX(1)) * 1e3 / cr + 60];
+        csY = [60, (cX(2) - cX(1)) * 1e3 / cs + 60];
+        cpY = [60, (cX(2) - cX(1)) * 1e3 / cp + 60];
+
+        plot(cX, crY, 'w', 'linewidth', 2.0);
+        text(cX(2) + 4, crY(2)+2, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
+        plot(cX, csY, 'w', 'linewidth', 2.0);
+        text(cX(2) + 4, csY(2) - 1, strcat('$c_s$ = 1.28 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
+        plot(cX, cpY, 'w', 'linewidth', 2.0);
+        text(cX(2) + 4, cpY(2), strcat('$c_p$ = 2.66 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
+        hold off;
+        set(h, 'EdgeColor', 'None');
+        c = colorbar;
+        caxis([0, 0.8]);
+        ylabel(c,'Slip rate [m/s]','FontName','Avenir','FontSize',fontsize);
+        xlim(Xrange);
+        ylim(Trange);
+        xlabel('Distance along the fault [mm]');
+        ylabel('Time [\mus]');
+        title(['X-T Slip rate at ', num2str(stress_distance), ' ', 'mm']);
         set(gca, 'FontSize', fontsize);
 
         % Save the figure

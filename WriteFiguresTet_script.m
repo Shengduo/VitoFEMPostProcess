@@ -23,8 +23,9 @@ theta2 = [-11];
 A = [0.008];
 AmB = [0.005];
 NULoad = [0];
-stress_dist = [3];
-mesh = [1, 2, 3];
+stress_dist = [1];
+mesh = [1];
+z_location = [0.003];
 
 % Filenames the things are stored
 filenames = [];
@@ -66,7 +67,13 @@ for i = 1:1:size(filenames, 1)
     % close all;
     
     for iStress_dist = 1:1:size(stress_dist, 2)
-        FakeDICDisp_function(filenames(i), stress_dist(iStress_dist));
+        % FakeDICDisp_function(filenames(i), stress_dist(iStress_dist));
+        % close all;
+        for iZ_location = 1:1:size(z_location, 2)
+            RealStressAtLocation_function(filenames(i), stress_dist(iStress_dist), z_location(iZ_location));
+            % close all;
+        end
     end
-    close all;
+    
+    % close all;
 end

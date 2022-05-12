@@ -7,12 +7,12 @@ tractionOffsetFlag = false;
 
 % frontsurfFile = 'FineFHLoad15DRS1-frontsurf.h5';
 % videoprefix = 'DRS1.5_8ModA0.016Load5_Vw2_fw0.1_theta0.036_NULoad2dir1';
-videoprefix = '3WithWallDRS1.5_1.5ModA0.008AmB0.005Load5_Vw2_fw0.1_theta0.036_-11_NULoad2dir0';
+videoprefix = '2WithWallDRS1.5_1.5ModA0.008AmB0.005Load5_Vw2_fw0.1_theta0.036_-11_NULoad2dir0';
 % videoprefix = 'ViscoElastic_theta0.043';
 % videoprefix = 'DiffNULoadWithWallDRS1.5_8ModA0.016Load5_Vw2_fw0.1_theta0.036_8_NULoad2dir-1';
 faultFileName = strcat('../faultFiles/', videoprefix, '-fault.h5');
 h5disp(faultFileName);
-fontsize = 25;
+fontsize = 20;
 
 % Read time
 time = h5read(faultFileName, '/time');
@@ -533,8 +533,8 @@ videoflag = true;
 if videoflag == true
     fig = figure(figNo);
     fig.Position = [1000, 597, 2800/2, 1680/2];
-    % xrange = [-100, 150];
-    yrange = [-6, 6];
+    xrange = 1e3 * [min(FaultX), max(FaultX)];
+    yrange = [-5, 5];
     
     % Initialize names
     videoname = strcat(videoprefix, '_sliprateMag.avi');
@@ -559,19 +559,19 @@ if videoflag == true
         hold on;
         xline(VSregion(1), 'r' ,'linewidth', 2.0);
         xline(VSregion(2), 'r' ,'linewidth', 2.0);
-        text(VSregion(1)+ 5, -8, 'VS region', 'color', 'r', 'Fontsize', fontsize);
+        text(56, -8, 'Gouge Region', 'color', 'r', 'Fontsize', fontsize, 'interpreter', 'latex');
         hold off;
         p.Faces = Connection' + 1;
         c = colorbar;
         caxis([0, 2]);
-        ylabel(c,'Slip rate [m/s]','FontName','Avenir','FontSize',fontsize);
+        ylabel(c,{'Slip rate', '[m/s]'},'FontName','Avenir','FontSize',fontsize,'interpreter', 'latex');
         axis equal;
         grid on;
         xlim(xrange);
         ylim(yrange);
-        xlabel('Distance along the fault [mm]');
-        ylabel({'Thickness along', 'the fault [mm]'});
-        title(strcat('Time = ', num2str(1e6 * time(i), '%2f'), ' [\mus]'));
+        xlabel('Distance along the fault [mm]', 'interpreter', 'latex');
+        ylabel({'Interface', 'width [mm]'}, 'interpreter', 'latex');
+        title(['Time = ', num2str(1e6 * time(i), '%.2f'), ' [$\mu$s]'], 'interpreter', 'latex');
         set(gca, 'FontSize', fontsize);
         
         % Write the video
@@ -587,8 +587,8 @@ videoflag = true;
 if videoflag == true
     fig = figure(figNo);
     fig.Position = [1000, 597, 2800/2, 1680/2];
-    % xrange = [-100, 150];
-    yrange = [-6, 6];
+    xrange = 1e3 * [min(FaultX), max(FaultX)];
+    yrange = [-5, 5];
     
     % Initialize names
     videoname = strcat(videoprefix, '_shearTrac.avi');
@@ -614,18 +614,19 @@ if videoflag == true
         hold on;
         xline(VSregion(1), 'r' ,'linewidth', 2.0);
         xline(VSregion(2), 'r' ,'linewidth', 2.0);
-        text(VSregion(1)+ 5, -8, 'VS region', 'color', 'r', 'Fontsize', fontsize);
+        text(56, -8, 'Gouge Region', 'color', 'r', 'Fontsize', fontsize, 'interpreter', 'latex');
         hold off;
         c = colorbar;
-        caxis([0, 10]);
-        ylabel(c,'Shear Stress [MPa]','FontName','Avenir','FontSize',fontsize);
+        caxis([0, 8]);
+        c.Ticks = [0, 4, 8];
+        ylabel(c,{'Shear Stress', '[MPa]'},'FontName','Avenir','FontSize',fontsize, 'interpreter', 'latex');
         axis equal;
         grid on;
         xlim(xrange);
         ylim(yrange);
-        xlabel('Distance along the fault [mm]');
-        ylabel({'Thickness along', 'the fault [mm]'});
-        title(strcat('Time = ', num2str(1e6 * time(i), '%2f'), ' [\mus]'));
+        xlabel('Distance along the fault [mm]', 'interpreter', 'latex');
+        ylabel({'Interface', 'width [mm]'}, 'interpreter', 'latex');
+        title(['Time = ', num2str(1e6 * time(i), '%.2f'), ' [$\mu$s]'], 'interpreter', 'latex');
         set(gca, 'FontSize', fontsize);
         
         % Write the video
@@ -640,9 +641,9 @@ figNo = figNo + 1;
 videoflag = true;
 if videoflag == true
     fig = figure(figNo);
-    fig.Position = [1000, 597, 2240/2, 1680/2];
-    % xrange = [-100, 150];
-    yrange = [-6, 6];
+    fig.Position = [1000, 597, 2800/2, 1680/2];
+    xrange = 1e3 * [min(FaultX), max(FaultX)];
+    yrange = [-5, 5];
     
     % Initialize names
     videoname = strcat(videoprefix, '_normalTrac.avi');
@@ -664,16 +665,22 @@ if videoflag == true
         p = patch(1e3 * nodalXYZ2D(1, :), 1e3 * nodalXYZ2D(2, :), ...
             Traction(3, :, i) / 1.0e6, 'EdgeColor', 'none');
         p.Faces = Connection' + 1;
+        hold on;
+        xline(VSregion(1), 'r' ,'linewidth', 2.0);
+        xline(VSregion(2), 'r' ,'linewidth', 2.0);
+        text(56, -8, 'Gouge Region', 'color', 'r', 'Fontsize', fontsize, 'interpreter', 'latex');
+        hold off;
         c = colorbar;
-        caxis([-15, 5]);
-        ylabel(c,'Normal Stress [MPa]','FontName','Avenir','FontSize',fontsize);
+        caxis([-12, 0]);
+        c.Ticks = [-12, -6,  0];
+        ylabel(c,{'Normal Stress', '[MPa]'},'FontName','Avenir','FontSize',fontsize, 'interpreter', 'latex');
         axis equal;
         grid on;
         xlim(xrange);
         ylim(yrange);
-        xlabel('Distance along the fault [mm]');
-        ylabel({'Thickness along', 'the fault [mm]'});
-        title(strcat('Time = ', num2str(1e6 * time(i), '%2f'), ' [\mu s]'));
+        xlabel('Distance along the fault [mm]', 'interpreter', 'latex');
+        ylabel({'Interface', 'width [mm]'}, 'interpreter', 'latex');
+        title(['Time = ', num2str(1e6 * time(i), '%.2f'), ' [$\mu$s]'], 'interpreter', 'latex');
         set(gca, 'FontSize', fontsize);
         
         % Write the video
@@ -766,130 +773,130 @@ if videoflag == true
 end
 figNo = figNo + 1;
 
-%% Get the video of fault-parallel and fault-vertical velocity
-% Read time
-time = h5read(frontsurfFile, '/time');
-time = reshape(time, [1, size(time, 3)]);
-nOfTimeSteps = size(time, 2);
-
-% Read node geometry
-nodalXYZ = h5read(frontsurfFile, '/geometry/vertices');
-nodalXYZ = nodalXYZ(1:2, :);
-nOfNodes = size(nodalXYZ, 2);
-
-% Read nodal slip, slip rate and traction
-velocity = h5read(frontsurfFile, '/vertex_fields/velocity');
-velocity = velocity(1:2, :, :);
-Connection = h5read(frontsurfFile, '/topology/cells');
-
-% Rotate into fault coordinate system
-alpha = 29 / 180 * pi;
-Q = [cos(alpha), sin(alpha); -sin(alpha), cos(alpha)];
-
-% Rotate the velocity field
-for i = 1:1:size(velocity, 3)
-    velocity(:, :, i) = Q * velocity(:,:,i);
-end
-
-% Rotate nodal XYZ
-nodalXYZ = Q * nodalXYZ;
-
-% Set plot range
-xrange = [floor(36.6 - norm(WirePos1)), ceil(36.6 - norm(WirePos1) + 47)];
-yrange = [-15, 15];
-crange = [-3, 3];
-timeWindow = [25, 100];
-
-%% Save a video of fault-parallel velocity field
-videoflag = false;
-if videoflag == true
-    fig = figure(figNo);
-    fig.Position = [1000, 597, 2240/4, 1680/4];
-    
-    % Initialize names
-    videoname = strcat(videoprefix, '_prlV.mp4');
-    
-    % Initialize video
-    myVideo = VideoWriter(strcat('../Videos/', videoname), 'MPEG-4');
-    myVideo.FrameRate = framerate;
-    myVideo.Quality = 100;
-    open(myVideo);
-    
-    % Shoot the video
-    for i = 1:1:size(time, 2)
-        if time(i) * 1e6 < timeWindow(1)
-            continue;
-        end
-        p = patch(1e3 * nodalXYZ(1, :), 1e3 * nodalXYZ(2, :), ...
-            velocity(1, :, i), 'EdgeColor', 'none', 'FaceColor', 'interp');
-        p.Faces = Connection' + 1;
-        yline(0, 'LineWidth', 2.0, 'color', 'w');
-        c = colorbar;
-        caxis(crange);
-        ylabel(c,'Fault-parallel Velocity [m/s]','FontName','Avenir','FontSize',fontsize);
-        axis equal;
-        grid on;
-        xlim(xrange);
-        ylim(yrange);
-        xlabel('X [mm]');
-        ylabel('Y [mm]');
-        title(strcat('Time = ', num2str(1e6 * time(i), '%2f'), ' [\mu s]'));
-        set(gca, 'FontSize', fontsize);
-        
-        % Write the video
-        frame = getframe(gcf);
-        writeVideo(myVideo, frame);
-        if time(i) * 1e6 > timeWindow(2)
-            break;
-        end
-    end
-    close(myVideo);
-end
-figNo = figNo + 1;
-
-%% Save a video of fault-normal velocity field
-videoflag = false;
-if videoflag == true
-    fig = figure(figNo);
-    fig.Position = [1000, 597, 2240/4, 1680/4];
-    
-    % Initialize names
-    videoname = strcat(videoprefix, '_nmlV.mp4');
-    
-    % Initialize video
-    myVideo = VideoWriter(strcat('../Videos/', videoname), 'MPEG-4');
-    myVideo.FrameRate = framerate;
-    myVideo.Quality = 100;
-    open(myVideo);
-    
-    % Shoot the video
-    for i = 1:1:size(time, 2)
-        if time(i) * 1e6 < timeWindow(1)
-            continue;
-        end
-        p = patch(1e3 * nodalXYZ(1, :), 1e3 * nodalXYZ(2, :), ...
-            velocity(2, :, i), 'EdgeColor', 'none', 'FaceColor', 'interp');
-        p.Faces = Connection' + 1;
-        c = colorbar;
-        caxis(crange);
-        ylabel(c,'Fault-normal Velocity [m/s]','FontName','Avenir','FontSize',fontsize);
-        axis equal;
-        grid on;
-        xlim(xrange);
-        ylim(yrange);
-        yline(0, 'LineWidth', 2.0, 'color', 'w');
-        xlabel('X [mm]');
-        ylabel('Y [mm]');
-        title(strcat('Time = ', num2str(1e6 * time(i), '%2f'), ' [\mu s]'));
-        set(gca, 'FontSize', fontsize);
-        
-        % Write the video
-        frame = getframe(gcf);
-        writeVideo(myVideo, frame);
-        if time(i) * 1e6 > timeWindow(2)
-            break;
-        end
-    end
-    close(myVideo);
-end
-figNo = figNo + 1;
+% %% Get the video of fault-parallel and fault-vertical velocity
+% % Read time
+% time = h5read(frontsurfFile, '/time');
+% time = reshape(time, [1, size(time, 3)]);
+% nOfTimeSteps = size(time, 2);
+% 
+% % Read node geometry
+% nodalXYZ = h5read(frontsurfFile, '/geometry/vertices');
+% nodalXYZ = nodalXYZ(1:2, :);
+% nOfNodes = size(nodalXYZ, 2);
+% 
+% % Read nodal slip, slip rate and traction
+% velocity = h5read(frontsurfFile, '/vertex_fields/velocity');
+% velocity = velocity(1:2, :, :);
+% Connection = h5read(frontsurfFile, '/topology/cells');
+% 
+% % Rotate into fault coordinate system
+% alpha = 29 / 180 * pi;
+% Q = [cos(alpha), sin(alpha); -sin(alpha), cos(alpha)];
+% 
+% % Rotate the velocity field
+% for i = 1:1:size(velocity, 3)
+%     velocity(:, :, i) = Q * velocity(:,:,i);
+% end
+% 
+% % Rotate nodal XYZ
+% nodalXYZ = Q * nodalXYZ;
+% 
+% % Set plot range
+% xrange = [floor(36.6 - norm(WirePos1)), ceil(36.6 - norm(WirePos1) + 47)];
+% yrange = [-15, 15];
+% crange = [-3, 3];
+% timeWindow = [25, 100];
+% 
+% %% Save a video of fault-parallel velocity field
+% videoflag = false;
+% if videoflag == true
+%     fig = figure(figNo);
+%     fig.Position = [1000, 597, 2240/4, 1680/4];
+%     
+%     % Initialize names
+%     videoname = strcat(videoprefix, '_prlV.mp4');
+%     
+%     % Initialize video
+%     myVideo = VideoWriter(strcat('../Videos/', videoname), 'MPEG-4');
+%     myVideo.FrameRate = framerate;
+%     myVideo.Quality = 100;
+%     open(myVideo);
+%     
+%     % Shoot the video
+%     for i = 1:1:size(time, 2)
+%         if time(i) * 1e6 < timeWindow(1)
+%             continue;
+%         end
+%         p = patch(1e3 * nodalXYZ(1, :), 1e3 * nodalXYZ(2, :), ...
+%             velocity(1, :, i), 'EdgeColor', 'none', 'FaceColor', 'interp');
+%         p.Faces = Connection' + 1;
+%         yline(0, 'LineWidth', 2.0, 'color', 'w');
+%         c = colorbar;
+%         caxis(crange);
+%         ylabel(c,'Fault-parallel Velocity [m/s]','FontName','Avenir','FontSize',fontsize);
+%         axis equal;
+%         grid on;
+%         xlim(xrange);
+%         ylim(yrange);
+%         xlabel('X [mm]');
+%         ylabel('Y [mm]');
+%         title(strcat('Time = ', num2str(1e6 * time(i), '%2f'), ' [\mu s]'));
+%         set(gca, 'FontSize', fontsize);
+%         
+%         % Write the video
+%         frame = getframe(gcf);
+%         writeVideo(myVideo, frame);
+%         if time(i) * 1e6 > timeWindow(2)
+%             break;
+%         end
+%     end
+%     close(myVideo);
+% end
+% figNo = figNo + 1;
+% 
+% %% Save a video of fault-normal velocity field
+% videoflag = false;
+% if videoflag == true
+%     fig = figure(figNo);
+%     fig.Position = [1000, 597, 2240/4, 1680/4];
+%     
+%     % Initialize names
+%     videoname = strcat(videoprefix, '_nmlV.mp4');
+%     
+%     % Initialize video
+%     myVideo = VideoWriter(strcat('../Videos/', videoname), 'MPEG-4');
+%     myVideo.FrameRate = framerate;
+%     myVideo.Quality = 100;
+%     open(myVideo);
+%     
+%     % Shoot the video
+%     for i = 1:1:size(time, 2)
+%         if time(i) * 1e6 < timeWindow(1)
+%             continue;
+%         end
+%         p = patch(1e3 * nodalXYZ(1, :), 1e3 * nodalXYZ(2, :), ...
+%             velocity(2, :, i), 'EdgeColor', 'none', 'FaceColor', 'interp');
+%         p.Faces = Connection' + 1;
+%         c = colorbar;
+%         caxis(crange);
+%         ylabel(c,'Fault-normal Velocity [m/s]','FontName','Avenir','FontSize',fontsize);
+%         axis equal;
+%         grid on;
+%         xlim(xrange);
+%         ylim(yrange);
+%         yline(0, 'LineWidth', 2.0, 'color', 'w');
+%         xlabel('X [mm]');
+%         ylabel('Y [mm]');
+%         title(strcat('Time = ', num2str(1e6 * time(i), '%2f'), ' [\mu s]'));
+%         set(gca, 'FontSize', fontsize);
+%         
+%         % Write the video
+%         frame = getframe(gcf);
+%         writeVideo(myVideo, frame);
+%         if time(i) * 1e6 > timeWindow(2)
+%             break;
+%         end
+%     end
+%     close(myVideo);
+% end
+% figNo = figNo + 1;
