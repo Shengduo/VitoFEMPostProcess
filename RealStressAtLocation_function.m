@@ -8,7 +8,6 @@ function RealStressAtLocation_function(videoprefix, stress_distance, z_location)
     upperFile = strcat('../dumpFiles/', videoprefix, '-upper_crust.h5');
 
     % Whether or not apply average symmetry
-    symmetryFlag = false;
 
     % Calculate normal direction
     faultST = [-0.100000000000000, -0.0554300000000000];
