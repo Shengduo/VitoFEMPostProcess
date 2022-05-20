@@ -3,7 +3,7 @@ clc,clear;
 close all;
 
 %% Some pre-calculated geometry info
-videoprefix = '1WithWallDRS1.5_1.5ModA0.008AmB0.005Load5_Vw2_fw0.1_theta0.036_-11_NULoad2dir0';
+videoprefix = '1NPDirWithWallDRS1.5_6ModA0.008AmB0.005Load5_Vw2_fw0.2_theta0.0064_-9_NULoad2dir0_duration120';
 dataFile = strcat('../dumpFiles/', videoprefix, '-domain.h5');
 lowerFile = strcat('../dumpFiles/', videoprefix, '-lower_crust.h5');
 

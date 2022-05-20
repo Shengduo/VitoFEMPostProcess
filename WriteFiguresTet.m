@@ -7,7 +7,7 @@ tractionOffsetFlag = false;
 
 % frontsurfFile = 'FineFHLoad15DRS1-frontsurf.h5';
 % videoprefix = 'DRS1.5_8ModA0.016Load5_Vw2_fw0.1_theta0.036_NULoad2dir1';
-videoprefix = '1WithWallDRS1.5_1.5ModA0.008AmB0.005Load5_Vw2_fw0.1_theta0.036_-11_NULoad2dir0';
+videoprefix = '1NPDirWithWallDRS1.5_6ModA0.008AmB0.005Load5_Vw2_fw0.2_theta0.0064_-9_NULoad2dir0_duration120';
 % videoprefix = 'ViscoElastic_theta0.043';
 % videoprefix = 'DiffNULoadWithWallDRS1.5_8ModA0.016Load5_Vw2_fw0.1_theta0.036_8_NULoad2dir-1';
 faultFileName = strcat('../faultFiles/', videoprefix, '-fault.h5');
@@ -192,7 +192,7 @@ end
 figNo = figNo + 1;
 
 %% Save a X-T diagram plot of surface slip rate (Vito range)
-plotflag = false;
+plotflag = true;
 if plotflag == true
     fig = figure(figNo);
     % Trange = [0, 150];
@@ -345,7 +345,7 @@ end
 figNo = figNo + 1;
 
 %% Save a X-T diagram plot of surface slip rate (observing window, smaller range)
-plotflag = false;
+plotflag = true;
 if plotflag == true
     fig = figure(figNo);
     % Trange = [0, 150];
@@ -400,7 +400,7 @@ end
 figNo = figNo + 1;
 
 %% Save a X-T diagram plot of shear stress (normal range)
-plotflag = false;
+plotflag = true;
 if plotflag == true
     fig = figure(figNo);
     Trange = [0, 115];
@@ -453,7 +453,7 @@ end
 figNo = figNo + 1;
 
 %% Save a X-T diagram plot of shear stress (only observing window)
-plotflag = false;
+plotflag = true;
 if plotflag == true
     fig = figure(figNo);
     % Trange = [0, 150];

@@ -7,12 +7,12 @@ tractionOffsetFlag = false;
 
 % frontsurfFile = 'FineFHLoad15DRS1-frontsurf.h5';
 % videoprefix = 'DRS1.5_8ModA0.016Load5_Vw2_fw0.1_theta0.036_NULoad2dir1';
-videoprefix = '2WithWallDRS1.5_1.5ModA0.008AmB0.005Load5_Vw2_fw0.1_theta0.036_-11_NULoad2dir0';
+videoprefix = '1NPDirWithWallDRS1.5_6ModA0.008AmB0.005Load5_Vw2_fw0.2_theta0.0064_-9_NULoad2dir0_duration1000';
 % videoprefix = 'ViscoElastic_theta0.043';
 % videoprefix = 'DiffNULoadWithWallDRS1.5_8ModA0.016Load5_Vw2_fw0.1_theta0.036_8_NULoad2dir-1';
 faultFileName = strcat('../faultFiles/', videoprefix, '-fault.h5');
 h5disp(faultFileName);
-fontsize = 20;
+fontsize = 18;
 
 % Read time
 time = h5read(faultFileName, '/time');
@@ -526,7 +526,7 @@ if plotflag == true
 end
 figNo = figNo + 1;
 
-timeWindow = [0, 150];
+timeWindow = [0, 1000];
 
 %% Save a video of sliprate magnitude on the fault
 videoflag = true;
@@ -583,7 +583,7 @@ end
 figNo = figNo + 1;
 
 %% Save a video of shear stress
-videoflag = true;
+videoflag = false;
 if videoflag == true
     fig = figure(figNo);
     fig.Position = [1000, 597, 2800/2, 1680/2];
@@ -638,7 +638,7 @@ end
 figNo = figNo + 1;
 
 %% Save a video of normal stress
-videoflag = true;
+videoflag = false;
 if videoflag == true
     fig = figure(figNo);
     fig.Position = [1000, 597, 2800/2, 1680/2];
