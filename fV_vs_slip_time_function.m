@@ -1,4 +1,4 @@
-function fV_vs_slip_time_function(totalprefix, target_x)
+function fV_vs_slip_time_function(totalprefix, target_x, z_location)
     % Read results from hdf5 files.
     % totalprefix = 'WithWallDRS1.5_1.5ModA0.008AmB0.005Load5_Vw2_fw0.1_theta0.036_-11_NULoad2dir0';
 
@@ -23,8 +23,8 @@ function fV_vs_slip_time_function(totalprefix, target_x)
         faultFileName = strcat('../faultFiles/', videoprefix, '-fault.h5');
         frontsurfFile = strcat('../frontsurfFiles/', videoprefix, '-frontsurf.h5');
 
-        h5disp(faultFileName);
-        h5disp(frontsurfFile);
+        % h5disp(faultFileName);
+        % h5disp(frontsurfFile);
         fontsize = 25;
 
         % Read time
@@ -34,94 +34,91 @@ function fV_vs_slip_time_function(totalprefix, target_x)
 
         % Read node geometry
         nodalXYZ = h5read(faultFileName, '/geometry/vertices');
-
-        % Select the surface nodes
-        I1 = (abs(nodalXYZ(3, :) - 0.005) <= 1e-7);
         nOfNodes = size(nodalXYZ, 2);
-
+        
         % Read nodal slip, slip rate and traction
-        Slip = h5read(faultFileName, '/vertex_fields/slip');
+        slip = h5read(faultFileName, '/vertex_fields/slip');
         SlipRate = h5read(faultFileName, '/vertex_fields/slip_rate');
-        Traction = h5read(faultFileName, '/vertex_fields/traction');
-        % Connection = h5read(faultFileName, '/topology/cells');
+        traction = h5read(faultFileName, '/vertex_fields/traction');
+        connection = h5read(faultFileName, '/topology/cells');
+        connection = connection + 1;
 
         % Read nodal slip
-        wireLabel = strcat('X = 0 [mm], wire position');
-        VSLabel = 'VS Region [mm]';
-
         % Input the first wire position
         WirePos1 = [-0.025657; -0.014222; 0];
 
-        VSstart = [0.006354, 0.003522, 0]';
-        VSend = [0.063204, 0.035034, 0]';
-        VSregion = 1e3 * [norm(VSstart - WirePos1, 2), norm(VSend - WirePos1, 2)];
-
-        nOf2DNodes = sum(I1);
-
-        FaultX = zeros(1, nOf2DNodes);
-        surfaceNodesXYZ = nodalXYZ(:, I1);
-        [~, I] = sort(surfaceNodesXYZ(1,:));
-
-        % Plot x and y axis ranges
-        xrange = [0, 150];
-        yrange = [0, 6];
-
-        for i = 1:1:nOf2DNodes
-            FaultX(i) = norm(surfaceNodesXYZ(1:2, i) - WirePos1(1:2), 2) * sign(surfaceNodesXYZ(1, i) - WirePos1(1));
-        end
-        FaultX = FaultX(I);
-        surfaceNodesXYZ = surfaceNodesXYZ(1:2, I);
-
-        % 2D node coordinates
-        nodalXYZ2D = zeros(2, nOfNodes);
-        for i = 1:1:nOfNodes
-            nodalXYZ2D(1, i) = sign(nodalXYZ(1, i) - WirePos1(1)) ...
-                * norm(nodalXYZ(1:2, i) - WirePos1(1:2), 2);
-            nodalXYZ2D(2, i) = nodalXYZ(3, i);
+        % Calculate NodalXYZ2D 
+        NodalXYZ2D = zeros(2, size(nodalXYZ, 2));
+        for ii = 1:1:size(nodalXYZ, 2)
+            NodalXYZ2D(1, ii) = sign(nodalXYZ(1, ii) - WirePos1(1)) * norm(nodalXYZ(1:2, ii) - WirePos1(1:2), 2);
+            NodalXYZ2D(2, ii) = nodalXYZ(3, ii);
         end
 
-        % Magnitude of slip rate
-        surfaceSlipRateMag = zeros(nOf2DNodes, nOfTimeSteps);
-        surfaceSlipRate = zeros(3, nOf2DNodes, nOfTimeSteps);
-
+        % Fault Range
+        xrange = [-100, 150];
+        
         % Magnitude of slip
-        surfaceSlipMag = zeros(nOf2DNodes, nOfTimeSteps);
-        surfaceSlip = zeros(3, nOf2DNodes, nOfTimeSteps);
-
-        % Shear and Normal stress
-        surfaceShearStress = zeros(nOf2DNodes, nOfTimeSteps);
-        surfaceNormalStress = zeros(nOf2DNodes, nOfTimeSteps);
+        slipMag = zeros(nOfNodes, nOfTimeSteps);
+        
+        % Magnitude of slip rate
+        slipRateMag = zeros(nOfNodes, nOfTimeSteps);
 
         for t = 1:1:nOfTimeSteps
-            surfaceSlipRate(:, :, t) = SlipRate(:, I1, t);
-            surfaceSlip(:, :, t) = Slip(:, I1, t);
-            surfaceShearStress(:, t) = Traction(1, I1, t);
-            surfaceNormalStress(:, t) = Traction(3, I1, t);
-
-            for i = 1:1:nOf2DNodes
-                surfaceSlipRateMag(i, t) = norm(surfaceSlipRate(:, i, t));
-                surfaceSlipMag(i, t) = norm(surfaceSlip(:, i, t));
+            for ii = 1:1:nOfNodes
+                slipRateMag(ii, t) = norm(SlipRate(:, ii, t), 2);
+                slipMag(ii, t) = norm(slip(:, ii, t), 2);
             end
-            surfaceSlipRateMag(:, t) = surfaceSlipRateMag(I, t);
-            surfaceSlipMag(:, t) = surfaceSlipMag(I, t);
-            surfaceShearStress(:, t) = surfaceShearStress(I, t);
-            surfaceNormalStress(:, t) = surfaceNormalStress(I, t);
         end
 
+        % Get the mesh stored as triangulation, get the location of places
+        % of interest
+        TR = triangulation(connection', NodalXYZ2D');
+        QueryXYZ = [target_x / 1e3; z_location / 1e3 * ones(1, size(target_x, 2))]';
+        elementID = pointLocation(TR, QueryXYZ);
+        nOfQueryPts = size(target_x, 2);
+        
+        %% Get sliprate, shear stress aned normal stress history at target points
+        QuerySlip = zeros(nOfQueryPts, nOfTimeSteps);
+        QueryV = zeros(nOfQueryPts, nOfTimeSteps);
+        QueryShearStress = ones(nOfQueryPts, nOfTimeSteps);
+        QueryNormalStress = ones(nOfQueryPts, nOfTimeSteps);
+        
+        % Get the interpolation
+        for t = 1:1:nOfTimeSteps
+            for pt = 1:1:nOfQueryPts
+                % Slip
+                slip = scatteredInterpolant(NodalXYZ2D(:, connection(:, elementID(pt)))', squeeze(slipMag(connection(:, elementID(pt)), t)), 'natural');
+                QuerySlip(pt, t) = slip(QueryXYZ(pt, 1), QueryXYZ(pt, 2));
+                
+                % Slip rate
+                vel_x = scatteredInterpolant(NodalXYZ2D(:, connection(:, elementID(pt)))', squeeze(slipRateMag(connection(:, elementID(pt)), t)), 'natural');
+                QueryV(pt, t) = vel_x(QueryXYZ(pt, 1), QueryXYZ(pt, 2));
+                
+                % Shear stress
+                shear = scatteredInterpolant(NodalXYZ2D(:, connection(:, elementID(pt)))', squeeze(traction(1, connection(:, elementID(pt)), t))', 'natural');
+                QueryShearStress(pt, t) = shear(QueryXYZ(pt, 1), QueryXYZ(pt, 2));
+                
+                % Normal stress
+                normal = scatteredInterpolant(NodalXYZ2D(:, connection(:, elementID(pt)))', squeeze(traction(3, connection(:, elementID(pt)), t))', 'natural');
+                QueryNormalStress(pt, t) = normal(QueryXYZ(pt, 1), QueryXYZ(pt, 2));
+            end
+        end
+        
+        
         %% Plot V-Slip history at X [mm]
         figure(1);
         for ii = 1:1:size(target_x, 2)
-            % Find the target index
-            [~, Ind] = min(abs(FaultX - target_x(ii) / 1e3));
-
             % Generate sliprate-slip plot
+            % Plot x and y axis ranges
+            xrange = [0, 150];
+            yrange = [0, 6];
             subplot(2, size(target_x, 2), size(target_x, 2) + ii);
-            plot(surfaceSlipMag(Ind, 2:end) * 1e6, surfaceSlipRateMag(Ind, 2:end), 'linewidth', 2.0);
+            plot(QuerySlip(ii, :) * 1e6, QueryV(ii, :), 'linewidth', 2.0);
             hold on; grid on;
-            scatter(surfaceSlipMag(Ind, 2:end) * 1e6, surfaceSlipRateMag(Ind, 2:end), 'filled');
-            xlabel('Slip [\mu m]');
+            scatter(QuerySlip(ii, :) * 1e6, QueryV(ii, :), 'filled');
+            xlabel('Slip [$\mu$m]', 'interpreter', 'latex');
             if (ii == 1) 
-                ylabel('Slip rate [m/s]');
+                ylabel('Slip rate [m/s]', 'interpreter', 'latex');
             end
             xlim(xrange);
             ylim(yrange);
@@ -129,17 +126,17 @@ function fV_vs_slip_time_function(totalprefix, target_x)
 
             % Generate friction coefficient-slip plot
             subplot(2, size(target_x, 2), ii);
-            plot(surfaceSlipMag(Ind, 2:end) * 1e6, - surfaceShearStress(Ind, 2:end) ./ surfaceNormalStress(Ind, 2:end), 'linewidth', 2.0);
+            plot(QuerySlip(ii, :) * 1e6, -QueryShearStress(ii, :) ./ QueryNormalStress(ii, :), 'linewidth', 2.0);
             hold on; grid on;
-            scatter(surfaceSlipMag(Ind, 2:end) * 1e6, - surfaceShearStress(Ind, 2:end) ./ surfaceNormalStress(Ind, 2:end), 'filled');
+            scatter(QuerySlip(ii, :) * 1e6, -QueryShearStress(ii, :) ./ QueryNormalStress(ii, :), 'filled');
 
             if (ii == 1)
-                ylabel('Friction coefficient');
+                ylabel('Friction coefficient', 'interpreter', 'latex');
             end
             xlim(xrange);
             ylim([0, 1]);
             probeLabel = strcat('X ={ }', num2str(target_x(ii)), '{ }[mm]');
-            title(probeLabel, 'Fontsize', fontsize);
+            title(probeLabel, 'Fontsize', fontsize, 'interpreter', 'latex');
             set(gca, 'FontSize', fontsize);
         end
 
@@ -153,33 +150,30 @@ function fV_vs_slip_time_function(totalprefix, target_x)
         xrange = [0, 110];
         % Generate sliprate-slip plot
         for ii = 1:1:size(target_x, 2)
-            % Find the target index
-            [~, Ind] = min(abs(FaultX - target_x(ii) / 1e3));
-
             % Plot friction coefficient vs time
             subplot(2, size(target_x, 2), ii);
-            plot(time * 1e6 - 10, - surfaceShearStress(Ind, 1:end) ./ surfaceNormalStress(Ind, 2), 'linewidth', 2.0);
+            plot(time * 1e6 - 10, -QueryShearStress(ii, :) ./ QueryNormalStress(ii, :), 'linewidth', 2.0);
             hold on; grid on;
-            scatter(time * 1e6 - 10, - surfaceShearStress(Ind, 1:end) ./ surfaceNormalStress(Ind, 2), 'filled');
+            scatter(time * 1e6 - 10, -QueryShearStress(ii, :) ./ QueryNormalStress(ii, :), 'filled');
 
             if ii == 1
-                ylabel('Friction coefficient');
+                ylabel('Friction coefficient', 'interpreter', 'latex');
             end
 
             xlim(xrange);
             ylim([0, 1]);
             probeLabel = strcat('X ={ }', num2str(target_x(ii)), '{ }[mm]');
-            title(probeLabel, 'Fontsize', fontsize);
+            title(probeLabel, 'Fontsize', fontsize, 'interpreter', 'latex');
             set(gca, 'FontSize', fontsize);
 
             % Plot sliprate vs time
             subplot(2, size(target_x, 2), size(target_x, 2) + ii);
-            plot(time * 1e6 - 10, surfaceSlipRateMag(Ind, 1:end), 'linewidth', 2.0);
+            plot(time * 1e6 - 10, QueryV(ii, :), 'linewidth', 2.0);
             hold on; grid on;
-            scatter(time * 1e6 - 10, surfaceSlipRateMag(Ind, 1:end), 'filled');
-            xlabel('Time [\mu s]');
+            scatter(time * 1e6 - 10, QueryV(ii, :), 'filled');
+            xlabel('Time [$\mu$s]', 'interpreter', 'latex');
             if (ii == 1)
-                ylabel('Slip rate [m/s]');
+                ylabel('Slip rate [m/s]', 'interpreter', 'latex');
             end
             xlim(xrange);
             ylim(yrange);
@@ -189,19 +183,23 @@ function fV_vs_slip_time_function(totalprefix, target_x)
     figure(1);
     subplot(2, size(target_x, 2), 2 * size(target_x, 2));
     kids = get(gca, 'children');
-    legend([kids(1), kids(3), kids(5)], 'mesh 3', 'mesh 2', 'mesh 1', 'location', 'best');
+    legend([kids(1), kids(3), kids(5)], 'mesh 3', 'mesh 2', 'mesh 1', 'location', 'best', 'interpreter', 'latex');
     set(gca, 'FontSize', fontsize);
 
     figure(2);
     subplot(2, size(target_x, 2), 2 * size(target_x, 2));
     kids = get(gca, 'children');
-    legend([kids(1), kids(3), kids(5)], 'mesh 3', 'mesh 2', 'mesh 1', 'location', 'best');
+    legend([kids(1), kids(3), kids(5)], 'mesh 3', 'mesh 2', 'mesh 1', 'location', 'best', 'interpreter', 'latex');
     set(gca, 'FontSize', fontsize);
 
     % Save the files
-    plotname = strcat(pwd, '/../Vitoplots/', totalprefix, num2str(target_x), '_fandV_VS_Slip.png');
+    % plotname = strcat(pwd, '/../Vitoplots/', totalprefix, num2str(target_x), 'z_', num2str(z_location), '_fandV_VS_Slip.png');
+    plotname = strcat(pwd, '/../Vitoplots/', totalprefix, 'z_', num2str(z_location), '_fandV_VS_Slip.png');
+    disp(plotname);
     print(figure(1) ,plotname, '-dpng', '-r500');
 
-    plotname = strcat(pwd, '/../Vitoplots/', totalprefix, num2str(target_x),  '_fandV_VS_Time.png');
+    % plotname = strcat(pwd, '/../Vitoplots/', totalprefix, num2str(target_x),  'z_', num2str(z_location), '_fandV_VS_Time.png');
+    plotname = strcat(pwd, '/../Vitoplots/', totalprefix, 'z_', num2str(z_location), '_fandV_VS_Time.png');
+    disp(plotname);
     print(figure(2) ,plotname, '-dpng', '-r500');
 end

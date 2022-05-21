@@ -42,8 +42,8 @@ for idrs = 1:1:size(drs, 2)
                                 end
                                 for iNULoad = 1:1:size(NULoad, 2)
                                     for iMesh = 1:1:size(mesh, 2)
-                                        % fileNamePrefix =  string(mesh(iMesh)) + "WithWallDRS1.5_" + string(drs(idrs)) + "ModA" + string(A(iA)) + "AmB" + string(AmB(iAmB)) + "Load" + string(load(iload)) + "_Vw" + string(Vw(iVw)) + "_fw" + string(fw(ifw)) + "_theta" + string(theta1(itheta1)) + "_" + string(theta2(itheta2)) + "_NULoad2dir" + string(NULoad(iNULoad));
-                                        fileNamePrefix =  string(mesh(iMesh)) + "NPDirWithWallDRS1.5_" + string(drs(idrs)) + "ModA" + string(A(iA)) + "AmB" + string(AmB(iAmB)) + "Load" + string(load(iload)) + "_Vw" + string(Vw(iVw)) + "_fw" + string(fw(ifw)) + "_theta" + string(theta1(itheta1)) + "_" + string(theta2(itheta2)) + "_NULoad2dir" + string(NULoad(iNULoad)) + "_duration120";
+                                        fileNamePrefix =  string(mesh(iMesh)) + "WithWallDRS1.5_" + string(drs(idrs)) + "ModA" + string(A(iA)) + "AmB" + string(AmB(iAmB)) + "Load" + string(load(iload)) + "_Vw" + string(Vw(iVw)) + "_fw" + string(fw(ifw)) + "_theta" + string(theta1(itheta1)) + "_" + string(theta2(itheta2)) + "_NULoad2dir" + string(NULoad(iNULoad));
+                                        % fileNamePrefix =  string(mesh(iMesh)) + "NPDirWithWallDRS1.5_" + string(drs(idrs)) + "ModA" + string(A(iA)) + "AmB" + string(AmB(iAmB)) + "Load" + string(load(iload)) + "_Vw" + string(Vw(iVw)) + "_fw" + string(fw(ifw)) + "_theta" + string(theta1(itheta1)) + "_" + string(theta2(itheta2)) + "_NULoad2dir" + string(NULoad(iNULoad)) + "_duration120";
                                         filenames = [filenames; fileNamePrefix];
                                     end
                                 end
