@@ -7,7 +7,7 @@ tractionOffsetFlag = false;
 
 % frontsurfFile = 'FineFHLoad15DRS1-frontsurf.h5';
 % videoprefix = 'DRS1.5_8ModA0.016Load5_Vw2_fw0.1_theta0.036_NULoad2dir1';
-videoprefix = '1NPDirWithWallDRS1.5_6ModA0.008AmB0.005Load5_Vw2_fw0.2_theta0.0064_-9_NULoad2dir0_duration1000';
+videoprefix = '1NPDirWithWallDRS1.5_6ModA0.011AmB0.005Load5_Vw2_fw0.2_theta0.0064_-9_NULoad2dir0_duration120';
 % videoprefix = 'ViscoElastic_theta0.043';
 % videoprefix = 'DiffNULoadWithWallDRS1.5_8ModA0.016Load5_Vw2_fw0.1_theta0.036_8_NULoad2dir-1';
 faultFileName = strcat('../faultFiles/', videoprefix, '-fault.h5');
@@ -583,7 +583,7 @@ end
 figNo = figNo + 1;
 
 %% Save a video of shear stress
-videoflag = false;
+videoflag = true;
 if videoflag == true
     fig = figure(figNo);
     fig.Position = [1000, 597, 2800/2, 1680/2];

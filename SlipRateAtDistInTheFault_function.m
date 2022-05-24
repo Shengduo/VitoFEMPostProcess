@@ -32,7 +32,8 @@ function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface)
     SlipRate = h5read(faultFileName, '/vertex_fields/slip_rate');
     connection = h5read(faultFileName, '/topology/cells');
     connection = connection + 1;
-
+    traction = h5read(faultFileName, '/vertex_fields/traction');
+    
     % Read nodal slip
     % Input the first wire position
     WirePos1 = [-0.025657; -0.014222; 0];
@@ -80,11 +81,13 @@ function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface)
 
     elementID = pointLocation(TR, P);
     SlipRateAtDist = zeros(size(Xq, 2), size(time, 2));
-
+    ShearStressAtDist = zeros(size(Xq, 2), size(time, 2));
     for t = 1:1:size(time, 2)
         for ele = 1:1:size(elementID, 1)
             vel_x = scatteredInterpolant(NodalXYZ2D(:, connection(:, elementID(ele)))', squeeze(slipRateMag(connection(:, elementID(ele)), t)), 'natural');
+            stress_x = scatteredInterpolant(NodalXYZ2D(:, connection(:, elementID(ele)))', squeeze(traction(1, connection(:, elementID(ele)), t))', 'natural');
             SlipRateAtDist(ele, t) = vel_x(x_up(ele), Distance_To_Surface);
+            ShearStressAtDist(ele, t) = stress_x(x_up(ele), Distance_To_Surface);
         end
     end
 
@@ -143,4 +146,61 @@ function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface)
         print(figure(figNo) ,plotname, '-dpng', '-r500');
     end
     figNo = figNo + 1;
+    
+    
+    %% Save a X-T diagram plot of shear stress (only observing window)
+    plotflag = true;
+    if plotflag == true
+        fig = figure(figNo);
+        % Trange = [0, 150];
+        Trange = [30, 110];
+        Xrange = [VSregion(1), VSregion(1) + 45];
+        fig.Position(3:4) = 1.5 * fig.Position(3:4);
+
+        % Initialize names
+        plotname = strcat(pwd, '/../plots/', videoprefix, '_X-TofShearStress_window_surface_', num2str(Distance_To_Surface), '.png');
+
+        % Plot sliprate on X-T
+        [Tsteps, Xsteps] = meshgrid(1e6 * time, 1e3 * x_up);
+        h = pcolor(Xsteps', Tsteps', (ShearStressAtDist ./ 1e6)');
+        shading interp;
+        
+        if VitoColorFlag == 1
+            colormap(black_rainbow_plus_long);
+        end
+        hold on;
+        xline(VSregion(1), 'r' ,'linewidth', 2.0);
+        xline(VSregion(2), 'r' ,'linewidth', 2.0);
+        text(VSregion(1)+ 5, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize);
+        % Add the wave speeds
+
+        cX = [55, 65];
+        crY = [40, (cX(2) - cX(1)) * 1e3 / cr + 40];
+        csY = [40, (cX(2) - cX(1)) * 1e3 / cs + 40];
+        cpY = [40, (cX(2) - cX(1)) * 1e3 / cp + 40];
+
+        plot(cX, crY, 'w', 'linewidth', 2.0);
+        text(cX(2) + 4, crY(2)+2, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
+        plot(cX, csY, 'w', 'linewidth', 2.0);
+        text(cX(2) + 4, csY(2) - 1, strcat('$c_s$ = 1.28 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
+        plot(cX, cpY, 'w', 'linewidth', 2.0);
+        text(cX(2) + 4, cpY(2), strcat('$c_p$ = 2.66 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
+        hold off;
+        set(h, 'EdgeColor', 'None');
+        c = colorbar;
+        caxis([2, 10]);
+        ylabel(c,'Shear stress [MPa]','FontName','Avenir','FontSize',fontsize);
+        xlim(Xrange);
+        ylim(Trange);
+        xlabel('Distance along the fault [mm]', 'interpreter', 'latex');
+        ylabel('Time [$\mu$s]', 'interpreter', 'latex');
+        title(['X-T of Shear Stress at Z = ', ' ', num2str(1e3 * Distance_To_Surface, '%.0f'), ' ', '[mm]'], 'interpreter', 'latex');
+        set(gca, 'FontSize', fontsize);
+
+        % Save the figure
+        print(figure(figNo) ,plotname, '-dpng', '-r500');
+    end
+    figNo = figNo + 1;
+    
+
 end
