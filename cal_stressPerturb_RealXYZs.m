@@ -2,36 +2,31 @@
 clc,clear;
 close all;
 load('../matFiles/realNormalStress.mat');
-parallel_vec = [0.100000, 0.055430, 0.0] ./ norm([0.100000, 0.055430, 0.0], 2);
 
 % Start of velocity strengthening region
 VS_start = [0.006354, 0.003522, 0.0];
+VS_end = [0.063204, 0.035034, 0];
+parallel_vec = (VS_end - VS_start) ./ norm(VS_end - VS_start, 2);
+faultLength = norm(VS_end - VS_start, 2);
 WirePos1 = [-0.025657, -0.014222, 0];
 
 % Points to center stress perturbation and length of each perturbed region
 % [mm]
-points = [8, 18];
-interval = 8;
-num_points = 11;
+num_points = 50;
 
 % Location of points
-XYZs = zeros(size(points, 2) * num_points, 3);
+XYZs = zeros(num_points, 3);
 counter = 1;
 
 % Generate XYZs
-for pt = 1:1:size(points, 2)
-    start = VS_start + (points(pt) - interval / 2) * 1e-3 * parallel_vec;
-    for i = 1:1:num_points
-        XYZs(counter, :) = start + (i - 1) * (interval / (num_points - 1)) * 1e-3 * parallel_vec;
-        counter = counter + 1;
-    end
+for pt = 1:1:num_points
+    XYZs(pt, :) = VS_start + (pt - 1) * faultLength / (num_points - 1) * parallel_vec;
 end
 
 %% plot the non-uniform load
 figNo = 1;
 fig = figure(figNo);
 fig.Position(3:4) = 5 * fig.Position(3:4);
-NUload = 0;
 xrange = [-84.9999,  143.6700];
 x_grid = xrange(1) : 1 : xrange(2);
 load = 14.3 * cosd(29)^2 * ones(1, size(x_grid, 2));

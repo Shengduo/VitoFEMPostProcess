@@ -1,12 +1,25 @@
-clc,clear; close all;
-% Get peak friction coefficient from files
-files = ["../matFiles/THD58_1_Friction.mat", "../matFiles/THD58_2_Friction.mat"];
+clc,clear; 
+close all;
+Vflag = 1;
 
-for i = 1:1:size(files, 2)
-    load(files(i));
-    peakFs(i, :) = peakFricCoef';
+% Get peak friction coefficient from files
+load('../matFiles/THD58_Friction.mat');
+peakFs = zeros(2, size(friction_AVG_THD58_1, 1));
+peakVs = zeros(2, size(friction_AVG_THD58_1, 1));
+
+% File 1
+[F, ind] = max(friction_AVG_THD58_1, [], 2);
+peakFs(1, :) = F';
+for i = 1:1:size(Slip_rate_avg_THD58_1, 1)
+    peakVs(1, i) = Slip_rate_avg_THD58_1(i, min(ind(i),size(Slip_rate_avg_THD58_1, 2)));
 end
 
+% File 2
+[F, ind] = max(friction_AVG_THD58_2, [], 2);
+peakFs(2, :) = F';
+for i = 1:1:size(Slip_rate_avg_THD58_2, 1)
+    peakVs(2, i) = Slip_rate_avg_THD58_2(i, max(ind(i),size(Slip_rate_avg_THD58_2, 2)));
+end
 Xs = position_THD58_2;
 
 % Calculate change of delta_f
@@ -23,17 +36,34 @@ a = 0.011;
 
 % Compute real normal stress around
 si = deltaFs * si0 / (a * log(Vdyn / Vini));
+if Vflag == 1
+    si = deltaFs * si0 ./ (a .* log(abs(peakVs) ./ Vini));
+end
+
 
 % Plot distribution of initial normal stress
 fig = figure(1);
-plot(Xs, si(1, :), 'linewidth', 2.0);
+plot(Xs, si(1, :), '--k', 'linewidth', 3.0);
 hold on; grid on;
-plot(Xs, si(2, :), 'linewidth', 2.0);
-legend('First explosion', 'Second explosion', 'location', 'best');
+plot(Xs, si(2, :), '--b', 'linewidth', 3.0);
+
+si_smooth = si;
+span = 0.3;
+si_smooth(1, :) = smooth(si(1, :), span, 'sgolay');
+si_smooth(2, :) = smooth(si(2, :), span, 'sgolay');
+
+plot(Xs, si_smooth(1, :), 'k', 'linewidth', 2.0);
+hold on; grid on;
+plot(Xs, si_smooth(2, :), 'b', 'linewidth', 2.0);
+
+
+xlabel('Distance Along The Fault [mm]', 'interpreter', 'latex');
+ylabel('Actual Normal Stress [MPa]', 'interpreter', 'latex');
+legend('1st explosion', '2nd explosion', '1st fit', '2nd fit', 'location', 'best', 'interpreter', 'latex');
 set(gca, 'fontsize', 20);
 
 %Save the figure
 print(fig ,'../matFiles/sigmaDistri.png', '-dpng', '-r500');
 
 % Save the data
-save('../matFiles/realNormalStress.mat', 'Xs', 'si');
+save('../matFiles/realNormalStress.mat', 'Xs', 'si', 'si_smooth');
