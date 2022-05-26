@@ -4,6 +4,7 @@ close all;
 load('BRColorScale.mat');
 VitoColorFlag = true;
 tractionOffsetFlag = false;
+yToxRatio = 2;
 
 % frontsurfFile = 'FineFHLoad15DRS1-frontsurf.h5';
 % videoprefix = 'DRS1.5_8ModA0.016Load5_Vw2_fw0.1_theta0.036_NULoad2dir1';
@@ -537,7 +538,7 @@ if videoflag == true
     yrange = [-5, 5];
     
     % Initialize names
-    videoname = strcat(videoprefix, '_sliprateMag.avi');
+    videoname = strcat(videoprefix, num2str(yToxRatio), '_sliprateMag.avi');
     
     % Initialize video
     myVideo = VideoWriter(strcat('../Videos/', videoname), 'Motion JPEG AVI');
@@ -559,7 +560,7 @@ if videoflag == true
         hold on;
         xline(VSregion(1), 'r' ,'linewidth', 2.0);
         xline(VSregion(2), 'r' ,'linewidth', 2.0);
-        text(56, -8, 'Gouge Region', 'color', 'r', 'Fontsize', fontsize, 'interpreter', 'latex');
+        text(56, 8, 'Gouge Region', 'color', 'r', 'Fontsize', fontsize, 'interpreter', 'latex');
         hold off;
         p.Faces = Connection' + 1;
         c = colorbar;
@@ -573,7 +574,8 @@ if videoflag == true
         ylabel({'Interface', 'width [mm]'}, 'interpreter', 'latex');
         title(['Time = ', num2str(1e6 * time(i), '%.2f'), ' [$\mu$s]'], 'interpreter', 'latex');
         set(gca, 'FontSize', fontsize);
-        
+        set(gca, 'ydir', 'reverse');
+        daspect([yToxRatio, 1, 1]);
         % Write the video
         frame = getframe(gcf);
         writeVideo(myVideo, frame);
@@ -591,7 +593,7 @@ if videoflag == true
     yrange = [-5, 5];
     
     % Initialize names
-    videoname = strcat(videoprefix, '_shearTrac.avi');
+    videoname = strcat(videoprefix, num2str(yToxRatio), '_shearTrac.avi');
     
     % Initialize video
     myVideo = VideoWriter(strcat('../Videos/', videoname),'Motion JPEG AVI');
@@ -614,7 +616,7 @@ if videoflag == true
         hold on;
         xline(VSregion(1), 'r' ,'linewidth', 2.0);
         xline(VSregion(2), 'r' ,'linewidth', 2.0);
-        text(56, -8, 'Gouge Region', 'color', 'r', 'Fontsize', fontsize, 'interpreter', 'latex');
+        text(56, 8, 'Gouge Region', 'color', 'r', 'Fontsize', fontsize, 'interpreter', 'latex');
         hold off;
         c = colorbar;
         caxis([0, 8]);
@@ -628,6 +630,8 @@ if videoflag == true
         ylabel({'Interface', 'width [mm]'}, 'interpreter', 'latex');
         title(['Time = ', num2str(1e6 * time(i), '%.2f'), ' [$\mu$s]'], 'interpreter', 'latex');
         set(gca, 'FontSize', fontsize);
+        set(gca, 'ydir', 'reverse');
+        daspect([yToxRatio, 1, 1]);
         
         % Write the video
         frame = getframe(gcf);
@@ -646,7 +650,7 @@ if videoflag == true
     yrange = [-5, 5];
     
     % Initialize names
-    videoname = strcat(videoprefix, '_normalTrac.avi');
+    videoname = strcat(videoprefix, num2str(yToxRatio), '_normalTrac.avi');
     
     % Initialize video
     myVideo = VideoWriter(strcat('../Videos/', videoname), 'Motion JPEG AVI');
@@ -668,7 +672,7 @@ if videoflag == true
         hold on;
         xline(VSregion(1), 'r' ,'linewidth', 2.0);
         xline(VSregion(2), 'r' ,'linewidth', 2.0);
-        text(56, -8, 'Gouge Region', 'color', 'r', 'Fontsize', fontsize, 'interpreter', 'latex');
+        text(56, 8, 'Gouge Region', 'color', 'r', 'Fontsize', fontsize, 'interpreter', 'latex');
         hold off;
         c = colorbar;
         caxis([-12, 0]);
@@ -682,6 +686,8 @@ if videoflag == true
         ylabel({'Interface', 'width [mm]'}, 'interpreter', 'latex');
         title(['Time = ', num2str(1e6 * time(i), '%.2f'), ' [$\mu$s]'], 'interpreter', 'latex');
         set(gca, 'FontSize', fontsize);
+        set(gca, 'ydir', 'reverse');
+        daspect([yToxRatio, 1, 1]);
         
         % Write the video
         frame = getframe(gcf);
