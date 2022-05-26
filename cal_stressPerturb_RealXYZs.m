@@ -3,6 +3,9 @@ clc,clear;
 close all;
 load('../matFiles/realNormalStress.mat');
 
+% Which sequence to use
+seq_ID = 2;
+
 % Start of velocity strengthening region
 VS_start = [0.006354, 0.003522, 0.0];
 VS_end = [0.063204, 0.035034, 0];
@@ -19,50 +22,79 @@ XYZs = zeros(num_points, 3);
 counter = 1;
 
 % Generate XYZs
+usableFault = [min(Xs), max(Xs)];
+usableFaultLength = usableFault(2) - usableFault(1);
+XYZs1D = zeros(1, num_points);
 for pt = 1:1:num_points
-    XYZs(pt, :) = VS_start + (pt - 1) * faultLength / (num_points - 1) * parallel_vec;
+    XYZs(pt, :) = VS_start + ((pt - 1) * usableFaultLength / (num_points - 1) + usableFault(1)) * parallel_vec* 1e-3;
+    XYZs1D(1, pt) = ((pt - 1) * usableFaultLength / (num_points - 1) + usableFault(1)) + norm(VS_start - WirePos1, 2) * 1e3;
 end
+XYZs = [VS_start; XYZs; VS_end];
+XYZs1D = [norm(VS_start - WirePos1, 2) * 1e3, XYZs1D, norm(VS_end - WirePos1, 2) * 1e3];
 
 %% plot the non-uniform load
-figNo = 1;
-fig = figure(figNo);
-fig.Position(3:4) = 5 * fig.Position(3:4);
 xrange = [-84.9999,  143.6700];
+si0 = 14.3 * cosd(29)^2;
+interpolate_xs = [xrange(1), norm(VS_start - WirePos1, 2) * 1e3, ...
+                  Xs + norm(VS_start - WirePos1, 2) * 1e3, ...
+                  (faultLength +  norm(VS_start - WirePos1, 2)) * 1e3, ...
+                  xrange(2)];
+interpolate_ys(1, :) = [si0, si0, si_smooth(1, :), si0, si0];
+interpolate_ys(2, :) = [si0, si0, si_smooth(2, :), si0, si0];
+
 x_grid = xrange(1) : 1 : xrange(2);
-load = 14.3 * cosd(29)^2 * ones(1, size(x_grid, 2));
-points = points + norm(VS_start - WirePos1, 2) * 1e3;
+Load(1, :) = interp1(interpolate_xs, interpolate_ys(1, :), x_grid);
+Load(2, :) = interp1(interpolate_xs, interpolate_ys(2, :), x_grid);
+
 XYZloads = zeros(size(XYZs, 1), 3);
-% for i = 1:1:size(x_grid, 2)
-%     if (x_grid(i) >= points(1) - interval / 2) && (x_grid(i) <= points(1) + interval / 2)
-%         load(i) = load(i) - (1 + cos(2 * pi / interval * (x_grid(i) - points(1)))) / 2 * NUload;
-%     elseif (x_grid(i) >= points(2) - interval / 2) && (x_grid(i) <= points(2) + interval / 2)
-%         load(i) = load(i) + (1 + cos(2 * pi / interval * (x_grid(i) - points(2)))) / 2 * NUload;
-%     end
-% end
 
-XYZnorms = zeros(1, size(XYZs, 1));
-points = [8, 18];
-points = points + norm(VS_start, 2) * 1e3;
-for i = 1:1:size(XYZloads, 1)
-    XYZnorms(i) = 1e3 * norm(XYZs(i, :), 2);
-    if (XYZnorms(i) >= points(1) - interval / 2) && (XYZnorms(i) <= points(1) + interval / 2)
-        XYZloads(i, 3) = (1 + cos(2 * pi / interval * (XYZnorms(i) - points(1)))) / 2 * NUload;
-    elseif (XYZnorms(i) >= points(2) - interval / 2) && (XYZnorms(i) <= points(2) + interval / 2)
-        XYZloads(i, 3) = -(1 + cos(2 * pi / interval * (XYZnorms(i) - points(2)))) / 2 * NUload;
-    end
-end
-
-plot(x_grid, load, 'linewidth', 2.0);
+figNo = 1;
+%% Plot for sequence 1
+fig = figure(figNo);
+fig.Position(3:3) = 5 * fig.Position(3:3);
+plot(x_grid, Load(1, :), 'linewidth', 2.0);
 hold on; grid on;
+yline(si0, '-.k', 'linewidth', 1.5);
+xline(norm(VS_start - WirePos1, 2) * 1e3, 'r', 'linewidth', 1.5);
+xline(norm(VS_end - WirePos1, 2) * 1e3, 'r', 'linewidth', 1.5);
+text(norm(VS_start - WirePos1, 2) * 1e3 + 20, 3, 'VS region', 'color', 'r', 'Fontsize', 20);
+
 xlabel('Distance along the fault [mm]', 'interpreter', 'latex');
 ylabel({'Initial normal', 'stress [MPa]'}, 'Interpreter', 'latex');
-title('Distribution of initial normal stress along the fault');
+title('Distribution of initial normal stress along the fault infered by sequence 1');
 axis equal;
 xlim(xrange);
-ylim([5, 17]);
+ylim([0, 20]);
 set(gca, 'fontsize', 25);
+print(fig ,'../matFiles/sigmaDistriWholeFault-1.png', '-dpng', '-r500');
+figNo = figNo + 1;
 
-% Write into files
+%% Plot for sequence 2
+fig = figure(figNo);
+fig.Position(3:3) = 5 * fig.Position(3:3);
+plot(x_grid, Load(2, :), 'color', '#D95319', 'linewidth', 2.0);
+hold on; grid on;
+yline(si0, '-.k', 'linewidth', 1.5);
+xline(norm(VS_start - WirePos1, 2) * 1e3, 'r', 'linewidth', 1.5);
+xline(norm(VS_end - WirePos1, 2) * 1e3, 'r', 'linewidth', 1.5);
+text(norm(VS_start - WirePos1, 2) * 1e3 + 20, 3, 'VS region', 'color', 'r', 'Fontsize', 20);
+
+xlabel('Distance along the fault [mm]', 'interpreter', 'latex');
+ylabel({'Initial normal', 'stress [MPa]'}, 'Interpreter', 'latex');
+title('Distribution of initial normal stress along the fault infered by sequence 2');
+axis equal;
+xlim(xrange);
+ylim([0, 20]);
+set(gca, 'fontsize', 25);
+print(fig ,'../matFiles/sigmaDistriWholeFault-2.png', '-dpng', '-r500');
+figNo = figNo + 1;
+
+
+%% Write into files
+% Compute the stress at certain points
+XYZloads = zeros(size(XYZs, 1), 3);
+XYZloads(:, 3) = si0 - interp1(interpolate_xs, interpolate_ys(seq_ID, :), XYZs1D)';
+
 % Write changable parameters into a '.txt' file
 txtname = "XYZs.txt";
 fileID = fopen(txtname, 'w');
