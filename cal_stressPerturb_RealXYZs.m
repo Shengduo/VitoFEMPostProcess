@@ -111,7 +111,7 @@ txtname = "XYZs.txt";
 fileID = fopen(txtname, 'w');
 
 Zs = [-0.0051, 0.0051; -0.0041, 0.0045; -0.0039, 0.0043];
-
+si0_reg = si0 - [si0_1, si0_2];
 
 % Write into the files
 for i = 1:1:size(XYZs, 1)
@@ -128,7 +128,7 @@ for i = 1:1:size(XYZs, 1)
         else
             fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
             fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
-            fprintf(fileID, '%10s', num2str(0.0, '%6f'));
+            fprintf(fileID, '%10s', num2str(si0_reg(seq_ID), '%6f'));
             fprintf(fileID, '\n');
         end
         
@@ -144,7 +144,7 @@ for i = 1:1:size(XYZs, 1)
         else
             fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
             fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
-            fprintf(fileID, '%10s', num2str(0.0, '%6f'));
+            fprintf(fileID, '%10s', num2str(si0_reg(seq_ID), '%6f'));
             fprintf(fileID, '\n');
         end
         
@@ -160,7 +160,7 @@ for i = 1:1:size(XYZs, 1)
         else
             fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
             fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
-            fprintf(fileID, '%10s', num2str(0.0, '%6f'));
+            fprintf(fileID, '%10s', num2str(si0_reg(seq_ID), '%6f'));
             fprintf(fileID, '\n');
         end
         
@@ -176,7 +176,7 @@ for i = 1:1:size(XYZs, 1)
         else
             fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
             fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
-            fprintf(fileID, '%10s', num2str(0.0, '%6f'));
+            fprintf(fileID, '%10s', num2str(si0_reg(seq_ID), '%6f'));
             fprintf(fileID, '\n');
         end
         fprintf(fileID, '\n');
