@@ -48,6 +48,7 @@ Load(2, :) = interp1(interpolate_xs, interpolate_ys(2, :), x_grid);
 
 XYZloads = zeros(size(XYZs, 1), 3);
 
+
 figNo = 1;
 %% Plot for sequence 1
 fig = figure(figNo);
