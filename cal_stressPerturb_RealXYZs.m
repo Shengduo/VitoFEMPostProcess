@@ -39,8 +39,18 @@ interpolate_xs = [xrange(1), norm(VS_start - WirePos1, 2) * 1e3, ...
                   Xs + norm(VS_start - WirePos1, 2) * 1e3, ...
                   (faultLength +  norm(VS_start - WirePos1, 2)) * 1e3, ...
                   xrange(2)];
-interpolate_ys(1, :) = [si0, si0, si_smooth(1, :), si0, si0];
-interpolate_ys(2, :) = [si0, si0, si_smooth(2, :), si0, si0];
+Xs_wire = Xs + norm(VS_start - WirePos1, 2) * 1e3;
+
+% Find the background stress
+[si0_1, Fval1] = fminsearch(@(x0) residualOfStress(x0, Xs, si_smooth(1, :)), si0);
+[si0_2, Fval2] = fminsearch(@(x0) residualOfStress(x0, Xs, si_smooth(2, :)), si0);
+disp(["Background normal stress of sequence 1 is: ", num2str(si0_1), " MPa"])
+disp(["Residual stress of sequence 1 is: ", num2str(Fval1), " MPa"]);
+disp(["Background normal stress of sequence 2 is: ", num2str(si0_2), " MPa"])
+disp(["Residual stress of sequence 2 is: ", num2str(Fval2), " MPa"]);
+
+interpolate_ys(1, :) = [si0_1, si0_1, si_smooth(1, :), si0_1, si0_1];
+interpolate_ys(2, :) = [si0_2, si0_2, si_smooth(2, :), si0_2, si0_2];
 
 x_grid = xrange(1) : 1 : xrange(2);
 Load(1, :) = interp1(interpolate_xs, interpolate_ys(1, :), x_grid);

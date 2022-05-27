@@ -12,5 +12,5 @@ function res = residualOfStress(x0, Xs, Ys)
                   (faultLength +  norm(VS_start - WirePos1, 2)) * 1e3, ...
                   xrange(2)];
     interpolate_ys = [x0, x0, Ys, x0, x0];
-    res = trapz(interpolate_xs, interpolate_ys - x0)^2;
+    res = (trapz(interpolate_xs, interpolate_ys) - si0 * (xrange(2) - xrange(1)))^2;
 end
