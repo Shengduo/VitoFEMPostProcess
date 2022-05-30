@@ -8,7 +8,11 @@ yToxRatio = 2;
 
 % frontsurfFile = 'FineFHLoad15DRS1-frontsurf.h5';
 % videoprefix = 'DRS1.5_8ModA0.016Load5_Vw2_fw0.1_theta0.036_NULoad2dir1';
-videoprefix = '1NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.00224_-9_NULoad2dir0_duration120';
+filenames = ["1NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.00224_-9_NULoad2dir0_duration120",
+             "1NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.0016_-9_NULoad2dir1_duration120",
+             "1NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.07_-9_NULoad2dir2_duration120"];
+videoprefix = filenames(3);
+% videoprefix = '1NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.00224_-9_NULoad2dir0_duration120';
 % videoprefix = 'ViscoElastic_theta0.043';
 % videoprefix = 'DiffNULoadWithWallDRS1.5_8ModA0.016Load5_Vw2_fw0.1_theta0.036_8_NULoad2dir-1';
 faultFileName = strcat('../faultFiles/', videoprefix, '-fault.h5');
@@ -619,8 +623,8 @@ if videoflag == true
         text(56, 8, 'Gouge Region', 'color', 'r', 'Fontsize', fontsize, 'interpreter', 'latex');
         hold off;
         c = colorbar;
-        caxis([0, 8]);
-        c.Ticks = [0, 4, 8];
+        caxis([0, 10]);
+        c.Ticks = [0, 5, 10];
         ylabel(c,{'Shear Stress', '[MPa]'},'FontName','Avenir','FontSize',fontsize, 'interpreter', 'latex');
         axis equal;
         grid on;

@@ -63,7 +63,7 @@ legend('1st explosion', '2nd explosion', '1st fit', '2nd fit', 'location', 'best
 set(gca, 'fontsize', 15);
 
 %Save the figure
-print(fig ,'../matFiles/sigmaDistri.png', '-dpng', '-r500');
+print(fig ,'../Vitoplots/sigmaDistri.png', '-dpng', '-r500');
 
 % Save the data
 save('../matFiles/realNormalStress.mat', 'Xs', 'si', 'si_smooth');
@@ -79,7 +79,7 @@ xlabel('Distance Along The Fault [mm]', 'interpreter', 'latex');
 ylabel('Actual Normal Stress [MPa]', 'interpreter', 'latex');
 legend('1st explosion', '1st fit', 'Uniform $\sigma_0$', 'location', 'best', 'interpreter', 'latex');
 set(gca, 'fontsize', 15);
-print(fig ,'../matFiles/sigmaDistri-1.png', '-dpng', '-r500');
+print(fig ,'../Vitoplots/sigmaDistri-1.png', '-dpng', '-r500');
 
 fig = figure(3);
 plot(Xs, si(2, :), '--', 'color', '#D95319', 'linewidth', 3.0);
@@ -91,4 +91,4 @@ xlabel('Distance Along The Fault [mm]', 'interpreter', 'latex');
 ylabel('Actual Normal Stress [MPa]', 'interpreter', 'latex');
 legend('2nd explosion', '2nd fit', 'Uniform $\sigma_0$', 'location', 'best', 'interpreter', 'latex');
 set(gca, 'fontsize', 15);
-print(fig ,'../matFiles/sigmaDistri-2.png', '-dpng', '-r500');
+print(fig ,'../Vitoplots/sigmaDistri-2.png', '-dpng', '-r500');

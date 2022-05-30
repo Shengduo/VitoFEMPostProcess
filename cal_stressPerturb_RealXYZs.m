@@ -4,7 +4,8 @@ close all;
 load('../matFiles/realNormalStress.mat');
 
 % Which sequence to use
-seq_ID = 2;
+seq_ID = 1;
+yToxRatio = 2;
 
 % Start of velocity strengthening region
 VS_start = [0.006354, 0.003522, 0.0];
@@ -62,7 +63,8 @@ XYZloads = zeros(size(XYZs, 1), 3);
 figNo = 1;
 %% Plot for sequence 1
 fig = figure(figNo);
-fig.Position(3:3) = 5 * fig.Position(3:3);
+fig.Position(4:4) = 2 * fig.Position(4:4);
+fig.Position(3:3) = 4 * fig.Position(3:3);
 plot(x_grid, Load(1, :), 'linewidth', 2.0);
 hold on; grid on;
 yline(si0, '-.k', 'linewidth', 1.5);
@@ -73,16 +75,17 @@ text(norm(VS_start - WirePos1, 2) * 1e3 + 20, 3, 'VS region', 'color', 'r', 'Fon
 xlabel('Distance along the fault [mm]', 'interpreter', 'latex');
 ylabel({'Initial normal', 'stress [MPa]'}, 'Interpreter', 'latex');
 title('Distribution of initial normal stress along the fault infered by sequence 1');
-axis equal;
+daspect([yToxRatio, 1, 1]);
 xlim(xrange);
 ylim([0, 20]);
 set(gca, 'fontsize', 25);
-print(fig ,'../matFiles/sigmaDistriWholeFault-1.png', '-dpng', '-r500');
+print(fig ,'../Vitoplots/sigmaDistriWholeFault-1.png', '-dpng', '-r500');
 figNo = figNo + 1;
 
 %% Plot for sequence 2
 fig = figure(figNo);
-fig.Position(3:3) = 5 * fig.Position(3:3);
+fig.Position(4:4) = 2 * fig.Position(4:4);
+fig.Position(3:3) = 4 * fig.Position(3:3);
 plot(x_grid, Load(2, :), 'color', '#D95319', 'linewidth', 2.0);
 hold on; grid on;
 yline(si0, '-.k', 'linewidth', 1.5);
@@ -93,11 +96,11 @@ text(norm(VS_start - WirePos1, 2) * 1e3 + 20, 3, 'VS region', 'color', 'r', 'Fon
 xlabel('Distance along the fault [mm]', 'interpreter', 'latex');
 ylabel({'Initial normal', 'stress [MPa]'}, 'Interpreter', 'latex');
 title('Distribution of initial normal stress along the fault infered by sequence 2');
-axis equal;
+daspect([yToxRatio, 1, 1]);
 xlim(xrange);
 ylim([0, 20]);
 set(gca, 'fontsize', 25);
-print(fig ,'../matFiles/sigmaDistriWholeFault-2.png', '-dpng', '-r500');
+print(fig ,'../Vitoplots/sigmaDistriWholeFault-2.png', '-dpng', '-r500');
 figNo = figNo + 1;
 
 

@@ -61,6 +61,10 @@ end
 % 2 Distance_To_Surface = 0.004133;
 % 1 Distance_To_Surface = 0.004135;
 % 3 Distance_To_Surface = 0.004134;
+
+filenames = ["1NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.00224_-9_NULoad2dir0_duration120",
+             "1NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.0016_-9_NULoad2dir1_duration120",
+             "1NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.07_-9_NULoad2dir2_duration120"];
 Distance_To_Surface = 0.005;
 for i = 1:1:size(filenames, 1)
     disp(filenames(i));

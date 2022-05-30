@@ -166,6 +166,7 @@ function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface)
         shading interp;
         
         if VitoColorFlag == 1
+            plotname = strcat(pwd, '/../Vitoplots/', videoprefix, '_X-TofShearStress_window_surface_', num2str(Distance_To_Surface), '.png');
             colormap(black_rainbow_plus_long);
         end
         hold on;
