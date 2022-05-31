@@ -7,7 +7,8 @@ tractionOffsetFlag = false;
 
 % frontsurfFile = 'FineFHLoad15DRS1-frontsurf.h5';
 % videoprefix = 'DRS1.5_8ModA0.016Load5_Vw2_fw0.1_theta0.036_NULoad2dir1';
-videoprefix = '1NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.0017_-9_NULoad2dir1_duration120';
+% videoprefix = '1NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.0016_-9_NULoad2dir1_duration120';
+videoprefix = '1NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.07_-9_NULoad2dir2_duration120';
 % videoprefix = 'ViscoElastic_theta0.043';
 % videoprefix = 'DiffNULoadWithWallDRS1.5_8ModA0.016Load5_Vw2_fw0.1_theta0.036_8_NULoad2dir-1';
 faultFileName = strcat('../faultFiles/', videoprefix, '-fault.h5');
@@ -25,7 +26,7 @@ cp = 2662.4;
 cs = 1279;
 nu = 0.35;
 cr = (0.874 + 0.196 * nu - 0.043 * nu^2 - 0.055 * nu^3) * cs;
-cX = [60, 80];
+cX = [50, 70];
 crY = [10, (cX(2) - cX(1)) * 1e3 / cr + 10];
 csY = [10, (cX(2) - cX(1)) * 1e3 / cs + 10];
 cpY = [10, (cX(2) - cX(1)) * 1e3 / cp + 10];
@@ -144,7 +145,7 @@ end
 figNo = figNo + 1;
 
 %% Save a X-T diagram plot of surface slip rate (normal range)
-plotflag = false;
+plotflag = true;
 if plotflag == true
     fig = figure(figNo);
     Trange = [0, 115];
@@ -166,7 +167,7 @@ if plotflag == true
     hold on;
     xline(VSregion(1), 'r' ,'linewidth', 2.0);
     xline(VSregion(2), 'r' ,'linewidth', 2.0);
-    text(VSregion(1)+ 5, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize);
+    text(VSregion(1)+ 5, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize, 'interpreter', 'latex');
     % Add the wave speeds
     plot(cX, crY, 'w', 'linewidth', 2.0);
     text(cX(2) + 4, crY(2)+5, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
@@ -178,12 +179,12 @@ if plotflag == true
     set(h, 'EdgeColor', 'None');
     c = colorbar;
     caxis([0, 12]);
-    ylabel(c,'Slip rate [m/s]','FontName','Avenir','FontSize',fontsize);
+    ylabel(c,'Slip rate [m/s]','FontName','Avenir','FontSize',fontsize, 'interpreter', 'latex');
     xlim(Xrange);
     ylim(Trange);
-    xlabel('Distance along the fault [mm]');
-    ylabel('Time [\mus]');
-    title('X-T diagram of Slip rate');
+    xlabel('Distance along the fault [mm]', 'interpreter', 'latex');
+    ylabel('Time [$\mu$s]', 'interpreter', 'latex');
+    title('X-T diagram of Slip rate', 'interpreter', 'latex');
     set(gca, 'FontSize', fontsize);
     
     % Save the figure
@@ -215,7 +216,7 @@ if plotflag == true
     hold on;
     xline(VSregion(1), 'r' ,'linewidth', 2.0);
     xline(VSregion(2), 'r' ,'linewidth', 2.0);
-    text(VSregion(1)+ 5, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize);
+    text(VSregion(1)+ 5, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize, 'interpreter', 'latex');
     % Add the wave speeds
     plot(cX, crY, 'w', 'linewidth', 2.0);
     text(cX(2) + 4, crY(2)+5, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
@@ -227,12 +228,12 @@ if plotflag == true
     set(h, 'EdgeColor', 'None');
     c = colorbar;
     caxis([0, 2]);
-    ylabel(c,'Slip rate [m/s]','FontName','Avenir','FontSize',fontsize);
+    ylabel(c,'Slip rate [m/s]','FontName','Avenir','FontSize',fontsize, 'interpreter', 'latex');
     xlim(Xrange);
     ylim(Trange);
-    xlabel('Distance along the fault [mm]');
-    ylabel('Time [\mus]');
-    title('X-T diagram of Slip rate');
+    xlabel('Distance along the fault [mm]', 'interpreter', 'latex');
+    ylabel('Time [$\mu$s]', 'interpreter', 'latex');
+    title('X-T diagram of Slip rate', 'interpreter', 'latex');
     set(gca, 'FontSize', fontsize);
     
     % Save the figure
@@ -241,7 +242,7 @@ end
 figNo = figNo + 1;
 
 %% Save a X-T diagram plot of surface slip rate (normal range, log scale)
-plotflag = false;
+plotflag = true;
 if plotflag == true
     fig = figure(figNo);
     % Trange = [0, 150];
@@ -264,7 +265,7 @@ if plotflag == true
     hold on;
     xline(VSregion(1), 'r' ,'linewidth', 2.0);
     xline(VSregion(2), 'r' ,'linewidth', 2.0);
-    text(VSregion(1)+ 5, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize);
+    text(VSregion(1)+ 5, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize, 'interpreter', 'latex');
     % Add the wave speeds
     plot(cX, crY, 'w', 'linewidth', 2.0);
     text(cX(2) + 4, crY(2)+5, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
@@ -276,12 +277,12 @@ if plotflag == true
     set(h, 'EdgeColor', 'None');
     c = colorbar;
     % caxis([0, 12]);
-    ylabel(c,'Log slip rate [m/s]','FontName','Avenir','FontSize',fontsize);
+    ylabel(c,'Log slip rate [m/s]','FontName','Avenir','FontSize',fontsize, 'interpreter', 'latex');
     xlim(Xrange);
     ylim(Trange);
-    xlabel('Distance along the fault [mm]');
-    ylabel('Time [\mus]');
-    title('X-T diagram of Slip rate');
+    xlabel('Distance along the fault [mm]', 'interpreter', 'latex');
+    ylabel('Time [$\mu$s]', 'interpreter', 'latex');
+    title('X-T diagram of Slip rate', 'interpreter', 'latex');
     set(gca, 'FontSize', fontsize);
     
     % Save the figure
@@ -313,7 +314,7 @@ if plotflag == true
     hold on;
     xline(VSregion(1), 'r' ,'linewidth', 2.0);
     xline(VSregion(2), 'r' ,'linewidth', 2.0);
-    text(VSregion(1)+ 5, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize);
+    text(VSregion(1)+ 5, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize, 'interpreter', 'latex');
     % Add the wave speeds
     
     cX = [55, 65];
@@ -331,12 +332,12 @@ if plotflag == true
     set(h, 'EdgeColor', 'None');
     c = colorbar;
     caxis([0, 2]);
-    ylabel(c,'Slip rate [m/s]','FontName','Avenir','FontSize',fontsize);
+    ylabel(c,'Slip rate [m/s]','FontName','Avenir','FontSize',fontsize, 'interpreter', 'latex');
     xlim(Xrange);
     ylim(Trange);
-    xlabel('Distance along the fault [mm]');
-    ylabel('Time [\mus]');
-    title('X-T diagram of Slip rate');
+    xlabel('Distance along the fault [mm]', 'interpreter', 'latex');
+    ylabel('Time [$\mu$s]', 'interpreter', 'latex');
+    title('X-T diagram of Slip rate', 'interpreter', 'latex');
     set(gca, 'FontSize', fontsize);
     
     % Save the figure
@@ -368,7 +369,7 @@ if plotflag == true
     hold on;
     xline(VSregion(1), 'r' ,'linewidth', 2.0);
     xline(VSregion(2), 'r' ,'linewidth', 2.0);
-    text(VSregion(1)+ 5, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize);
+    text(VSregion(1)+ 5, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize, 'interpreter', 'latex');
     % Add the wave speeds
     
     cX = [55, 65];
@@ -386,12 +387,12 @@ if plotflag == true
     set(h, 'EdgeColor', 'None');
     c = colorbar;
     caxis([0, 0.8]);
-    ylabel(c,'Slip rate [m/s]','FontName','Avenir','FontSize',fontsize);
+    ylabel(c,'Slip rate [m/s]','FontName','Avenir','FontSize',fontsize, 'interpreter', 'latex');
     xlim(Xrange);
     ylim(Trange);
-    xlabel('Distance along the fault [mm]');
-    ylabel('Time [\mus]');
-    title('X-T diagram of Slip rate');
+    xlabel('Distance along the fault [mm]', 'interpreter', 'latex');
+    ylabel('Time [$\mu$s]', 'interpreter', 'latex');
+    title('X-T diagram of Slip rate', 'interpreter', 'latex');
     set(gca, 'FontSize', fontsize);
     
     % Save the figure
@@ -422,9 +423,9 @@ if plotflag == true
     hold on;
     xline(VSregion(1), 'r' ,'linewidth', 2.0);
     xline(VSregion(2), 'r' ,'linewidth', 2.0);
-    text(VSregion(1)+ 5, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize);
+    text(VSregion(1)+ 5, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize, 'interpreter', 'latex');
     
-    cX = [60, 80];
+    cX = [50, 70];
     crY = [10, (cX(2) - cX(1)) * 1e3 / cr + 10];
     csY = [10, (cX(2) - cX(1)) * 1e3 / cs + 10];
     cpY = [10, (cX(2) - cX(1)) * 1e3 / cp + 10];
@@ -439,12 +440,12 @@ if plotflag == true
     set(h, 'EdgeColor', 'None');
     c = colorbar;
     caxis([2, 10]);
-    ylabel(c,'Shear stress [MPa]','FontName','Avenir','FontSize',fontsize);
+    ylabel(c,'Shear stress [MPa]','FontName','Avenir','FontSize',fontsize, 'interpreter', 'latex');
     xlim(Xrange);
     ylim(Trange);
-    xlabel('Distance along the fault [mm]');
-    ylabel('Time [\mus]');
-    title('X-T diagram of Shear stress');
+    xlabel('Distance along the fault [mm]', 'interpreter', 'latex');
+    ylabel('Time [$\mu$s]', 'interpreter', 'latex');
+    title('X-T diagram of Shear stress', 'interpreter', 'latex');
     set(gca, 'FontSize', fontsize);
     
     % Save the figure
@@ -476,7 +477,7 @@ if plotflag == true
     hold on;
     xline(VSregion(1), 'r' ,'linewidth', 2.0);
     xline(VSregion(2), 'r' ,'linewidth', 2.0);
-    text(VSregion(1)+ 5, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize);
+    text(VSregion(1)+ 5, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize, 'interpreter', 'latex');
     % Add the wave speeds
     
     cX = [55, 65];
@@ -494,12 +495,12 @@ if plotflag == true
     set(h, 'EdgeColor', 'None');
     c = colorbar;
     caxis([2, 10]);
-    ylabel(c,'Shear stress [MPa]','FontName','Avenir','FontSize',fontsize);
+    ylabel(c,'Shear stress [MPa]','FontName','Avenir','FontSize',fontsize, 'interpreter', 'latex');
     xlim(Xrange);
     ylim(Trange);
-    xlabel('Distance along the fault [mm]');
-    ylabel('Time [\mus]');
-    title('X-T diagram of Shear stress');
+    xlabel('Distance along the fault [mm]', 'interpreter', 'latex');
+    ylabel('Time [$\mu$s]', 'interpreter', 'latex');
+    title('X-T diagram of Shear stress', 'interpreter', 'latex');
     set(gca, 'FontSize', fontsize);
     
     % Save the figure
@@ -531,7 +532,7 @@ if plotflag == true
     hold on;
     xline(VSregion(1), 'r' ,'linewidth', 2.0);
     xline(VSregion(2), 'r' ,'linewidth', 2.0);
-    text(VSregion(1)+ 5, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize);
+    text(VSregion(1)+ 5, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize, 'interpreter', 'latex');
     % Add the wave speeds
     
     cX = [55, 65];
@@ -549,12 +550,12 @@ if plotflag == true
     set(h, 'EdgeColor', 'None');
     c = colorbar;
     caxis([5, 15]);
-    ylabel(c,'Shear stress [MPa]','FontName','Avenir','FontSize',fontsize);
+    ylabel(c,'Shear stress [MPa]','FontName','Avenir','FontSize',fontsize, 'interpreter', 'latex');
     xlim(Xrange);
     ylim(Trange);
-    xlabel('Distance along the fault [mm]');
-    ylabel('Time [\mus]');
-    title('X-T diagram of Normal stress');
+    xlabel('Distance along the fault [mm]', 'interpreter', 'latex');
+    ylabel('Time [$\mu$s]', 'interpreter', 'latex');
+    title('X-T diagram of Normal stress', 'interpreter', 'latex');
     set(gca, 'FontSize', fontsize);
     
     % Save the figure
