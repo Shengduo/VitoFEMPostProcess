@@ -63,10 +63,12 @@ end
 % 3 Distance_To_Surface = 0.004134;
 
 filenames = ["1NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.00224_-9_NULoad2dir0_duration120",
-             "1NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.0016_-9_NULoad2dir1_duration120",
-             "1NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.07_-9_NULoad2dir2_duration120"];
+             "2NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.0016_-9_NULoad2dir1_duration120_100",
+             "2NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.07_-9_NULoad2dir2_duration120_100"];
 Distance_To_Surface = 0.005;
-for i = 1:1:size(filenames, 1)
+pre_time = 100e-6;
+% for i = 2:1:size(filenames, 1)
+for i = 2:1:3
     disp(filenames(i));
     % WriteFiguresTet_function(filenames(i), Distance_To_Surface);
     close all;
@@ -81,7 +83,7 @@ for i = 1:1:size(filenames, 1)
 %     end
     
     for iZ_location = 1:1:size(z_location, 2)
-        SlipRateAtDistInTheFault_function(filenames(i), z_location(iZ_location));
+        SlipRateAtDistInTheFault_function(filenames(i), z_location(iZ_location), pre_time);
         close all;
     end
     

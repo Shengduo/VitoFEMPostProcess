@@ -1,4 +1,4 @@
-function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface)
+function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface, pre_time)
     % This function process the faultfile and get the slip at certain location
     load('BRColorScale.mat');
     VitoColorFlag = true;
@@ -97,7 +97,7 @@ function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface)
     if plotflag == true
         fig = figure(figNo);
         % Trange = [0, 150];
-        Trange = [30, 110];
+        Trange = [30, 110] + pre_time * 1e6;
         Xrange = [VSregion(1), VSregion(1) + 45];
         fig.Position(3:4) = 1.5 * fig.Position(3:4);
 
@@ -120,12 +120,12 @@ function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface)
         % Add the wave speeds
 
         cX = [55, 65];
-        crY = [60, (cX(2) - cX(1)) * 1e3 / cr + 60];
-        csY = [60, (cX(2) - cX(1)) * 1e3 / cs + 60];
-        cpY = [60, (cX(2) - cX(1)) * 1e3 / cp + 60];
+        crY = [60, (cX(2) - cX(1)) * 1e3 / cr + 60] + pre_time * 1e6;
+        csY = [60, (cX(2) - cX(1)) * 1e3 / cs + 60] + pre_time * 1e6;
+        cpY = [60, (cX(2) - cX(1)) * 1e3 / cp + 60] + pre_time * 1e6;
 
         plot(cX, crY, 'w', 'linewidth', 2.0);
-        text(cX(2) + 4, crY(2)+2, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
+        text(cX(2) + 4, crY(2) + 2, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
         plot(cX, csY, 'w', 'linewidth', 2.0);
         text(cX(2) + 4, csY(2) - 1, strcat('$c_s$ = 1.28 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
         plot(cX, cpY, 'w', 'linewidth', 2.0);
@@ -134,7 +134,7 @@ function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface)
         set(h, 'EdgeColor', 'None');
         c = colorbar;
         caxis([0, 0.8]);
-        ylabel(c,'Slip rate [m/s]','FontName','Avenir','FontSize',fontsize);
+        ylabel(c,'Slip rate [m/s]','FontName','Avenir','FontSize',fontsize, 'interpreter', 'latex');
         xlim(Xrange);
         ylim(Trange);
         xlabel('Distance along the fault [mm]', 'interpreter', 'latex');
@@ -153,7 +153,7 @@ function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface)
     if plotflag == true
         fig = figure(figNo);
         % Trange = [0, 150];
-        Trange = [30, 110];
+        Trange = [30, 110] + pre_time * 1e6;
         Xrange = [VSregion(1), VSregion(1) + 45];
         fig.Position(3:4) = 1.5 * fig.Position(3:4);
 
@@ -176,9 +176,9 @@ function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface)
         % Add the wave speeds
 
         cX = [55, 65];
-        crY = [40, (cX(2) - cX(1)) * 1e3 / cr + 40];
-        csY = [40, (cX(2) - cX(1)) * 1e3 / cs + 40];
-        cpY = [40, (cX(2) - cX(1)) * 1e3 / cp + 40];
+        crY = [40, (cX(2) - cX(1)) * 1e3 / cr + 40] + pre_time * 1e6;
+        csY = [40, (cX(2) - cX(1)) * 1e3 / cs + 40] + pre_time * 1e6;
+        cpY = [40, (cX(2) - cX(1)) * 1e3 / cp + 40] + pre_time * 1e6;
 
         plot(cX, crY, 'w', 'linewidth', 2.0);
         text(cX(2) + 4, crY(2)+2, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
@@ -190,7 +190,7 @@ function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface)
         set(h, 'EdgeColor', 'None');
         c = colorbar;
         caxis([2, 10]);
-        ylabel(c,'Shear stress [MPa]','FontName','Avenir','FontSize',fontsize);
+        ylabel(c,'Shear stress [MPa]','FontName','Avenir','FontSize',fontsize, 'interpreter', 'latex');
         xlim(Xrange);
         ylim(Trange);
         xlabel('Distance along the fault [mm]', 'interpreter', 'latex');

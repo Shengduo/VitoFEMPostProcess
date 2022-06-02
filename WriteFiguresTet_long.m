@@ -7,8 +7,8 @@ tractionOffsetFlag = false;
 
 % frontsurfFile = 'FineFHLoad15DRS1-frontsurf.h5';
 % videoprefix = 'DRS1.5_8ModA0.016Load5_Vw2_fw0.1_theta0.036_NULoad2dir1';
-videoprefix = '2NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.0016_-9_NULoad2dir1_duration120_0';
-% videoprefix = '2NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.07_-9_NULoad2dir2_duration120_0';
+% videoprefix = '2NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.07_-9_NULoad2dir2_duration120_100';
+videoprefix = '2NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.0016_-9_NULoad2dir1_duration120_100';
 % videoprefix = 'ViscoElastic_theta0.043';
 % videoprefix = 'DiffNULoadWithWallDRS1.5_8ModA0.016Load5_Vw2_fw0.1_theta0.036_8_NULoad2dir-1';
 faultFileName = strcat('../faultFiles/', videoprefix, '-fault.h5');
@@ -16,6 +16,7 @@ h5disp(faultFileName);
 fontsize = 25;
 
 % Read time
+pre_time = 100 * 1e-6;
 time = h5read(faultFileName, '/time');
 time = reshape(time, [1, size(time, 3)]);
 time = time - 10e-6;
@@ -27,9 +28,9 @@ cs = 1279;
 nu = 0.35;
 cr = (0.874 + 0.196 * nu - 0.043 * nu^2 - 0.055 * nu^3) * cs;
 cX = [40, 60];
-crY = [10, (cX(2) - cX(1)) * 1e3 / cr + 10];
-csY = [10, (cX(2) - cX(1)) * 1e3 / cs + 10];
-cpY = [10, (cX(2) - cX(1)) * 1e3 / cp + 10];
+crY = [10, (cX(2) - cX(1)) * 1e3 / cr + 10] + pre_time * 1e6;
+csY = [10, (cX(2) - cX(1)) * 1e3 / cs + 10] + pre_time * 1e6;
+cpY = [10, (cX(2) - cX(1)) * 1e3 / cp + 10] + pre_time * 1e6;
 
 % Read node geometry
 nodalXYZ = h5read(faultFileName, '/geometry/vertices');
@@ -148,9 +149,10 @@ figNo = figNo + 1;
 plotflag = true;
 if plotflag == true
     fig = figure(figNo);
-    Trange = [0, 115];
+    Trange = [0, 115 + pre_time * 1e6];
     Xrange = [-100, 150];
     fig.Position(3:4) = 1.5 * fig.Position(3:4);
+    fig.Position(4) = (pre_time * 1e6 / 115 + 1) * fig.Position(4);
     
     % Initialize names
     plotname = strcat(pwd, '/../plots/', videoprefix, '_X-TofSlipRate_normalRange.png');
@@ -167,7 +169,7 @@ if plotflag == true
     hold on;
     xline(VSregion(1), 'r' ,'linewidth', 2.0);
     xline(VSregion(2), 'r' ,'linewidth', 2.0);
-    text(VSregion(1) + 2, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize, 'interpreter', 'latex');
+    text(VSregion(1)+ 2, 40 + pre_time * 1e6, 'VS region', 'color', 'r', 'Fontsize', fontsize, 'interpreter', 'latex');
     % Add the wave speeds
     plot(cX, crY, 'w', 'linewidth', 2.0);
     text(cX(2) + 4, crY(2)+5, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
@@ -196,10 +198,10 @@ figNo = figNo + 1;
 plotflag = true;
 if plotflag == true
     fig = figure(figNo);
-    % Trange = [0, 150];
-    Trange = [0, 115];
+    Trange = [0, 115 + pre_time * 1e6];
     Xrange = [-100, 150];
     fig.Position(3:4) = 1.5 * fig.Position(3:4);
+    fig.Position(4) = (pre_time * 1e6 / 115 + 1) * fig.Position(4);
     
     % Initialize names
     plotname = strcat(pwd, '/../plots/', videoprefix, '_X-TofSlipRate_VitoRange.png');
@@ -216,7 +218,7 @@ if plotflag == true
     hold on;
     xline(VSregion(1), 'r' ,'linewidth', 2.0);
     xline(VSregion(2), 'r' ,'linewidth', 2.0);
-    text(VSregion(1) + 2, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize, 'interpreter', 'latex');
+    text(VSregion(1) + 2, 40 + pre_time * 1e6, 'VS region', 'color', 'r', 'Fontsize', fontsize, 'interpreter', 'latex');
     % Add the wave speeds
     plot(cX, crY, 'w', 'linewidth', 2.0);
     text(cX(2) + 4, crY(2)+5, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
@@ -245,10 +247,10 @@ figNo = figNo + 1;
 plotflag = true;
 if plotflag == true
     fig = figure(figNo);
-    % Trange = [0, 150];
-    Trange = [0, 115];
+    Trange = [0, 115 + pre_time * 1e6];
     Xrange = [-100, 150];
     fig.Position(3:4) = 1.5 * fig.Position(3:4);
+    fig.Position(4) = (pre_time * 1e6 / 115 + 1) * fig.Position(4);
     
     % Initialize names
     plotname = strcat(pwd, '/../plots/', videoprefix, '_X-TofSlipRate_normalRangeLog.png');
@@ -265,7 +267,7 @@ if plotflag == true
     hold on;
     xline(VSregion(1), 'r' ,'linewidth', 2.0);
     xline(VSregion(2), 'r' ,'linewidth', 2.0);
-    text(VSregion(1) + 2, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize, 'interpreter', 'latex');
+    text(VSregion(1) + 2, 40 + pre_time * 1e6, 'VS region', 'color', 'r', 'Fontsize', fontsize, 'interpreter', 'latex');
     % Add the wave speeds
     plot(cX, crY, 'w', 'linewidth', 2.0);
     text(cX(2) + 4, crY(2)+5, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
@@ -295,7 +297,7 @@ plotflag = false;
 if plotflag == true
     fig = figure(figNo);
     % Trange = [0, 150];
-    Trange = [30, 110];
+    Trange = [30, 110] + pre_time * 1e6;
     Xrange = [VSregion(1), VSregion(1) + 45];
     fig.Position(3:4) = 1.5 * fig.Position(3:4);
     
@@ -318,9 +320,9 @@ if plotflag == true
     % Add the wave speeds
     
     cX = [55, 65];
-    crY = [60, (cX(2) - cX(1)) * 1e3 / cr + 60];
-    csY = [60, (cX(2) - cX(1)) * 1e3 / cs + 60];
-    cpY = [60, (cX(2) - cX(1)) * 1e3 / cp + 60];
+    crY = [60, (cX(2) - cX(1)) * 1e3 / cr + 60] + pre_time * 1e6;
+    csY = [60, (cX(2) - cX(1)) * 1e3 / cs + 60] + pre_time * 1e6;
+    cpY = [60, (cX(2) - cX(1)) * 1e3 / cp + 60] + pre_time * 1e6;
 
     plot(cX, crY, 'w', 'linewidth', 2.0);
     text(cX(2) + 4, crY(2)+2, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
@@ -350,7 +352,7 @@ plotflag = true;
 if plotflag == true
     fig = figure(figNo);
     % Trange = [0, 150];
-    Trange = [30, 110];
+    Trange = [30, 110] + 1e6 * pre_time;
     Xrange = [VSregion(1), VSregion(1) + 45];
     fig.Position(3:4) = 1.5 * fig.Position(3:4);
     
@@ -373,9 +375,9 @@ if plotflag == true
     % Add the wave speeds
     
     cX = [55, 65];
-    crY = [60, (cX(2) - cX(1)) * 1e3 / cr + 60];
-    csY = [60, (cX(2) - cX(1)) * 1e3 / cs + 60];
-    cpY = [60, (cX(2) - cX(1)) * 1e3 / cp + 60];
+    crY = [60, (cX(2) - cX(1)) * 1e3 / cr + 60] + pre_time * 1e6;
+    csY = [60, (cX(2) - cX(1)) * 1e3 / cs + 60] + pre_time * 1e6;
+    cpY = [60, (cX(2) - cX(1)) * 1e3 / cp + 60] + pre_time * 1e6;
 
     plot(cX, crY, 'w', 'linewidth', 2.0);
     text(cX(2) + 4, crY(2)+2, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
@@ -404,9 +406,10 @@ figNo = figNo + 1;
 plotflag = true;
 if plotflag == true
     fig = figure(figNo);
-    Trange = [0, 115];
+    Trange = [0, 115 + pre_time * 1e6];
     Xrange = [-100, 150];
     fig.Position(3:4) = 1.5 * fig.Position(3:4);
+    fig.Position(4) = (pre_time * 1e6 / 115 + 1) * fig.Position(4);
     
     % Initialize names
     plotname = strcat(pwd, '/../plots/', videoprefix, '_X-TofShearStress_normalRange.png');
@@ -423,12 +426,12 @@ if plotflag == true
     hold on;
     xline(VSregion(1), 'r' ,'linewidth', 2.0);
     xline(VSregion(2), 'r' ,'linewidth', 2.0);
-    text(VSregion(1) + 2, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize, 'interpreter', 'latex');
+    text(VSregion(1) + 2, 40 + pre_time * 1e6, 'VS region', 'color', 'r', 'Fontsize', fontsize, 'interpreter', 'latex');
     
     cX = [40, 60];
-    crY = [10, (cX(2) - cX(1)) * 1e3 / cr + 10];
-    csY = [10, (cX(2) - cX(1)) * 1e3 / cs + 10];
-    cpY = [10, (cX(2) - cX(1)) * 1e3 / cp + 10];
+    crY = [10, (cX(2) - cX(1)) * 1e3 / cr + 10] + pre_time * 1e6;
+    csY = [10, (cX(2) - cX(1)) * 1e3 / cs + 10] + pre_time * 1e6;
+    cpY = [10, (cX(2) - cX(1)) * 1e3 / cp + 10] + pre_time * 1e6;
     % Add the wave speeds
     plot(cX, crY, 'w', 'linewidth', 2.0);
     text(cX(2) + 4, crY(2)+5, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
@@ -458,7 +461,7 @@ plotflag = true;
 if plotflag == true
     fig = figure(figNo);
     % Trange = [0, 150];
-    Trange = [30, 110];
+    Trange = [30, 110] + 1e6 * pre_time;
     Xrange = [VSregion(1), VSregion(1) + 45];
     fig.Position(3:4) = 1.5 * fig.Position(3:4);
     
@@ -478,12 +481,12 @@ if plotflag == true
     
     % Add the wave speeds    
     cX = [55, 65];
-    crY = [40, (cX(2) - cX(1)) * 1e3 / cr + 40];
-    csY = [40, (cX(2) - cX(1)) * 1e3 / cs + 40];
-    cpY = [40, (cX(2) - cX(1)) * 1e3 / cp + 40];
+    crY = [40, (cX(2) - cX(1)) * 1e3 / cr + 40] + pre_time * 1e6;
+    csY = [40, (cX(2) - cX(1)) * 1e3 / cs + 40] + pre_time * 1e6;
+    cpY = [40, (cX(2) - cX(1)) * 1e3 / cp + 40] + pre_time * 1e6;
 
     plot(cX, crY, 'w', 'linewidth', 2.0);
-    text(cX(2) + 4, crY(2)+2, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
+    text(cX(2) + 4, crY(2) + 2, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
     plot(cX, csY, 'w', 'linewidth', 2.0);
     text(cX(2) + 4, csY(2) - 1, strcat('$c_s$ = 1.28 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
     plot(cX, cpY, 'w', 'linewidth', 2.0);
@@ -510,7 +513,7 @@ plotflag = false;
 if plotflag == true
     fig = figure(figNo);
     % Trange = [0, 150];
-    Trange = [30, 110];
+    Trange = [30, 110] + pre_time * 1e6;
     Xrange = [VSregion(1), VSregion(1) + 45];
     fig.Position(3:4) = 1.5 * fig.Position(3:4);
     
@@ -527,15 +530,12 @@ if plotflag == true
         colormap(black_rainbow_plus_long);
     end
     hold on;
-    xline(VSregion(1), 'r' ,'linewidth', 2.0);
-    xline(VSregion(2), 'r' ,'linewidth', 2.0);
-    text(VSregion(1) + 2, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize, 'interpreter', 'latex');
     % Add the wave speeds
     
     cX = [55, 65];
-    crY = [40, (cX(2) - cX(1)) * 1e3 / cr + 40];
-    csY = [40, (cX(2) - cX(1)) * 1e3 / cs + 40];
-    cpY = [40, (cX(2) - cX(1)) * 1e3 / cp + 40];
+    crY = [40, (cX(2) - cX(1)) * 1e3 / cr + 40] + pre_time * 1e6;
+    csY = [40, (cX(2) - cX(1)) * 1e3 / cs + 40] + pre_time * 1e6;
+    cpY = [40, (cX(2) - cX(1)) * 1e3 / cp + 40] + pre_time * 1e6;
 
     plot(cX, crY, 'w', 'linewidth', 2.0);
     text(cX(2) + 4, crY(2)+2, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
