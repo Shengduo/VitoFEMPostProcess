@@ -4,9 +4,9 @@ close all;
 load('../matFiles/realNormalStress.mat');
 
 % Which sequence to use
-seq_ID = 1;
+seq_ID = 2;
 yToxRatio = 2;
-flatflag = 1;
+flatflag = 0;
 
 % Start of velocity strengthening region
 VS_start = [0.006354, 0.003522, 0.0];
@@ -109,6 +109,10 @@ figNo = figNo + 1;
 % Compute the stress at certain points
 XYZloads = zeros(size(XYZs, 1), 3);
 XYZloads(:, 3) = si0 - interp1(interpolate_xs, interpolate_ys(seq_ID, :), XYZs1D)';
+
+% Add first and last XYZ
+XYZs = [-0.110000, 0.0, 0.0; XYZs; 0.110000, 0.0, 0.0];
+XYZloads = [XYZloads(1, :); XYZloads; XYZloads(end, :)];
 
 % Write changable parameters into a '.txt' file
 if flatflag == 1
