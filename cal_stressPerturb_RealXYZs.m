@@ -6,6 +6,7 @@ load('../matFiles/realNormalStress.mat');
 % Which sequence to use
 seq_ID = 1;
 yToxRatio = 2;
+flatflag = 1;
 
 % Start of velocity strengthening region
 VS_start = [0.006354, 0.003522, 0.0];
@@ -43,8 +44,8 @@ interpolate_xs = [xrange(1), norm(VS_start - WirePos1, 2) * 1e3, ...
 Xs_wire = Xs + norm(VS_start - WirePos1, 2) * 1e3;
 
 % Find the background stress
-[si0_1, Fval1] = fminsearch(@(x0) residualOfStress(x0, Xs, si_smooth(1, :)), si0);
-[si0_2, Fval2] = fminsearch(@(x0) residualOfStress(x0, Xs, si_smooth(2, :)), si0);
+[si0_1, Fval1] = fminsearch(@(x0) residualOfStress(x0, Xs, si_smooth(1, :), flatflag), si0);
+[si0_2, Fval2] = fminsearch(@(x0) residualOfStress(x0, Xs, si_smooth(2, :), flatflag), si0);
 disp(["Background normal stress of sequence 1 is: ", num2str(si0_1), " MPa"])
 disp(["Residual stress of sequence 1 is: ", num2str(Fval1), " MPa"]);
 disp(["Background normal stress of sequence 2 is: ", num2str(si0_2), " MPa"])
@@ -110,84 +111,161 @@ XYZloads = zeros(size(XYZs, 1), 3);
 XYZloads(:, 3) = si0 - interp1(interpolate_xs, interpolate_ys(seq_ID, :), XYZs1D)';
 
 % Write changable parameters into a '.txt' file
-txtname = "XYZs.txt";
-fileID = fopen(txtname, 'w');
+if flatflag == 1
+    %% Flat file
+    txtname = "../matFiles/XYZs.txt";
+    fileID = fopen(txtname, 'w');
+    Zs = [-0.0051, 0.0051; -0.0041, 0.0045; -0.0039, 0.0043];
+    si0_reg = si0 - [si0_1, si0_2];
 
-Zs = [-0.0051, 0.0051; -0.0041, 0.0045; -0.0039, 0.0043];
-si0_reg = si0 - [si0_1, si0_2];
+    % Write into the files
+    for i = 1:1:size(XYZs, 1)
+        % Write 9 lines
+        for shit = 1:1:3
+            fprintf(fileID, '%9s', num2str(XYZs(i, 1), '%6f')); 
+            fprintf(fileID, '%10s', num2str(0.1, '%6f')); 
+            fprintf(fileID, '%10s', num2str(Zs(shit, 1), '%6f'));
+            if shit == 3
+                fprintf(fileID, '%10s', num2str(XYZloads(i, 1), '%6f')); 
+                fprintf(fileID, '%10s', num2str(XYZloads(i, 2), '%6f')); 
+                fprintf(fileID, '%10s', num2str(XYZloads(i, 3), '%6f'));
+                fprintf(fileID, '\n');
+            else
+                fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
+                fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
+                fprintf(fileID, '%10s', num2str(si0_reg(seq_ID), '%6f'));
+                fprintf(fileID, '\n');
+            end
 
-% Write into the files
-for i = 1:1:size(XYZs, 1)
-    % Write 9 lines
-    for shit = 1:1:3
-        fprintf(fileID, '%9s', num2str(XYZs(i, 1), '%6f')); 
-        fprintf(fileID, '%10s', num2str(0.1, '%6f')); 
-        fprintf(fileID, '%10s', num2str(Zs(shit, 1), '%6f'));
-        if shit == 3
-            fprintf(fileID, '%10s', num2str(XYZloads(i, 1), '%6f')); 
-            fprintf(fileID, '%10s', num2str(XYZloads(i, 2), '%6f')); 
-            fprintf(fileID, '%10s', num2str(XYZloads(i, 3), '%6f'));
+            % ================================================
+            fprintf(fileID, '%9s', num2str(XYZs(i, 1), '%6f')); 
+            fprintf(fileID, '%10s', num2str(0.1, '%6f')); 
+            fprintf(fileID, '%10s', num2str(Zs(shit, 2), '%6f'));
+            if shit == 3
+                fprintf(fileID, '%10s', num2str(XYZloads(i, 1), '%6f')); 
+                fprintf(fileID, '%10s', num2str(XYZloads(i, 2), '%6f')); 
+                fprintf(fileID, '%10s', num2str(XYZloads(i, 3), '%6f'));
+                fprintf(fileID, '\n');
+            else
+                fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
+                fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
+                fprintf(fileID, '%10s', num2str(si0_reg(seq_ID), '%6f'));
+                fprintf(fileID, '\n');
+            end
+
+            % ================================================
+            fprintf(fileID, '%9s', num2str(XYZs(i, 1), '%6f')); 
+            fprintf(fileID, '%10s', num2str(-0.1, '%6f')); 
+            fprintf(fileID, '%10s', num2str(Zs(shit, 1), '%6f'));
+            if shit == 3
+                fprintf(fileID, '%10s', num2str(XYZloads(i, 1), '%6f')); 
+                fprintf(fileID, '%10s', num2str(XYZloads(i, 2), '%6f')); 
+                fprintf(fileID, '%10s', num2str(XYZloads(i, 3), '%6f'));
+                fprintf(fileID, '\n');
+            else
+                fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
+                fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
+                fprintf(fileID, '%10s', num2str(si0_reg(seq_ID), '%6f'));
+                fprintf(fileID, '\n');
+            end
+
+            % ================================================
+            fprintf(fileID, '%9s', num2str(XYZs(i, 1), '%6f')); 
+            fprintf(fileID, '%10s', num2str(-0.1, '%6f')); 
+            fprintf(fileID, '%10s', num2str(Zs(shit, 2), '%6f'));
+            if shit == 3
+                fprintf(fileID, '%10s', num2str(XYZloads(i, 1), '%6f')); 
+                fprintf(fileID, '%10s', num2str(XYZloads(i, 2), '%6f')); 
+                fprintf(fileID, '%10s', num2str(XYZloads(i, 3), '%6f'));
+                fprintf(fileID, '\n');
+            else
+                fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
+                fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
+                fprintf(fileID, '%10s', num2str(si0_reg(seq_ID), '%6f'));
+                fprintf(fileID, '\n');
+            end
             fprintf(fileID, '\n');
-        else
+        end
+    end
+
+    % Output XYZ
+    for i = 1:1:size(XYZs, 1)
+        fprintf(fileID, '%10s', num2str(XYZs(i, 1), '%6f')); 
+    end
+    fclose(fileID);
+else
+    %% Non-flat
+    txtname = "../matFiles/XYZs_nonflat.txt";
+    fileID = fopen(txtname, 'w');
+    Zs = [-0.0051, 0.0051; -0.0041, 0.0045; -0.0039, 0.0043];
+    Zmid = 0.0002;
+    si0_reg = si0 - [si0_1, si0_2];
+
+    % Write into the files
+    for i = 1:1:size(XYZs, 1)
+        % Write 9 lines
+        for shit = 1:1:3
+            fprintf(fileID, '%9s', num2str(XYZs(i, 1), '%6f')); 
+            fprintf(fileID, '%10s', num2str(0.1, '%6f')); 
+            fprintf(fileID, '%10s', num2str(Zs(shit, 1), '%6f'));
             fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
             fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
             fprintf(fileID, '%10s', num2str(si0_reg(seq_ID), '%6f'));
             fprintf(fileID, '\n');
-        end
-        
-        % ================================================
-        fprintf(fileID, '%9s', num2str(XYZs(i, 1), '%6f')); 
-        fprintf(fileID, '%10s', num2str(0.1, '%6f')); 
-        fprintf(fileID, '%10s', num2str(Zs(shit, 2), '%6f'));
-        if shit == 3
-            fprintf(fileID, '%10s', num2str(XYZloads(i, 1), '%6f')); 
-            fprintf(fileID, '%10s', num2str(XYZloads(i, 2), '%6f')); 
-            fprintf(fileID, '%10s', num2str(XYZloads(i, 3), '%6f'));
-            fprintf(fileID, '\n');
-        else
+
+            % ================================================
+            fprintf(fileID, '%9s', num2str(XYZs(i, 1), '%6f')); 
+            fprintf(fileID, '%10s', num2str(0.1, '%6f')); 
+            fprintf(fileID, '%10s', num2str(Zs(shit, 2), '%6f'));
             fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
             fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
             fprintf(fileID, '%10s', num2str(si0_reg(seq_ID), '%6f'));
             fprintf(fileID, '\n');
+
+            % ================================================
+            fprintf(fileID, '%9s', num2str(XYZs(i, 1), '%6f')); 
+            fprintf(fileID, '%10s', num2str(-0.1, '%6f')); 
+            fprintf(fileID, '%10s', num2str(Zs(shit, 1), '%6f'));
+            fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
+            fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
+            fprintf(fileID, '%10s', num2str(si0_reg(seq_ID), '%6f'));
+            fprintf(fileID, '\n');
+
+            % ================================================
+            fprintf(fileID, '%9s', num2str(XYZs(i, 1), '%6f')); 
+            fprintf(fileID, '%10s', num2str(-0.1, '%6f')); 
+            fprintf(fileID, '%10s', num2str(Zs(shit, 2), '%6f'));
+            fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
+            fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
+            fprintf(fileID, '%10s', num2str(si0_reg(seq_ID), '%6f'));
+            fprintf(fileID, '\n');
+            fprintf(fileID, '\n');
         end
-        
+        % ====================================================
+        fprintf(fileID, '%9s', num2str(XYZs(i, 1), '%6f')); 
+        fprintf(fileID, '%10s', num2str(0.1, '%6f')); 
+        fprintf(fileID, '%10s', num2str(Zmid, '%6f'));
+        fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
+        fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
+        fprintf(fileID, '%10s', num2str(XYZloads(i, 3), '%6f'));
+        fprintf(fileID, '\n');
+
         % ================================================
         fprintf(fileID, '%9s', num2str(XYZs(i, 1), '%6f')); 
         fprintf(fileID, '%10s', num2str(-0.1, '%6f')); 
-        fprintf(fileID, '%10s', num2str(Zs(shit, 1), '%6f'));
-        if shit == 3
-            fprintf(fileID, '%10s', num2str(XYZloads(i, 1), '%6f')); 
-            fprintf(fileID, '%10s', num2str(XYZloads(i, 2), '%6f')); 
-            fprintf(fileID, '%10s', num2str(XYZloads(i, 3), '%6f'));
-            fprintf(fileID, '\n');
-        else
-            fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
-            fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
-            fprintf(fileID, '%10s', num2str(si0_reg(seq_ID), '%6f'));
-            fprintf(fileID, '\n');
-        end
-        
-        % ================================================
-        fprintf(fileID, '%9s', num2str(XYZs(i, 1), '%6f')); 
-        fprintf(fileID, '%10s', num2str(-0.1, '%6f')); 
-        fprintf(fileID, '%10s', num2str(Zs(shit, 2), '%6f'));
-        if shit == 3
-            fprintf(fileID, '%10s', num2str(XYZloads(i, 1), '%6f')); 
-            fprintf(fileID, '%10s', num2str(XYZloads(i, 2), '%6f')); 
-            fprintf(fileID, '%10s', num2str(XYZloads(i, 3), '%6f'));
-            fprintf(fileID, '\n');
-        else
-            fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
-            fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
-            fprintf(fileID, '%10s', num2str(si0_reg(seq_ID), '%6f'));
-            fprintf(fileID, '\n');
-        end
+        fprintf(fileID, '%10s', num2str(Zmid, '%6f'));
+        fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
+        fprintf(fileID, '%10s', num2str(0.0, '%6f')); 
+        fprintf(fileID, '%10s', num2str(XYZloads(i, 3), '%6f'));
+        fprintf(fileID, '\n');
         fprintf(fileID, '\n');
     end
+
+    % Output XYZ
+    for i = 1:1:size(XYZs, 1)
+        fprintf(fileID, '%10s', num2str(XYZs(i, 1), '%6f')); 
+    end
+    fclose(fileID);
 end
 
-% Output XYZ
-for i = 1:1:size(XYZs, 1)
-    fprintf(fileID, '%10s', num2str(XYZs(i, 1), '%6f')); 
-end
-fclose(fileID);
+
