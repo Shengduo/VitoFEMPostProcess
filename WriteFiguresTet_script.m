@@ -1,6 +1,5 @@
 %% Call this script to postprocess all output .h5 files from one RunJobs sh.
-clc,clear;
-close all;
+setEnvironment;
 
 %% First write figures for the default case
 % filename = "1WithWallDRS1.5_1.5ModA0.008AmB0.005Load5_Vw2e+16_fw0.58_theta0.036_-11_NULoad2dir0";
@@ -25,7 +24,7 @@ AmB = [0.005];
 NULoad = [5];
 stress_dist = [1, 2, 3];
 mesh = [1];
-z_location = [0.000, 0.003, 0.004, 0.005];
+z_location = [0.005, 0.004, 0.003, 0.000];
 
 % Filenames the things are stored
 filenames = [];
@@ -62,15 +61,46 @@ end
 % 1 Distance_To_Surface = 0.004135;
 % 3 Distance_To_Surface = 0.004134;
 
-filenames = ["1NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.00224_-9_NULoad2dir0_duration120",
-             "2NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.0016_-9_NULoad2dir1_duration120_100",
-             "2NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.07_-9_NULoad2dir2_duration120_100"];
+% filenames = ["1NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.00224_-9_NULoad2dir0_duration120",
+%              "2NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.0016_-9_NULoad2dir1_duration120_100",
+%              "2NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.07_-9_NULoad2dir2_duration120_100", 
+%              "2OPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.005_-9_NULoad2dir3_duration120_0", 
+%              "2OPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.0045_-9_NULoad2dir1_duration120_0", 
+%              "2NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.0016_-9_NULoad2dir3_duration120_100", 
+%              "2NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.0016_-9_NULoad2dir3_duration120_0"];
+         
+%% Longer versions of shits
+filenames = ["2OPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.006_-9_NULoad2dir0_duration200_0", ...
+             "2OPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.006_-9_NULoad2dir0_duration200_100", ...
+             "2NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.0016_-9_NULoad2dir3_duration200_0", ...
+             "2NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.0016_-9_NULoad2dir3_duration200_100", ...
+             "2OPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.0045_-9_NULoad2dir1_duration200_0", ...
+             "2OPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.0045_-9_NULoad2dir1_duration200_100"];
+         
+filenames = [filenames, ...
+             "2OPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.005_-9_NULoad2dir3_duration200_0", ...
+             "2OPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.005_-9_NULoad2dir3_duration200_100", ...
+             "2NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.0016_-9_NULoad2dir1_duration200_0", ...
+             "2NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.0016_-9_NULoad2dir1_duration200_100", ...
+             "2NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.00224_-9_NULoad2dir0_duration200_0", ...
+             "2NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.00224_-9_NULoad2dir0_duration200_100"];
+         
+% Baseline cases
+filenames = [filenames, ...
+            "2OPDirWithWallDRS1.5_1.5ModA0.011AmB-0.005Load5_Vw0.2_fw0.33_theta0.006_0.006_NULoad2dir0_duration200_0", ...
+            "2NPDirWithWallDRS1.5_1.5ModA0.011AmB-0.005Load5_Vw1.1_fw0.27_theta0.00224_0.00224_NULoad2dir0_duration200_0", ...
+            "2OPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2e+16_fw0.1_theta0.006_-9_NULoad2dir0_duration200_0", ...
+            "2NPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2e+16_fw0.1_theta0.00224_-9_NULoad2dir0_duration200_0"];
+         
+         
+pre_times = [0, 100, 0, 100, 0, 100, 0, 100, 0, 100, 0, 100, 0, 0, 0, 0] * 1e-6;
+         
 Distance_To_Surface = 0.005;
-pre_time = 100e-6;
+% pre_time = 0e-6;
 % for i = 2:1:size(filenames, 1)
-for i = 2:1:3
+for i = 1:1:size(filenames, 2)
     disp(filenames(i));
-    % WriteFiguresTet_function(filenames(i), Distance_To_Surface);
+    % WriteFiguresTet_function(filenames(i), Distance_To_Surface, pre_times(i));
     close all;
     
 %     for iStress_dist = 1:1:size(stress_dist, 2)
@@ -82,10 +112,12 @@ for i = 2:1:3
 %         
 %     end
     
-    for iZ_location = 1:1:size(z_location, 2)
-        SlipRateAtDistInTheFault_function(filenames(i), z_location(iZ_location), pre_time);
-        close all;
-    end
+     for iZ_location = 1:1:size(z_location, 2)
+         % SlipRateAtDistInTheFault_function(filenames(i), z_location(iZ_location), pre_times(i));
+         close all;
+     end
     
     % close all;
+    writeVideosTet_function(filenames(i), pre_times(i));
+    close all;
 end

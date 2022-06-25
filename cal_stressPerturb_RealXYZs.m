@@ -4,9 +4,9 @@ close all;
 load('../matFiles/realNormalStress.mat');
 
 % Which sequence to use
-seq_ID = 2;
+seq_ID = 1;
 yToxRatio = 2;
-flatflag = 0;
+flatflag = 1;
 
 % Start of velocity strengthening region
 VS_start = [0.006354, 0.003522, 0.0];
@@ -59,19 +59,19 @@ Load(1, :) = interp1(interpolate_xs, interpolate_ys(1, :), x_grid);
 Load(2, :) = interp1(interpolate_xs, interpolate_ys(2, :), x_grid);
 
 XYZloads = zeros(size(XYZs, 1), 3);
-
+xrange = xrange - 1e3 * norm(VS_start - WirePos1, 2);
 
 figNo = 1;
 %% Plot for sequence 1
 fig = figure(figNo);
 fig.Position(4:4) = 2 * fig.Position(4:4);
 fig.Position(3:3) = 4 * fig.Position(3:3);
-plot(x_grid, Load(1, :), 'linewidth', 2.0);
+plot(x_grid - 1e3 * norm(VS_start - WirePos1, 2), Load(1, :), 'linewidth', 2.0);
 hold on; grid on;
 yline(si0, '-.k', 'linewidth', 1.5);
-xline(norm(VS_start - WirePos1, 2) * 1e3, 'r', 'linewidth', 1.5);
-xline(norm(VS_end - WirePos1, 2) * 1e3, 'r', 'linewidth', 1.5);
-text(norm(VS_start - WirePos1, 2) * 1e3 + 20, 3, 'VS region', 'color', 'r', 'Fontsize', 20);
+xline(norm(VS_start - VS_start, 2) * 1e3, 'r', 'linewidth', 1.5);
+xline(norm(VS_end - VS_start, 2) * 1e3, 'r', 'linewidth', 1.5);
+text(norm(VS_start - VS_start, 2) * 1e3 + 20, 3, 'Region 2', 'color', 'r', 'Fontsize', 20);
 
 xlabel('Distance along the fault [mm]', 'interpreter', 'latex');
 ylabel({'Initial normal', 'stress [MPa]'}, 'Interpreter', 'latex');
@@ -80,19 +80,23 @@ daspect([yToxRatio, 1, 1]);
 xlim(xrange);
 ylim([0, 20]);
 set(gca, 'fontsize', 25);
-print(fig ,'../Vitoplots/sigmaDistriWholeFault-1.png', '-dpng', '-r500');
+if flatflag == 1
+    print(fig ,'../PaperPlots/sigmaDistriWholeFault-1.png', '-dpng', '-r500');
+else
+    print(fig ,'../PaperPlots/sigmaDistriWholeFault-1_nonflat.png', '-dpng', '-r500');
+end
 figNo = figNo + 1;
 
 %% Plot for sequence 2
 fig = figure(figNo);
 fig.Position(4:4) = 2 * fig.Position(4:4);
 fig.Position(3:3) = 4 * fig.Position(3:3);
-plot(x_grid, Load(2, :), 'color', '#D95319', 'linewidth', 2.0);
+plot(x_grid - 1e3 * norm(VS_start - WirePos1, 2), Load(2, :), 'color', '#D95319', 'linewidth', 2.0);
 hold on; grid on;
 yline(si0, '-.k', 'linewidth', 1.5);
-xline(norm(VS_start - WirePos1, 2) * 1e3, 'r', 'linewidth', 1.5);
-xline(norm(VS_end - WirePos1, 2) * 1e3, 'r', 'linewidth', 1.5);
-text(norm(VS_start - WirePos1, 2) * 1e3 + 20, 3, 'VS region', 'color', 'r', 'Fontsize', 20);
+xline(norm(VS_start - VS_start, 2) * 1e3, 'r', 'linewidth', 1.5);
+xline(norm(VS_end - VS_start, 2) * 1e3, 'r', 'linewidth', 1.5);
+text(norm(VS_start - VS_start, 2) * 1e3 + 20, 3, 'Region 2', 'color', 'r', 'Fontsize', 20);
 
 xlabel('Distance along the fault [mm]', 'interpreter', 'latex');
 ylabel({'Initial normal', 'stress [MPa]'}, 'Interpreter', 'latex');
@@ -101,7 +105,11 @@ daspect([yToxRatio, 1, 1]);
 xlim(xrange);
 ylim([0, 20]);
 set(gca, 'fontsize', 25);
-print(fig ,'../Vitoplots/sigmaDistriWholeFault-2.png', '-dpng', '-r500');
+if flatflag == 1
+    print(fig ,'../PaperPlots/sigmaDistriWholeFault-2.png', '-dpng', '-r500');
+else
+    print(fig ,'../PaperPlots/sigmaDistriWholeFault-2_nonflat.png', '-dpng', '-r500');
+end
 figNo = figNo + 1;
 
 

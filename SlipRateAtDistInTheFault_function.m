@@ -6,7 +6,8 @@ function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface, pre
     faultFileName = strcat('../faultFiles/', videoprefix, '-fault.h5');
     h5disp(faultFileName);
     fontsize = 25;
-
+    yToxRatio = 30 / 37.5;
+    
     % Read time
     time = h5read(faultFileName, '/time');
     time = reshape(time, [1, size(time, 3)]);
@@ -39,13 +40,13 @@ function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface, pre
     WirePos1 = [-0.025657; -0.014222; 0];
     VSstart = [0.006354, 0.003522, 0]';
     VSend = [0.063204, 0.035034, 0]';
-    VSregion = 1e3 * [norm(VSstart - WirePos1, 2), norm(VSend - WirePos1, 2)];
+    VSregion = 1e3 * ([norm(VSstart - WirePos1, 2), norm(VSend - WirePos1, 2)] - norm(VSstart - WirePos1, 2));
     % VSregion = [50, 120];
 
     % Calculate NodalXYZ2D 
     NodalXYZ2D = zeros(2, size(nodalXYZ, 2));
     for i = 1:1:size(nodalXYZ, 2)
-        NodalXYZ2D(1, i) = sign(nodalXYZ(1, i) - WirePos1(1)) * norm(nodalXYZ(1:2, i) - WirePos1(1:2), 2);
+        NodalXYZ2D(1, i) = sign(nodalXYZ(1, i) - VSstart(1)) * norm(nodalXYZ(1:2, i) - VSstart(1:2), 2);
         NodalXYZ2D(2, i) = nodalXYZ(3, i);
     end
 
@@ -64,8 +65,8 @@ function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface, pre
 
     %% Get the interpolation of slip at these locations
     % Get the start and end location of  VS region
-    VS_start_x = norm(VSstart - WirePos1, 2);
-    VS_end_x = norm(VSend - WirePos1, 2);
+    VS_start_x = norm(VSstart - VSstart, 2);
+    VS_end_x = norm(VSend - VSstart, 2);
 
     % Camera specific values
     Pix_10mm = 81;  %Number of pixels in a grid of 10 mm ;  144 pixels in 2 mm -> 72 pixels in 1 mm
@@ -99,10 +100,11 @@ function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface, pre
         % Trange = [0, 150];
         Trange = [30, 110] + pre_time * 1e6;
         Xrange = [VSregion(1), VSregion(1) + 45];
-        fig.Position(3:4) = 1.5 * fig.Position(3:4);
+        fig.Position(3:3) = 2.4 / 1.5 * fig.Position(3:3);
+        fig.Position(4:4) = 2.4 * fig.Position(4:4);
 
         % Initialize names
-        plotname = strcat(pwd, '/../plots/', videoprefix, '_X-TofSlipRate_window_small_surface_', num2str(Distance_To_Surface), '.png');
+        plotname = strcat(pwd, '/../PaperPlots_interp/', videoprefix, '_X-TofSlipRate_window_small_surface_', num2str(Distance_To_Surface), '.png');
 
         % Plot sliprate on X-T
         [Tsteps, Xsteps] = meshgrid(1e6 * time, 1e3 * x_up);
@@ -110,26 +112,26 @@ function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface, pre
         shading interp;
 
         if VitoColorFlag == 1
-            plotname = strcat(pwd, '/../Vitoplots/', videoprefix, '_X-TofSlipRate_window_small_surface_', num2str(Distance_To_Surface), '.png');
+            plotname = strcat(pwd, '/../PaperPlots_interp/', videoprefix, '_X-TofSlipRate_window_small_surface_', num2str(Distance_To_Surface), '.png');
             colormap(flipud(black_rainbow_shear_long));
         end
         hold on;
-        xline(VSregion(1), 'r' ,'linewidth', 2.0);
-        xline(VSregion(2), 'r' ,'linewidth', 2.0);
-        text(VSregion(1)+ 5, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize, 'interpreter', 'latex');
+        % xline(VSregion(1), 'r' ,'linewidth', 2.0);
+        % xline(VSregion(2), 'r' ,'linewidth', 2.0);
+        % text(VSregion(1)+ 5, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize, 'interpreter', 'latex');
         % Add the wave speeds
 
-        cX = [55, 65];
+        cX = [50, 60] - 1e3 * norm(VSstart - WirePos1);
         crY = [60, (cX(2) - cX(1)) * 1e3 / cr + 60] + pre_time * 1e6;
         csY = [60, (cX(2) - cX(1)) * 1e3 / cs + 60] + pre_time * 1e6;
         cpY = [60, (cX(2) - cX(1)) * 1e3 / cp + 60] + pre_time * 1e6;
 
         plot(cX, crY, 'w', 'linewidth', 2.0);
-        text(cX(2) + 4, crY(2) + 2, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
+        text(cX(2) + 1, crY(2) + 2, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 0, 'interpreter', 'latex');
         plot(cX, csY, 'w', 'linewidth', 2.0);
-        text(cX(2) + 4, csY(2) - 1, strcat('$c_s$ = 1.28 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
+        text(cX(2) + 1, csY(2) - 1, strcat('$c_s$ = 1.28 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 0, 'interpreter', 'latex');
         plot(cX, cpY, 'w', 'linewidth', 2.0);
-        text(cX(2) + 4, cpY(2), strcat('$c_p$ = 2.66 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
+        text(cX(2) + 1, cpY(2) - 2, strcat('$c_p$ = 2.66 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 0, 'interpreter', 'latex');
         hold off;
         set(h, 'EdgeColor', 'None');
         c = colorbar;
@@ -138,10 +140,11 @@ function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface, pre
         xlim(Xrange);
         ylim(Trange);
         xlabel('Distance along the fault [mm]', 'interpreter', 'latex');
-        ylabel('Time [$\mu$s]', 'interpreter', 'latex');
-        title(['X-T diagram of Slip rate at Z = ', ' ', num2str(1e3 * Distance_To_Surface, '%.0f'), ' ', '[mm]'], 'interpreter', 'latex');
+        ylabel('Time [$\mathrm{\mu s}$]', 'interpreter', 'latex');
+        % title(['X-T diagram of Slip rate at Depth = ', ' ', num2str(5 - 1e3 * Distance_To_Surface, '%.0f'), ' ', '[mm]'], 'interpreter', 'latex');
         set(gca, 'FontSize', fontsize);
-
+        daspect([yToxRatio, 1, 1]);
+        
         % Save the figure
         print(figure(figNo) ,plotname, '-dpng', '-r500');
     end
@@ -155,10 +158,11 @@ function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface, pre
         % Trange = [0, 150];
         Trange = [30, 110] + pre_time * 1e6;
         Xrange = [VSregion(1), VSregion(1) + 45];
-        fig.Position(3:4) = 1.5 * fig.Position(3:4);
+        fig.Position(3:3) = 2.4 / 1.5 * fig.Position(3:3);
+        fig.Position(4:4) = 2.4 * fig.Position(4:4);
 
         % Initialize names
-        plotname = strcat(pwd, '/../plots/', videoprefix, '_X-TofShearStress_window_surface_', num2str(Distance_To_Surface), '.png');
+        plotname = strcat(pwd, '/../PaperPlots_interp/', videoprefix, '_X-TofShearStress_window_surface_', num2str(Distance_To_Surface), '.png');
 
         % Plot sliprate on X-T
         [Tsteps, Xsteps] = meshgrid(1e6 * time, 1e3 * x_up);
@@ -166,26 +170,26 @@ function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface, pre
         shading interp;
         
         if VitoColorFlag == 1
-            plotname = strcat(pwd, '/../Vitoplots/', videoprefix, '_X-TofShearStress_window_surface_', num2str(Distance_To_Surface), '.png');
+            plotname = strcat(pwd, '/../PaperPlots_interp/', videoprefix, '_X-TofShearStress_window_surface_', num2str(Distance_To_Surface), '.png');
             colormap(black_rainbow_plus_long);
         end
         hold on;
-        xline(VSregion(1), 'r' ,'linewidth', 2.0);
-        xline(VSregion(2), 'r' ,'linewidth', 2.0);
-        text(VSregion(1)+ 5, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize);
+        % xline(VSregion(1), 'r' ,'linewidth', 2.0);
+        % xline(VSregion(2), 'r' ,'linewidth', 2.0);
+        % text(VSregion(1)+ 5, 40, 'VS region', 'color', 'r', 'Fontsize', fontsize);
         % Add the wave speeds
 
-        cX = [55, 65];
+        cX = [50, 60] - 1e3 * norm(VSstart - WirePos1);
         crY = [40, (cX(2) - cX(1)) * 1e3 / cr + 40] + pre_time * 1e6;
         csY = [40, (cX(2) - cX(1)) * 1e3 / cs + 40] + pre_time * 1e6;
         cpY = [40, (cX(2) - cX(1)) * 1e3 / cp + 40] + pre_time * 1e6;
 
-        plot(cX, crY, 'w', 'linewidth', 2.0);
-        text(cX(2) + 4, crY(2)+2, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
+        plot(cX, crY, 'w', 'linewidth', 2.0);int
+        text(cX(2) + 1, crY(2) + 4, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 0, 'interpreter', 'latex');
         plot(cX, csY, 'w', 'linewidth', 2.0);
-        text(cX(2) + 4, csY(2) - 1, strcat('$c_s$ = 1.28 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
+        text(cX(2) + 1, csY(2) - 1, strcat('$c_s$ = 1.28 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 0, 'interpreter', 'latex');
         plot(cX, cpY, 'w', 'linewidth', 2.0);
-        text(cX(2) + 4, cpY(2), strcat('$c_p$ = 2.66 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 10, 'interpreter', 'latex');
+        text(cX(2) + 1, cpY(2) - 2, strcat('$c_p$ = 2.66 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 0, 'interpreter', 'latex');
         hold off;
         set(h, 'EdgeColor', 'None');
         c = colorbar;
@@ -194,10 +198,11 @@ function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface, pre
         xlim(Xrange);
         ylim(Trange);
         xlabel('Distance along the fault [mm]', 'interpreter', 'latex');
-        ylabel('Time [$\mu$s]', 'interpreter', 'latex');
-        title(['X-T of Shear Stress at Z = ', ' ', num2str(1e3 * Distance_To_Surface, '%.0f'), ' ', '[mm]'], 'interpreter', 'latex');
+        ylabel('Time [$\mathrm{\mu s}$]', 'interpreter', 'latex');
+        % title(['X-T of Shear Stress at  = Depth', ' ', num2str(5 - 1e3 * Distance_To_Surface, '%.0f'), ' ', '[mm]'], 'interpreter', 'latex');
         set(gca, 'FontSize', fontsize);
-
+        daspect([yToxRatio, 1, 1]);
+        
         % Save the figure
         print(figure(figNo) ,plotname, '-dpng', '-r500');
     end
