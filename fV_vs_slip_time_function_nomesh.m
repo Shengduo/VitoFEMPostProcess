@@ -1,4 +1,4 @@
-function fV_vs_slip_time_function(totalprefix, target_x, z_location, theta_flag)
+function fV_vs_slip_time_function_nomesh(totalprefix, target_x, z_location, theta_flag, legendFlag)
     % Read results from hdf5 files.
     % totalprefix = 'WithWallDRS1.5_1.5ModA0.008AmB0.005Load5_Vw2_fw0.1_theta0.036_-11_NULoad2dir0';
 
@@ -22,7 +22,7 @@ function fV_vs_slip_time_function(totalprefix, target_x, z_location, theta_flag)
     end
     fig2.Position = pos;
 
-    for i = 1:1:3
+    for i = 2:1:2
         videoprefix = strcat(num2str(i), totalprefix); 
         faultFileName = strcat('../faultFiles/', videoprefix, '-fault.h5');
         frontsurfFile = strcat('../frontsurfFiles/', videoprefix, '-frontsurf.h5');
@@ -219,15 +219,15 @@ function fV_vs_slip_time_function(totalprefix, target_x, z_location, theta_flag)
             % Plot theta vs time
             if theta_flag == 1
                 subplot(nrows, size(target_x, 2), 3 * size(target_x, 2) + ii);
-                plot(time * 1e6 - 10, log(QueryTheta(ii, :)), 'linewidth', 2.0);
+                plot(time * 1e6 - 10, log10(QueryTheta(ii, :)), 'linewidth', 2.0);
                 hold on; grid on;
-                scatter(time * 1e6 - 10, log(QueryTheta(ii, :)), 'filled');
+                scatter(time * 1e6 - 10, log10(QueryTheta(ii, :)), 'filled');
                 xlabel('Time [$\mathrm{\mu s}$]', 'interpreter', 'latex');
                 if (ii == 1)
                     ylabel('$\mathrm{\log(\theta)}$ [$\mathrm{s}$]', 'interpreter', 'latex');
                 end
                 xlim(xrange);
-                ylim([0, 30]);
+                ylim([-10, 10]);
                 set(gca, 'FontSize', fontsize);
             end
             
@@ -236,27 +236,31 @@ function fV_vs_slip_time_function(totalprefix, target_x, z_location, theta_flag)
         
     end
     figure(1);
-    subplot(2, size(target_x, 2), 2 * size(target_x, 2));
-    kids = get(gca, 'children');
-    legend([kids(1), kids(3), kids(5)], 'mesh 3', 'mesh 2', 'mesh 1', 'location', 'best', 'interpreter', 'latex');
+    if legendFlag == 1
+        subplot(2, size(target_x, 2), 2 * size(target_x, 2));
+        kids = get(gca, 'children');
+        legend([kids(1), kids(3), kids(5)], 'mesh 3', 'mesh 2', 'mesh 1', 'location', 'best', 'interpreter', 'latex');
+    end
     set(gca, 'FontSize', fontsize);
 
     figure(2);
-    subplot(3, size(target_x, 2), 3 * size(target_x, 2));
-    kids = get(gca, 'children');
-    legend([kids(1), kids(3), kids(5)], 'mesh 3', 'mesh 2', 'mesh 1', 'location', 'best', 'interpreter', 'latex');
+    if legendFlag == 1
+        subplot(3, size(target_x, 2), 3 * size(target_x, 2));
+        kids = get(gca, 'children');
+        legend([kids(1), kids(3), kids(5)], 'mesh 3', 'mesh 2', 'mesh 1', 'location', 'best', 'interpreter', 'latex');
+    end
     set(gca, 'FontSize', fontsize);
 
     % Save the files
     % plotname = strcat(pwd, '/../Vitoplots/', totalprefix, num2str(target_x), 'z_', num2str(z_location), '_fandV_VS_Slip.png');
-    plotname = strcat(pwd, '/../Vitoplots/', totalprefix, 'z_', num2str(z_location), '_fandV_VS_Slip.png');
+    plotname = strcat(pwd, '/../fVSlipTimePlots/', totalprefix, 'z_', num2str(z_location), '_fandV_VS_Slip.png');
     disp(plotname);
     print(figure(1) ,plotname, '-dpng', '-r500');
 
     % plotname = strcat(pwd, '/../Vitoplots/', totalprefix, num2str(target_x),  'z_', num2str(z_location), '_fandV_VS_Time.png');
-    plotname = strcat(pwd, '/../PaperPlots_interp/', totalprefix, 'z_', num2str(z_location), '_f_SlipandV_VS_Time.png');
+    plotname = strcat(pwd, '/../fVSlipTimePlots/', totalprefix, 'z_', num2str(z_location), '_f_SlipandV_VS_Time.png');
     if theta_flag == 1
-        plotname = strcat(pwd, '/../PaperPlots_interp/', totalprefix, 'z_', num2str(z_location), '_f_Slip_VandTheta_VS_Time.png');
+        plotname = strcat(pwd, '/../fVSlipTimePlots/', totalprefix, 'z_', num2str(z_location), '_f_Slip_VandTheta_VS_Time.png');
     end
     disp(plotname);
     print(figure(2) ,plotname, '-dpng', '-r500');

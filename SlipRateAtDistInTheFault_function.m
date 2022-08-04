@@ -112,7 +112,7 @@ function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface, pre
         shading interp;
 
         if VitoColorFlag == 1
-            plotname = strcat(pwd, '/../PaperPlots_interp/', videoprefix, '_X-TofSlipRate_window_small_surface_', num2str(Distance_To_Surface), '.png');
+            plotname = strcat(pwd, '/../PaperPlots_interp/', videoprefix, '_X-TofSlipRate_window_surface_', num2str(Distance_To_Surface), '.png');
             colormap(flipud(black_rainbow_shear_long));
         end
         hold on;
@@ -135,7 +135,7 @@ function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface, pre
         hold off;
         set(h, 'EdgeColor', 'None');
         c = colorbar;
-        caxis([0, 0.8]);
+        caxis([0, 2]);
         ylabel(c,'Slip rate [m/s]','FontName','Avenir','FontSize',fontsize, 'interpreter', 'latex');
         xlim(Xrange);
         ylim(Trange);
@@ -184,7 +184,7 @@ function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface, pre
         csY = [40, (cX(2) - cX(1)) * 1e3 / cs + 40] + pre_time * 1e6;
         cpY = [40, (cX(2) - cX(1)) * 1e3 / cp + 40] + pre_time * 1e6;
 
-        plot(cX, crY, 'w', 'linewidth', 2.0);int
+        plot(cX, crY, 'w', 'linewidth', 2.0);
         text(cX(2) + 1, crY(2) + 4, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 0, 'interpreter', 'latex');
         plot(cX, csY, 'w', 'linewidth', 2.0);
         text(cX(2) + 1, csY(2) - 1, strcat('$c_s$ = 1.28 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 0, 'interpreter', 'latex');

@@ -24,7 +24,7 @@ AmB = [0.005];
 NULoad = [5];
 stress_dist = [1, 2, 3];
 mesh = [1];
-z_location = [0.005, 0.004, 0.003, 0.000];
+z_location = [0.005, 0.000];
 
 % Filenames the things are stored
 filenames = [];
@@ -94,13 +94,19 @@ filenames = [filenames, ...
          
          
 pre_times = [0, 100, 0, 100, 0, 100, 0, 100, 0, 100, 0, 100, 0, 0, 0, 0] * 1e-6;
-         
+filenames = filenames([1, 5, 7, 13, 15]);
+pre_times = pre_times([1, 5, 7, 13, 15]);
+% filenames = ["1VaryingBOPDirWithWallDRS1.5_1.5ModA0.011AmB0.005_3.0bD30Load5_Vw2_fw0.1_theta0.005_-9_NULoad2dir3_duration200_0", ...
+%             "2VaryingBOPDirWithWallDRS1.5_1.5ModA0.011AmB0.005_2.0bD7Load5_Vw2_fw0.1_theta0.0045_-9_NULoad2dir1_duration200_0"];
+filenames = ["2VaryingBOPDirWithWallDRS1.5_1.5ModA0.011AmB0.005_2.0bD10Load5_Vw2_fw0.1_theta0.006_-9_NULoad2dir0_duration200_0"];
+
+filenames = ["1OPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.006_-3_NULoad2dir0_duration200_0"];
 Distance_To_Surface = 0.005;
 % pre_time = 0e-6;
-% for i = 2:1:size(filenames, 1)
-for i = 1:1:size(filenames, 2)
+for i = 1:1:1
+% for i = 2:1:size(filenames, 2)
     disp(filenames(i));
-    % WriteFiguresTet_function(filenames(i), Distance_To_Surface, pre_times(i));
+    WriteFiguresTet_function(filenames(i), Distance_To_Surface, pre_times(i));
     close all;
     
 %     for iStress_dist = 1:1:size(stress_dist, 2)
@@ -112,12 +118,12 @@ for i = 1:1:size(filenames, 2)
 %         
 %     end
     
-     for iZ_location = 1:1:size(z_location, 2)
-         % SlipRateAtDistInTheFault_function(filenames(i), z_location(iZ_location), pre_times(i));
-         close all;
-     end
+      for iZ_location = 1:1:size(z_location, 2)
+          SlipRateAtDistInTheFault_function(filenames(i), z_location(iZ_location), pre_times(i));
+          close all;
+      end
     
-    % close all;
-    writeVideosTet_function(filenames(i), pre_times(i));
-    close all;
+     % close all;
+%      writeVideosTet_function(filenames(i), pre_times(i));
+%      close all;
 end

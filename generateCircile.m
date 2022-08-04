@@ -1,0 +1,12 @@
+clc,clear;
+close all;
+VSstart = [0.006354, 0.003522, 0]';
+alpha = 29;
+nuclear = 15e-3;
+diam = 5e-3;
+diam_in = 4e-3;
+shit1 = VSstart +(nuclear - diam) * [cosd(alpha), sind(alpha), 0]';
+shit1_in = VSstart +(nuclear - diam_in) * [cosd(alpha), sind(alpha), 0]';
+shitMid = VSstart +(nuclear) * [cosd(alpha), sind(alpha), 0]';
+shit2 = VSstart +(nuclear + diam) * [cosd(alpha), sind(alpha), 0]';
+shit2_in = VSstart +(nuclear + diam_in) * [cosd(alpha), sind(alpha), 0]';

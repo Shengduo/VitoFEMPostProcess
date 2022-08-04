@@ -107,7 +107,7 @@ function writeVideosTet_function(videoprefix, pre_time)
     figNo = 1;
 
     %% Save a video of sliprate magnitude on the fault
-    videoflag = false;
+    videoflag = true;
     if videoflag == true
         fig = figure(figNo);
         fig.Position = [1000, 597, 2800/2, 1680/2];
@@ -142,8 +142,8 @@ function writeVideosTet_function(videoprefix, pre_time)
             p.Faces = Connection' + 1;
             colormap(flipud(black_rainbow_shear_long));
             c = colorbar;
-            caxis([0, 0.8]);
-            c.Ticks = [0, 0.4, 0.8];
+            caxis([0, 2]);
+            c.Ticks = [0, 1, 2];
             ylabel(c,{'Slip rate', '[m/s]'},'FontName','Avenir','FontSize',fontsize,'interpreter', 'latex');
             axis equal;
             grid on;
@@ -155,6 +155,8 @@ function writeVideosTet_function(videoprefix, pre_time)
             set(gca, 'FontSize', fontsize);
             daspect([yToxRatio, 1, 1]);
             % Write the video
+            set(gcf, 'color', 'w');
+            fig.Position = [1000, 597, 2800/2, 1680/2];
             frame = getframe(gcf);
             writeVideo(myVideo, frame);
         end
@@ -212,6 +214,8 @@ function writeVideosTet_function(videoprefix, pre_time)
             daspect([yToxRatio, 1, 1]);
 
             % Write the video
+            set(gcf, 'color', 'w');
+            fig.Position = [1000, 597, 2800/2, 1680/2];
             frame = getframe(gcf);
             writeVideo(myVideo, frame);
         end
@@ -220,7 +224,7 @@ function writeVideosTet_function(videoprefix, pre_time)
     figNo = figNo + 1;
 
     %% Save a video of normal stress
-    videoflag = true;
+    videoflag = false;
     if videoflag == true
         fig = figure(figNo);
         fig.Position = [1000, 597, 2800/2, 1680/2];
@@ -268,7 +272,9 @@ function writeVideosTet_function(videoprefix, pre_time)
             daspect([yToxRatio, 1, 1]);
 
             % Write the video
-            frame = getframe(gcf);
+            set(gcf, 'color', 'w');
+            fig.Position = [1000, 597, 2800/2, 1680/2];
+            frame = getframe(gcf);            
             writeVideo(myVideo, frame);
         end
         close(myVideo);
@@ -316,6 +322,7 @@ function writeVideosTet_function(videoprefix, pre_time)
             set(gca, 'FontSize', fontsize);
 
             % Write the video
+            fig.Position = [1000, 597, 2800/2, 1680/2];
             frame = getframe(gcf);
             writeVideo(myVideo, frame);
         end
@@ -350,6 +357,7 @@ function writeVideosTet_function(videoprefix, pre_time)
             set(gca, 'FontSize', fontsize);
 
             % Write the video
+            fig.Position = [1000, 597, 2800/2, 1680/2];
             frame = getframe(gcf);
             writeVideo(myVideo, frame);
         end

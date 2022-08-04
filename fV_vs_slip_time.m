@@ -1,6 +1,5 @@
 % Read results from hdf5 files.
-clc,clear;
-close all;
+setEnvironment;
 totalprefix = 'WithWallDRS1.5_1.5ModA0.008AmB0.005Load5_Vw2_fw0.1_theta0.036_-11_NULoad2dir0';
 
 % Node positions
@@ -120,7 +119,7 @@ for i = 1:1:3
         plot(surfaceSlipMag(Ind, 2:end) * 1e6, surfaceSlipRateMag(Ind, 2:end), 'linewidth', 2.0);
         hold on; grid on;
         scatter(surfaceSlipMag(Ind, 2:end) * 1e6, surfaceSlipRateMag(Ind, 2:end), 'filled');
-        xlabel('Slip [\mu m]');
+        xlabel('Slip [$\mathrm{\mu m}$]');
         if (ii == 1) 
             ylabel('Slip rate [m/s]');
         end
@@ -178,7 +177,7 @@ for i = 1:1:3
         plot(time * 1e6 - 10, surfaceSlipRateMag(Ind, 1:end), 'linewidth', 2.0);
         hold on; grid on;
         scatter(time * 1e6 - 10, surfaceSlipRateMag(Ind, 1:end), 'filled');
-        xlabel('Time [\mu s]');
+        xlabel('Time [$\mathrm{\mu s}$]');
         if (ii == 1)
             ylabel('Slip rate [m/s]');
         end

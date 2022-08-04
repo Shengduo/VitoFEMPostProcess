@@ -344,7 +344,7 @@ function WriteFiguresTet_function(videoprefix, Distance_To_Surface, pre_time)
     figNo = figNo + 1;
 
     %% Save a X-T diagram plot of surface slip rate (observing window, smaller range)
-    plotflag = true;
+    plotflag = false;
     if plotflag == true
         fig = figure(figNo);
         % Trange = [0, 150];
