@@ -6,6 +6,7 @@ function fV_vs_slip_time_function_nomesh(totalprefix, target_x, z_location, thet
     % target_x = [-50, -10, -5];
 
     % Specify figure positions
+    
     fig1 = figure(1);
     pos = fig1.Position;
     pos(3) = pos(3) * size(target_x, 2);
@@ -22,10 +23,9 @@ function fV_vs_slip_time_function_nomesh(totalprefix, target_x, z_location, thet
     end
     fig2.Position = pos;
 
-    for i = 2:1:2
+    for i = 1:1:3
         videoprefix = strcat(num2str(i), totalprefix); 
         faultFileName = strcat('../faultFiles/', videoprefix, '-fault.h5');
-        frontsurfFile = strcat('../frontsurfFiles/', videoprefix, '-frontsurf.h5');
 
         % h5disp(faultFileName);
         % h5disp(frontsurfFile);
@@ -121,6 +121,8 @@ function fV_vs_slip_time_function_nomesh(totalprefix, target_x, z_location, thet
             end
         end
         
+        % Save QueryNormalStress, QueryV
+        save('~/InverseProblems/RateStateFrictionTraining/data/realData.mat', 'QueryV', 'QueryNormalStress', 'time');
         
         %% Plot V-Slip history at X [mm]
         figure(1);
@@ -128,7 +130,7 @@ function fV_vs_slip_time_function_nomesh(totalprefix, target_x, z_location, thet
             % Generate sliprate-slip plot
             % Plot x and y axis ranges
             xrange = [0, 150];
-            yrange = [0, 6];
+            yrange = [0, 10];
             subplot(2, size(target_x, 2), size(target_x, 2) + ii);
             plot(QuerySlip(ii, :) * 1e6, QueryV(ii, :), 'linewidth', 2.0);
             hold on; grid on;
@@ -152,7 +154,7 @@ function fV_vs_slip_time_function_nomesh(totalprefix, target_x, z_location, thet
             end
             xlim(xrange);
             ylim([0, 1]);
-            probeLabel = strcat('X ={ }', num2str(target_x(ii)), '{ }[mm]');
+            probeLabel = strcat('$x_1$ ={ }', num2str(target_x(ii)), '{ }[mm]');
             title(probeLabel, 'Fontsize', fontsize, 'interpreter', 'latex');
             set(gca, 'FontSize', fontsize);
         end
@@ -184,7 +186,7 @@ function fV_vs_slip_time_function_nomesh(totalprefix, target_x, z_location, thet
 
             xlim(xrange);
             ylim([0, 1]);
-            probeLabel = strcat('X ={ }', num2str(target_x(ii)), '{ }[mm]');
+            probeLabel = strcat('$x_1$ ={ }', num2str(target_x(ii)), '{ }[mm]');
             title(probeLabel, 'Fontsize', fontsize, 'interpreter', 'latex');
             set(gca, 'FontSize', fontsize);
 
@@ -252,16 +254,16 @@ function fV_vs_slip_time_function_nomesh(totalprefix, target_x, z_location, thet
     set(gca, 'FontSize', fontsize);
 
     % Save the files
-    % plotname = strcat(pwd, '/../Vitoplots/', totalprefix, num2str(target_x), 'z_', num2str(z_location), '_fandV_VS_Slip.png');
-    plotname = strcat(pwd, '/../fVSlipTimePlots/', totalprefix, 'z_', num2str(z_location), '_fandV_VS_Slip.png');
+    % plotname = strcat(pwd, '/../Vitoplots/', totalprefix, num2str(target_x), 'z_', num2str(z_location), '_fandV_VS_Slip.eps');
+    plotname = strcat(pwd, '/../fVSlipTimePlots/', totalprefix, 'z_', num2str(z_location), '_fandV_VS_Slip.eps');
     disp(plotname);
-    print(figure(1) ,plotname, '-dpng', '-r500');
+    print('-vector', figure(1) ,plotname, '-depsc');
 
-    % plotname = strcat(pwd, '/../Vitoplots/', totalprefix, num2str(target_x),  'z_', num2str(z_location), '_fandV_VS_Time.png');
-    plotname = strcat(pwd, '/../fVSlipTimePlots/', totalprefix, 'z_', num2str(z_location), '_f_SlipandV_VS_Time.png');
+    % plotname = strcat(pwd, '/../Vitoplots/', totalprefix, num2str(target_x),  'z_', num2str(z_location), '_fandV_VS_Time.eps');
+    plotname = strcat(pwd, '/../fVSlipTimePlots/', totalprefix, 'z_', num2str(z_location), '_f_SlipandV_VS_Time.eps');
     if theta_flag == 1
-        plotname = strcat(pwd, '/../fVSlipTimePlots/', totalprefix, 'z_', num2str(z_location), '_f_Slip_VandTheta_VS_Time.png');
+        plotname = strcat(pwd, '/../fVSlipTimePlots/', totalprefix, 'z_', num2str(z_location), '_f_Slip_VandTheta_VS_Timegpng');
     end
     disp(plotname);
-    print(figure(2) ,plotname, '-dpng', '-r500');
+    print('-vector', figure(2) ,plotname, '-depsc');
 end

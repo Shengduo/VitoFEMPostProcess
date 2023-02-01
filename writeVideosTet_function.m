@@ -107,7 +107,7 @@ function writeVideosTet_function(videoprefix, pre_time)
     figNo = 1;
 
     %% Save a video of sliprate magnitude on the fault
-    videoflag = true;
+    videoflag = false;
     if videoflag == true
         fig = figure(figNo);
         fig.Position = [1000, 597, 2800/2, 1680/2];
@@ -156,7 +156,7 @@ function writeVideosTet_function(videoprefix, pre_time)
             daspect([yToxRatio, 1, 1]);
             % Write the video
             set(gcf, 'color', 'w');
-            fig.Position = [1000, 597, 2800/2, 1680/2];
+            % fig.Position = [1000, 597, 2800/2, 1680/2];
             frame = getframe(gcf);
             writeVideo(myVideo, frame);
         end
@@ -168,7 +168,7 @@ function writeVideosTet_function(videoprefix, pre_time)
     videoflag = true;
     if videoflag == true
         fig = figure(figNo);
-        fig.Position = [1000, 597, 2800/2, 1680/2];
+        fig.Position = [1000, 597, 2800/2, 1680/4];
         xrange = 1e3 * [min(FaultX), max(FaultX)];
         yrange = [0, 10];
 
@@ -200,8 +200,8 @@ function writeVideosTet_function(videoprefix, pre_time)
             text(56 - 1e3 * norm(VSstart - WirePos1, 2), -2, 'Region 2', 'color', 'r', 'Fontsize', fontsize, 'interpreter', 'latex');
             hold off;
             c = colorbar;
-            caxis([0, 10]);
-            c.Ticks = [0, 5, 10];
+            caxis([2, 10]);
+            c.Ticks = [2, 6, 10];
             ylabel(c,{'Shear Stress', '[MPa]'},'FontName','Avenir','FontSize',fontsize, 'interpreter', 'latex');
             axis equal;
             grid on;
@@ -215,7 +215,7 @@ function writeVideosTet_function(videoprefix, pre_time)
 
             % Write the video
             set(gcf, 'color', 'w');
-            fig.Position = [1000, 597, 2800/2, 1680/2];
+            fig.Position = [1000, 597, 2800/2, 1680/4];
             frame = getframe(gcf);
             writeVideo(myVideo, frame);
         end
