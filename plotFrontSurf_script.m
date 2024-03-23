@@ -4,12 +4,13 @@ setEnvironment;
 %% First write figures for the default case
 filenames = ["3OPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.006_-9_NULoad2dir0_duration200_0", ...
              "3OPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.006_-6_NULoad2dir0_duration200_0", ...
-             "GougeThick2OPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.006_-6_NULoad2dir0_duration200_0"];
+             "GougeThick2OPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.006_-6_NULoad2dir0_duration200_0", ...
+             "W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load5_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_8"];
 
 
 times = [20, 32, 40, 48, 59, 68, 80, 88, 92];
-times = times(2);
-filenames = filenames(2);
+% times = times(2);
+filenames = filenames(4);
 % Write FrontFiles
 for i = 1 : 1 : length(filenames)
     disp(filenames(i));

@@ -26,7 +26,7 @@ stress_dist = [1, 2, 3];
 mesh = [1];
 % z_location = [0.005, 0.003, 0.000];
 % z_location = [0.000, 0.005];
-z_location = [0.005];
+z_location = [0];
 
 % Filenames the things are stored
 filenames = [];
@@ -183,9 +183,9 @@ filenames = ["ExcCorr1OPDirWithWallDRS1.5_1.5ModA0.011AmB-0.005Load10_Vw0.2_fw0.
              "W8_4_Load6_6HMonly1212_3_8_theta0.1434", ...
              "W8_4_Load5_8HMonly1212_3_8_theta0.1434", ...
              "W8_4_Load5_6HMonly1212_3_8_theta0.1434", ...
-             "W8_4ExcCorr1NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load5_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_8", ... % 8
-             "W8_4ExcCorr1NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load8_Vw2_fw0.1_theta0.3399_-8_NULoad2dir0_duration200_8", ...
-             "W8_4ExcCorr1NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load8_Vw2_fw0.1_theta0.8061_-9_NULoad2dir0_duration200_8", ...
+             "W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load5_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_8", ... % 8 ## Ones to be used ##
+             "W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load8_Vw2_fw0.1_theta0.3399_-8_NULoad2dir0_duration200_8", ...
+             "W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load8_Vw2_fw0.1_theta0.8061_-9_NULoad2dir0_duration200_8", ...
              "W8_4ExcCorr1NPDirWithWallDRS1.5_1.5ModA0.011AmB0.009Load8_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_8", ...
              "Visco1e40_W8_4ExcCorr1NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load5_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_8", ...
              "Elastic_W8_4ExcCorr1NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load5_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_8", ...
@@ -197,15 +197,79 @@ filenames = ["ExcCorr1OPDirWithWallDRS1.5_1.5ModA0.011AmB-0.005Load10_Vw0.2_fw0.
              "L50_200_ChangingE_W8_4ExcCorr1NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load5_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_8", ... % 19
              "L100_ChangingE_W8_4.5_1.5ModA0.016AmB0.014Load10_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_8", ... % 20
              "L50_200_damping2.0_ChangingE_W8_4ExcCorr1NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load5_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_8", ... % 21
-             "F0.33_0.5_L50_200__ChangingE_W8_4ExcCorr1NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load5_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_8"]; % 22
+             "F0.33_0.2_L50_1000000_ChangingE_cp3500_W8_4ExcCorr1NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load5_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_8", ... % 22
+             "FINITETHICKNESSGOUGE_W8_4ExcCorr1NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load5_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_8", ... % 23
+             "SW_0.1_5_W8_4ExcCorr1NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load8_Vw2_fw0.1_theta0.3399_-8_NULoad2dir0_duration200_8", ...% 24
+             "SW_0.1_5.7_W8_4ExcCorr1NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load8_Vw2_fw0.1_theta0.8061_-9_NULoad2dir0_duration200_8", ... % 25
+             "W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load5_Vw2e+16_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_8", ... % 26
+             "SW_0.1_5.7_37.5_41.5_W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load8_Vw2_fw0.1_theta0.8061_-9_NULoad2dir0_duration200_8", ... % 27
+             "W8_4_Hom0.0015_0.5_1NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load8_Vw2_fw0.1_theta0.2208_-9_NULoad2dir0_duration200_8", ... % 28
+             "Hom0.0015_0.47_SW_0.1_2_36_40_W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load8_Vw2_fw0.1_theta0.2208_-9_NULoad2dir0_duration200_50", ... % 29
+             "W8Hom0.0015_0.47_SW_0.1_2_36_40_W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load8_Vw2_fw0.1_theta0.2208_-9_NULoad2dir0_duration200_50", ...% 30
+             "W8Hom0.0015_0.47_SW_0.1_2_8_34_38_W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load8_Vw2_fw0.1_theta0.2208_-9_NULoad2dir0_duration200_50"]; % 31
+filenames = filenames([8]);
+% filenames = ["Blk13_8_W8_4ExcCorr1NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load8_Vw2_fw0.1_theta0.8061_-9_NULoad2dir0_duration200_8"];
+% filenames = ["Blk9_8_W8_4ExcCorr1NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load8_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_8"];
+%% Slip law for V_ini=10^-7, -8, -9
+% filenames = ["SlipW8_4ExcCorr2NPDirWithWallDRS0.8ModA0.016AmB0.014Load5_Vw2_fw0.1_theta-7_-7_NULoad2dir0_duration200_8"];
+% filenames = ["SlipW8_4ExcCorr2NPDirWithWallDRS0.8ModA0.016AmB0.014Load5_Vw2_fw0.1_theta-8_-8_NULoad2dir0_duration200_8"];
+
+%% Aging law for mesh 1 and 2, blocking
+% filenames = ["BlkW8_SW_0.01_3.56_4_8_36_40_7e-7_W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.012AmB0.01Load8_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_12"];
+% filenames = ["BlkW8_SW_0.01_4.26_4_8_36_40_7e-7_W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.012AmB0.01Load8_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_12"];
+% filenames = ["NoPatchBlkW8_SW_0.01_3.56_4_8_36_40_7e-7_W8_4ExcCorr1NPDirWithWallDRS1.5_1.5ModA0.012AmB0.01Load8_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_12"];
+
+%% Aging law for mesh 2, long lasting weakening
+% filenames = ["BlkW8_SW_0.01_4.26_4_8_36_40_7e-7_W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.012AmB0.01Load8_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_12"];
+% No blocking
+% filenames = ["AllThru_W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.012AmB0.01Load5_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_8"];
+%% Aging law for mesh 2, through-thickness patch
+% filenames = ["BlkW8_SW_0.01_4.26_4_8_39_43_7e-7_W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.012AmB0.01Load8_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_12"];
+% filenames = ["AllThru_BlkW8_SW_0.01_4.26_4_8_36_40_7e-7_W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.012AmB0.01Load8_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_12"];
+
+%% Aging law for mesh 2, mis-matching initial slip rate
+% filenames = ["W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load5_Vw2_fw0.1_theta0.1434_-6_NULoad2dir0_duration200_8"];
+% filenames = ["W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load8_Vw2_fw0.1_theta0.8061_-7_NULoad2dir0_duration200_8"];
 
 z_location = [0.005, 0];
-filenames = filenames([16]);
+% filenames = ["SlipW8_4ExcCorr1NPDirWithWallDRS0.9ModA0.016AmB0.014Load5_Vw2_fw0.1_theta-7_-7_NULoad2dir0_duration200_8"];
+
+%% Slip law for mesh 2, blocking 
+% filenames = ["BlkSlipW8_SW_0.1_0.76_4_8_36_40_4e-6_W8_4ExcCorr2NPDirWithWallDRS8_ModA0.012AmB0.01Load6_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_10"];
+% filenames = ["BlkSlipW8_SW_0.1_4.65_4_8_36_40_4e-6_W8_4ExcCorr1NPDirWithWallDRS8_ModA0.012AmB0.01Load8_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_8"];
+
+%% Compare finite thickness gouge
+% filenames = ["FINITETHICKNESSGOUGE_W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load5_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_8"];
+
+% pre_times = 0.e-6 * ones(length(filenames));
 % filenames = ["W16_4ExcCorr1OPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load10_Vw2_fw0.1_theta1.4664_-7_NULoad2dir0_duration200_5", ...
 %              "W16_4ExcCorr1OPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load10_Vw2_fw0.1_theta1.4664_-7_NULoad2dir0_duration200_15", ...
 %              "W16_4ExcCorr1OPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load10_Vw2_fw0.1_theta1.4664_-7_NULoad2dir0_duration200_20", ...
 %              "W16_4ExcCorr1OPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load10_Vw2_fw0.1_theta1.4664_-7_NULoad2dir0_duration200_10"];
 % % for i = 12:1:12
+% filenames = [filenames(8), ...
+%              "W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load5_Vw2e+16_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_8", ...
+%              "W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.003AmB-0.005Load5_Vw0.2_fw0.33_theta0.1434_0.1434_NULoad2dir0_duration200_8"];
+% filenames = filenames([1]);
+% filenames = ["BlkW8_SW_0.01_4.26_4_8_36_40_7e-7_W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.012AmB0.01Load8_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_12"];
+% filenames = ["W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.014AmB0.012Load5_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_8", ...
+%              "W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.012AmB0.01Load5_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_8", ...
+%              "W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.01AmB0.008Load5_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_8", ...
+%              "W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.008AmB0.006Load5_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_8"];
+% filenames = ["SW_Homa_W8_4ExcCorr1NPDirWithWallDRS1.5_1.5ModA0.003AmB-0.005Load5_Vw0.2_fw0.33_theta0.1434_0.1434_NULoad2dir0_duration200_8"];
+% filenames = ["SW_HomaGouge_W8_4ExcCorr1NPDirWithWallDRS1.5_1.5ModA0.003AmB-0.005Load5_Vw0.2_fw0.33_theta0.1434_0.1434_NULoad2dir0_duration200_8"];
+
+%% Keeping explosion the same
+% filenames = ["W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load5_Vw2_fw0.1_theta0.3399_-8_NULoad2dir0_duration200_8", ...
+%              "W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load5_Vw2_fw0.1_theta0.8061_-9_NULoad2dir0_duration200_8"];
+
+pre_times = 0.e-6 * ones(length(filenames));
+% videoTimes = [83, 85, 87, 90] * 1.e-6;
+% videoTimes = [78, 82, 86, 90] * 1.e-6;
+videoTimes = [23, 58] * 1.e-6;
+xVideoLim = 0.;
+xPlotRange = [-40., 40.];
+Flag2D = 1;
 for i = 1:1:size(filenames, 2)
     disp(filenames(i));
     % WriteFiguresTet_function(filenames(i), Distance_To_Surface, pre_times(i));
@@ -220,12 +284,19 @@ for i = 1:1:size(filenames, 2)
 %         
 %     end
     
-    for iZ_location = 1:1:size(z_location, 2)
-      SlipRateAtDistInTheFault_function(filenames(i), z_location(iZ_location), pre_times(i), 'png');
-      close all;
-    end
+%     for iZ_location = 1:1:size(z_location, 2)
+%       [X, Y, sliprates(iZ_location, :, :)] = SlipRateAtDistInTheFault_function(filenames(i), ...
+%                                                                                z_location(iZ_location), ... 
+%                                                                                pre_times(i), ...
+%                                                                                'eps');
+%       % SlipRateAtDistInTheFault_function(filenames(i), z_location(iZ_location), pre_times(i), 'png');
+%       close all;
+%     end
     
-%     close all;
-%     writeVideosTet_function(filenames(i), pre_times(i));
-%     close all;
+    close all;
+    % writeVideosTet_function(filenames(i), pre_times(i));
+    writeVideosTetTime_function(filenames(i), xPlotRange, pre_times(i), videoTimes, "eps", Flag2D);
+    close all;
+
+    % plotSliprateDifference(X, Y, sliprates, filenames(i), 'eps');
 end

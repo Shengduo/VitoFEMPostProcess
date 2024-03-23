@@ -14,7 +14,8 @@ Distance_To_Surface = [0, 0.005];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % videoprefix = "2OPDirWithWallDRS1.5_1.5ModA0.011AmB0.005Load5_Vw2_fw0.1_theta0.006_-9_NULoad2dir0_duration200_0";
 % videoprefix = "W16_4ExcCorr1OPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load10_Vw2_fw0.1_theta1.4664_-7_NULoad2dir0_duration200_10";
-videoprefix = "W8_4ExcCorr1NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load5_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_8";
+% videoprefix = "W8_4ExcCorr1NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load5_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_8";
+videoprefix = "W8_4ExcCorr1NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load5_Vw2e+16_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_8";
 
 faultFileName = strcat('../faultFiles/', videoprefix, '-fault.h5');
 % h5disp(faultFileName);

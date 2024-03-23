@@ -1,4 +1,4 @@
-function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface, pre_time, fmt)
+function [X, Y, slipRates] = SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface, pre_time, fmt)
     % This function process the faultfile and get the slip at certain location
     load('BRColorScale.mat');
     VitoColorFlag = true;
@@ -7,7 +7,7 @@ function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface, pre
     % h5disp(faultFileName);
     fontsize = 25;
     yToxRatio = 30 / 37.5;
-    
+    ftBig = 10;
     % Read time
     time = h5read(faultFileName, '/time');
     time = reshape(time, [1, size(time, 3)]);
@@ -127,7 +127,7 @@ function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface, pre
         % Add the wave speeds
         
         % Add x_3
-        text(5, 105, strcat("$x_3$ = ", string(1000 * Distance_To_Surface - 5), "$\ \mathrm{mm}$"), 'color', 'w', 'Fontsize', fontsize);
+        text(5, 105, strcat("$x_3$ = ", string(1000 * Distance_To_Surface - 5), "$\ \mathrm{mm}$"), 'color', 'w', 'Fontsize', fontsize + ftBig);
         
         cX = [50, 60] - 1e3 * norm(VSstart - WirePos1);
         crY = [60, (cX(2) - cX(1)) * 1e3 / cr + 60] + pre_time * 1e6;
@@ -144,13 +144,15 @@ function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface, pre
         set(h, 'EdgeColor', 'None');
         c = colorbar;
         clim([0, 2]);
-        ylabel(c,'Slip rate [m/s]','FontName','Avenir','FontSize',fontsize, 'interpreter', 'latex');
+        ylabel(c,'Slip rate [m/s]','FontName','Avenir','FontSize',fontsize + ftBig, 'interpreter', 'latex');
         xlim(Xrange);
         ylim(Trange);
         xlabel('$x_1\ \mathrm{[mm]}$', 'interpreter', 'latex');
         ylabel('Time [$\mathrm{\mu s}$]', 'interpreter', 'latex');
+        xticks(0:10:40);
+        yticks(30:10:110);
         % title(['X-T diagram of Slip rate at Depth = ', ' ', num2str(5 - 1e3 * Distance_To_Surface, '%.0f'), ' ', '[mm]'], 'interpreter', 'latex');
-        set(gca, 'FontSize', fontsize);
+        set(gca, 'FontSize', fontsize + ftBig);
         daspect([yToxRatio, 1, 1]);
         
         % Save the figure
@@ -198,20 +200,20 @@ function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface, pre
         cpY = [40, (cX(2) - cX(1)) * 1e3 / cp + 40] + pre_time * 1e6;
 
         plot(cX, crY, 'w', 'linewidth', 2.0);
-        text(cX(2) + 1, crY(2) + 4, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 0, 'interpreter', 'latex');
+        text(cX(2) + 1, crY(2) + 4, strcat('$c_r$ = 1.20 [km/s]'), 'color', 'w', 'Fontsize', fontsize + 0, 'interpreter', 'latex');
         plot(cX, csY, 'w', 'linewidth', 2.0);
-        text(cX(2) + 1, csY(2) - 1, strcat('$c_s$ = 1.28 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 0, 'interpreter', 'latex');
+        text(cX(2) + 1, csY(2) - 1, strcat('$c_s$ = 1.28 [km/s]'), 'color', 'w', 'Fontsize', fontsize + 0, 'interpreter', 'latex');
         plot(cX, cpY, 'w', 'linewidth', 2.0);
-        text(cX(2) + 1, cpY(2) - 2, strcat('$c_p$ = 2.66 [km/s]'), 'color', 'w', 'Fontsize', fontsize - 0, 'interpreter', 'latex');
+        text(cX(2) + 1, cpY(2) - 2, strcat('$c_p$ = 2.66 [km/s]'), 'color', 'w', 'Fontsize', fontsize + 0, 'interpreter', 'latex');
         hold off;
         
         % Add x_3
-        text(5, 105, strcat("$x_3$ = ", string(1000 * Distance_To_Surface - 5), "$\ \mathrm{mm}$"), 'color', 'w', 'Fontsize', fontsize);
+        text(5, 105, strcat("$x_3$ = ", string(1000 * Distance_To_Surface - 5), "$\ \mathrm{mm}$"), 'color', 'w', 'Fontsize', fontsize + ftBig);
         
         set(h, 'EdgeColor', 'None');
         c = colorbar;
         clim([2, 10]);
-        ylabel(c,'Shear stress [MPa]','FontName','Avenir','FontSize',fontsize, 'interpreter', 'latex');
+        ylabel(c,'Shear stress [MPa]','FontName','Avenir','FontSize',fontsize + ftBig, 'interpreter', 'latex');
         xlim(Xrange);
         ylim(Trange);
         xticks(0:10:40);
@@ -219,7 +221,7 @@ function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface, pre
         xlabel('$x_1\ \mathrm{[mm]}$', 'interpreter', 'latex');
         ylabel('Time [$\mathrm{\mu s}$]', 'interpreter', 'latex');
         % title(['X-T of Shear Stress at  = Depth', ' ', num2str(5 - 1e3 * Distance_To_Surface, '%.0f'), ' ', '[mm]'], 'interpreter', 'latex');
-        set(gca, 'FontSize', fontsize);
+        set(gca, 'FontSize', fontsize + ftBig);
         daspect([yToxRatio, 1, 1]);
         
         % Save the figure
@@ -385,6 +387,9 @@ function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface, pre
     end
     figNo = figNo + 1;
     
+    % Store the slip rates data
+    X = Xsteps'; Y = Tsteps'; slipRates = SlipRateAtDist';
+    
     %% Save a X-T diagram plot of shear stress (whole field)
     plotflag = true;
     if plotflag == true
@@ -530,5 +535,5 @@ function SlipRateAtDistInTheFault_function(videoprefix, Distance_To_Surface, pre
         end
     end
 
-    disp(strcat('V_initial at $x_1 = 26$ mm: ', string(log10(SlipRateAtDist(1200, 2)))));
+  disp(strcat('V_initial at $x_1 = 26$ mm: ', string(log10(SlipRateAtDist(1200, 2)))));
 end
