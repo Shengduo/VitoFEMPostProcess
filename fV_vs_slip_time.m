@@ -1,9 +1,11 @@
 % Read results from hdf5 files.
 setEnvironment;
-totalprefix = 'WithWallDRS1.5_1.5ModA0.008AmB0.005Load5_Vw2_fw0.1_theta0.036_-11_NULoad2dir0';
-
+% totalprefix = 'WithWallDRS1.5_1.5ModA0.008AmB0.005Load5_Vw2_fw0.1_theta0.036_-11_NULoad2dir0';
+totalprefix = "W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load5_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_8"; 
+% totalprefix = "W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load8_Vw2_fw0.1_theta0.3399_-8_NULoad2dir0_duration200_8";
+% totalprefix = "W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load8_Vw2_fw0.1_theta0.8061_-9_NULoad2dir0_duration200_8";
 % Node positions
-target_x = [-50, -10, -5];
+target_x = [-100];
 
 % Specify figure positions
 fig1 = figure(1);
@@ -15,11 +17,11 @@ fig1.Position = pos;
 fig2 = figure(2);
 pos = fig2.Position;
 pos(3) = pos(3) * size(target_x, 2);
-pos(4) = pos(4) * 2;
+pos(4) = pos(4) * 4;
 fig2.Position = pos;
 
-for i = 1:1:3
-    videoprefix = strcat(num2str(i), totalprefix); 
+for i = 2:1:2
+    videoprefix = totalprefix; % strcat(num2str(i), totalprefix); 
     faultFileName = strcat('../faultFiles/', videoprefix, '-fault.h5');
     frontsurfFile = strcat('../frontsurfFiles/', videoprefix, '-frontsurf.h5');
 
@@ -43,6 +45,7 @@ for i = 1:1:3
     Slip = h5read(faultFileName, '/vertex_fields/slip');
     SlipRate = h5read(faultFileName, '/vertex_fields/slip_rate');
     Traction = h5read(faultFileName, '/vertex_fields/traction');
+    theta = h5read(faultFileName, '/vertex_fields/state_variable');
     % Connection = h5read(faultFileName, '/topology/cells');
 
     % Read nodal slip
@@ -64,7 +67,8 @@ for i = 1:1:3
 
     % Plot x and y axis ranges
     xrange = [0, 150];
-    yrange = [0, 6];
+    yrange = [0, 20];
+    yLogRange = [-10, 2];
 
     for i = 1:1:nOf2DNodes
         FaultX(i) = norm(surfaceNodesXYZ(1:2, i) - WirePos1(1:2), 2) * sign(surfaceNodesXYZ(1, i) - WirePos1(1));
@@ -86,6 +90,7 @@ for i = 1:1:3
 
     % Magnitude of slip
     surfaceSlipMag = zeros(nOf2DNodes, nOfTimeSteps);
+    surfaceTheta = zeros(nOf2DNodes, nOfTimeSteps); 
     surfaceSlip = zeros(3, nOf2DNodes, nOfTimeSteps);
 
     % Shear and Normal stress
@@ -97,6 +102,7 @@ for i = 1:1:3
         surfaceSlip(:, :, t) = Slip(:, I1, t);
         surfaceShearStress(:, t) = Traction(1, I1, t);
         surfaceNormalStress(:, t) = Traction(3, I1, t);
+        surfaceTheta(:, t) = theta(1, I1, t);
 
         for i = 1:1:nOf2DNodes
             surfaceSlipRateMag(i, t) = norm(surfaceSlipRate(:, i, t));
@@ -106,6 +112,7 @@ for i = 1:1:3
         surfaceSlipMag(:, t) = surfaceSlipMag(I, t);
         surfaceShearStress(:, t) = surfaceShearStress(I, t);
         surfaceNormalStress(:, t) = surfaceNormalStress(I, t);
+        surfaceTheta(:, t) = surfaceTheta(I, t);
     end
 
     %% Plot V-Slip history at X [mm]
@@ -157,7 +164,7 @@ for i = 1:1:3
         [~, Ind] = min(abs(FaultX - target_x(ii) / 1e3));
 
         % Plot friction coefficient vs time
-        subplot(2, size(target_x, 2), ii);
+        subplot(4, size(target_x, 2), ii);
         plot(time * 1e6 - 10, - surfaceShearStress(Ind, 1:end) ./ surfaceNormalStress(Ind, 2), 'linewidth', 2.0);
         hold on; grid on;
         scatter(time * 1e6 - 10, - surfaceShearStress(Ind, 1:end) ./ surfaceNormalStress(Ind, 2), 'filled');
@@ -173,7 +180,7 @@ for i = 1:1:3
         set(gca, 'FontSize', fontsize);
 
         % Plot sliprate vs time
-        subplot(2, size(target_x, 2), size(target_x, 2) + ii);
+        subplot(4, size(target_x, 2), size(target_x, 2) + ii);
         plot(time * 1e6 - 10, surfaceSlipRateMag(Ind, 1:end), 'linewidth', 2.0);
         hold on; grid on;
         scatter(time * 1e6 - 10, surfaceSlipRateMag(Ind, 1:end), 'filled');
@@ -184,19 +191,59 @@ for i = 1:1:3
         xlim(xrange);
         ylim(yrange);
         set(gca, 'FontSize', fontsize);
+
+        % Plot logsliprate vs time
+        subplot(4, size(target_x, 2), size(target_x, 2) * 2 + ii);
+        plot(time * 1e6 - 10, log10(surfaceSlipRateMag(Ind, 1:end)), 'linewidth', 2.0);
+        hold on; grid on;
+        scatter(time * 1e6 - 10, log10(surfaceSlipRateMag(Ind, 1:end)), 'filled');
+        xlabel('Time [$\mathrm{\mu s}$]');
+        if (ii == 1)
+            ylabel('Log slip rate [m/s]');
+        end
+        xlim(xrange);
+        ylim(yLogRange);
+        set(gca, 'FontSize', fontsize);
+        
+        % Plot slip vs time
+        subplot(4, size(target_x, 2), size(target_x, 2) * 3 + ii);
+        plot(time * 1e6 - 10, 1e6 * surfaceSlipMag(Ind, 1:end), 'linewidth', 2.0);
+        hold on; grid on;
+        scatter(time * 1e6 - 10, 1e6 * surfaceSlipMag(Ind, 1:end), 'filled');
+        xlabel('Time [$\mathrm{\mu s}$]');
+        if (ii == 1)
+            ylabel('Slip [$\mathrm{\mu m}$]');
+        end
+        xlim(xrange);
+        ylim([0, 100]);
+        set(gca, 'FontSize', fontsize);
+
+        % Find difference between f_peak and a * log(V/V_ini)
+        fric = - surfaceShearStress(Ind, 1:end) ./ surfaceNormalStress(Ind, 2);
+        V_this = surfaceSlipRateMag(Ind, 1:end);
+        slip_this = surfaceSlipMag(Ind, 1:end);
+        theta_this = surfaceTheta(Ind, 1:end);
+
+        [val, ind] = max(fric);
+        hypo_fric = fric(2) + 0.003 * log(V_this(ind) / V_this(2));
+        disp("True, Hypothesized jump in friction coefficient: " + num2str(val - fric(2)) + ", " + num2str(hypo_fric - fric(2)));
+        disp("slip, slip rate, theta initially: " + num2str(slip_this(2)) + ", " + num2str(V_this(2)) + ", " + num2str(theta_this(2)));
+        disp("slip, slip rate, theta then: " + num2str(slip_this(ind)) + ", " + num2str(V_this(ind)) + ", " + num2str(theta_this(ind)));
     end
 end
 figure(1);
 subplot(2, size(target_x, 2), 2 * size(target_x, 2));
 kids = get(gca, 'children');
-legend([kids(1), kids(3), kids(5)], 'mesh 3', 'mesh 2', 'mesh 1', 'location', 'best');
+% legend([kids(1), kids(3), kids(5)], 'mesh 3', 'mesh 2', 'mesh 1', 'location', 'best');
 set(gca, 'FontSize', fontsize);
+set(gcf, 'color', 'w');
 
 figure(2);
-subplot(2, size(target_x, 2), 2 * size(target_x, 2));
+subplot(4, size(target_x, 2), 3 * size(target_x, 2));
 kids = get(gca, 'children');
-legend([kids(1), kids(3), kids(5)], 'mesh 3', 'mesh 2', 'mesh 1', 'location', 'best');
+% legend([kids(1), kids(3), kids(5)], 'mesh 3', 'mesh 2', 'mesh 1', 'location', 'best');
 set(gca, 'FontSize', fontsize);
+set(gcf, 'color', 'w');
 
 % Save the files
 plotname = strcat(pwd, '/../Vitoplots/', totalprefix, '_fandV_VS_Slip.png');

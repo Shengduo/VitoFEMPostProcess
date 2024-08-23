@@ -249,20 +249,42 @@ function fV_vs_slip_time_function_nomesh_allLabel(totalprefixs, target_x, z_loca
             % Plot theta vs time
             if theta_flag == 1
                 subplot(nrows, size(target_x, 2), 3 * size(target_x, 2) + ii);
-                plot(time * 1e6 - 10, log10(QueryTheta(ii, :)), 'linewidth', 2.0);
+%                 plot(time * 1e6 - 10, log10(QueryTheta(ii, :)), 'linewidth', 2.0);
+%                 hold on; grid on;
+%                 if legendFlag ~= 2
+%                     scatter(time * 1e6 - 10, log10(QueryTheta(ii, :)), 'filled');
+%                 end
+%                 xlabel('Time [$\mathrm{\mu s}$]', 'interpreter', 'latex');
+%                 if (ii == 1)
+%                     ylabel('$\mathrm{\log(\theta)}$ [$\mathrm{s}$]', 'interpreter', 'latex');
+%                 end
+%                 xlim(xrange);
+%                 ylim([-10, 10]);
+%                 set(gca, 'FontSize', fontsize);
+                plot(time * 1e6 - 10, log10(QueryV(ii, :)), 'linewidth', 2.0);
                 hold on; grid on;
                 if legendFlag ~= 2
-                    scatter(time * 1e6 - 10, log10(QueryTheta(ii, :)), 'filled');
+                    scatter(time * 1e6 - 10, log10(QueryV(ii, :)), 'filled');
                 end
                 xlabel('Time [$\mathrm{\mu s}$]', 'interpreter', 'latex');
                 if (ii == 1)
-                    ylabel('$\mathrm{\log(\theta)}$ [$\mathrm{s}$]', 'interpreter', 'latex');
+                    ylabel('$\mathrm{\log(V)}$ [$\mathrm{m/s}$]', 'interpreter', 'latex');
                 end
                 xlim(xrange);
-                ylim([-10, 10]);
+                ylim([-10, 2]);
                 set(gca, 'FontSize', fontsize);
             end
-            
+            % Find difference between f_peak and a * log(V/V_ini)
+            fric = - QueryShearStress(ii, :) ./QueryNormalStress(ii, :);
+            V_this = QueryV(ii, :);
+            slip_this = QuerySlip(ii, :);
+            theta_this = QueryTheta(ii, :);
+    
+            [val, ind] = max(fric);
+            hypo_fric = fric(2) + 0.003 * log(V_this(ind) / V_this(2));
+            disp("True, Hypothesized jump in friction coefficient: " + num2str(val - fric(2)) + ", " + num2str(hypo_fric - fric(2)));
+            disp("slip, slip rate, theta initially: " + num2str(slip_this(2)) + ", " + num2str(V_this(2)) + ", " + num2str(theta_this(2)));
+            disp("slip, slip rate, theta then: " + num2str(slip_this(ind)) + ", " + num2str(V_this(ind)) + ", " + num2str(theta_this(ind)));
         end
         
         

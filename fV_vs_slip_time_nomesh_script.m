@@ -20,16 +20,20 @@ setEnvironment;
 %                 "W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load5_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_8", ...
 %                 "W8_4ExcCorr3NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load5_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_8"];
 
-totalprefixs = ["W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load5_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_8"];
-
+% totalprefixs = ["W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load5_Vw2_fw0.1_theta0.1434_-7_NULoad2dir0_duration200_8"];
+% totalprefixs = ["W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load8_Vw2_fw0.1_theta0.3399_-8_NULoad2dir0_duration200_8";];
+% totalprefixs = ["W8_4ExcCorr2NPDirWithWallDRS1.5_1.5ModA0.016AmB0.014Load8_Vw2_fw0.1_theta0.8061_-9_NULoad2dir0_duration200_8"];
+% totalprefixs = ["SlipW8_4ExcCorr2NPDirWithWallDRS0.8ModA0.016AmB0.014Load5_Vw2_fw0.1_theta-7_-7_NULoad2dir0_duration200_8"];
+% totalprefixs = ["SlipW8_4ExcCorr2NPDirWithWallDRS0.8ModA0.016AmB0.014Load5_Vw2_fw0.1_theta-8_-8_NULoad2dir0_duration200_8"];
+totalprefixs = ["SlipW8_4ExcCorr2NPDirWithWallDRS0.8ModA0.016AmB0.014Load5_Vw2_fw0.1_theta-9_-9_NULoad2dir0_duration200_8"];
 % z_locations = [0, 5];
 % target_x = [5, 15, 20];
 % totalprefixs = ["SW_HomaGouge_W8_4ExcCorr1NPDirWithWallDRS1.5_1.5ModA0.003AmB-0.005Load5_Vw0.2_fw0.33_theta0.1434_0.1434_NULoad2dir0_duration200_8"];
 % totalprefixs = ["SlipW8_4ExcCorr2NPDirWithWallDRS0.8ModA0.016AmB0.014Load5_Vw2_fw0.1_theta-7_-7_NULoad2dir0_duration200_8"];
 z_locations = [0];
-target_x = [-5, 5];
+target_x = [-100];
 
 for iZ = 1:1:size(z_locations, 2)
-    fV_vs_slip_time_function_nomesh_allLabel(totalprefixs, target_x, z_locations(iZ), 0, 2);
+    fV_vs_slip_time_function_nomesh_allLabel(totalprefixs, target_x, z_locations(iZ), 1, 2);
     close all;
 end

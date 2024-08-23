@@ -293,10 +293,10 @@ for i = 1:1:size(filenames, 2)
 %       close all;
 %     end
     
-    close all;
+%     close all;
     % writeVideosTet_function(filenames(i), pre_times(i));
-    writeVideosTetTime_function(filenames(i), xPlotRange, pre_times(i), videoTimes, "eps", Flag2D);
-    close all;
+%     writeVideosTetTime_function(filenames(i), xPlotRange, pre_times(i), videoTimes, "eps", Flag2D);
+%     close all;
 
     % plotSliprateDifference(X, Y, sliprates, filenames(i), 'eps');
 end
